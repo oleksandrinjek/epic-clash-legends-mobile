@@ -3,7 +3,7 @@ import { Character } from '@/types/game';
 export const characters: Character[] = [
   {
     id: 'fire-knight',
-    name: 'Fire Knight',
+    name: 'Fire Ninja',
     health: 100,
     maxHealth: 100,
     attack: 25,
@@ -11,7 +11,7 @@ export const characters: Character[] = [
     energy: 50,
     maxEnergy: 50,
     rarity: 'epic',
-    image: '🔥⚔️',
+    image: '/lovable-uploads/4d283304-067e-41fc-9da9-530663f35cbf.png',
     abilities: [
       {
         id: 'flame-strike',
