@@ -71,7 +71,7 @@ export const characters: Character[] = [
   },
   {
     id: 'shadow-assassin',
-    name: 'Shadow Assassin',
+    name: 'Guardian',
     health: 70,
     maxHealth: 70,
     attack: 35,
@@ -79,7 +79,7 @@ export const characters: Character[] = [
     energy: 40,
     maxEnergy: 40,
     rarity: 'legendary',
-    image: '🌙🗡️',
+    image: '/lovable-uploads/b947c9a5-6e1b-463e-b02e-1cc3b155f794.png',
     abilities: [
       {
         id: 'shadow-strike',
