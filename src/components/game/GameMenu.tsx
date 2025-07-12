@@ -86,7 +86,15 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
             <h3 className="font-semibold mb-3">Selected Hero</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <span className="text-2xl">{selectedCharacter.image}</span>
+                {selectedCharacter.image.startsWith('/') ? (
+                  <img 
+                    src={selectedCharacter.image} 
+                    alt={selectedCharacter.name}
+                    className="w-12 h-12 rounded-lg object-cover"
+                  />
+                ) : (
+                  <span className="text-2xl">{selectedCharacter.image}</span>
+                )}
                 <div>
                   <div className="font-semibold">{selectedCharacter.name}</div>
                   <Badge variant="outline">{selectedCharacter.rarity}</Badge>
