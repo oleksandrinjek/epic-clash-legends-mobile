@@ -45,7 +45,7 @@ export const characters: Character[] = [
     energy: 60,
     maxEnergy: 60,
     rarity: 'rare',
-    image: '❄️🧙',
+    image: '/lovable-uploads/d93765a6-5a88-4644-89f6-ffc315bc15a5.png',
     abilities: [
       {
         id: 'frost-bolt',
