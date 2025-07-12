@@ -53,15 +53,17 @@ export const CharacterCard = ({
       <div className={cn('absolute top-0 left-0 right-0 h-1', getRarityColor(character.rarity))} />
       
       {/* Character Image */}
-      <div className="flex items-center justify-center h-20 bg-gradient-to-b from-background to-muted">
+      <div className="relative h-24 overflow-hidden">
         {character.image.startsWith('/') || character.image.startsWith('http') ? (
           <img 
             src={character.image} 
             alt={character.name}
-            className="w-12 h-12 object-cover rounded-full"
+            className="w-full h-full object-cover"
           />
         ) : (
-          <span className="text-4xl">{character.image}</span>
+          <div className="flex items-center justify-center h-full bg-gradient-to-b from-background to-muted text-4xl">
+            {character.image}
+          </div>
         )}
       </div>
       

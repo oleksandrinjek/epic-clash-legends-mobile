@@ -11,7 +11,7 @@ export const characters: Character[] = [
     energy: 50,
     maxEnergy: 50,
     rarity: 'epic',
-    image: '/lovable-uploads/4d283304-067e-41fc-9da9-530663f35cbf.png',
+    image: '/lovable-uploads/49100634-f3c6-4802-994b-538b52ea2d38.png',
     abilities: [
       {
         id: 'flame-strike',
