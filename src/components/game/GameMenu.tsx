@@ -66,7 +66,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
 
         {/* Character Selection */}
         <Card className="p-4">
-          <h2 className="font-bold mb-4">Choose Your Champion</h2>
+          <h2 className="font-bold mb-4">Choose Your Hero</h2>
           <div className="grid grid-cols-2 gap-3">
             {characters.map((character) => (
               <CharacterCard
@@ -83,7 +83,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
         {/* Selected Character Info */}
         {selectedCharacter && (
           <Card className="p-4">
-            <h3 className="font-semibold mb-3">Selected Champion</h3>
+            <h3 className="font-semibold mb-3">Selected Hero</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">{selectedCharacter.image}</span>
@@ -118,7 +118,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
             onClick={handleStartBattle}
             disabled={!selectedCharacter}
           >
-            {selectedCharacter ? '⚔️ Start Battle' : 'Select a Champion'}
+            {selectedCharacter ? '⚔️ Start Battle' : 'Select a Hero'}
           </Button>
           
           <div className="grid grid-cols-2 gap-3">

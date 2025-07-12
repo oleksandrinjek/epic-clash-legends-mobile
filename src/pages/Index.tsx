@@ -56,7 +56,7 @@ const Index = () => {
           <p className="text-muted-foreground">
             {gameState === 'victory' 
               ? 'Congratulations! You emerged victorious!' 
-              : 'Better luck next time, champion!'
+              : 'Better luck next time, hero!'
             }
           </p>
           <div className="space-y-2">
