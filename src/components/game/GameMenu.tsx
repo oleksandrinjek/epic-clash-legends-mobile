@@ -9,17 +9,17 @@ import { Separator } from '@/components/ui/separator';
 
 interface GameMenuProps {
   onStartBattle: (playerCharacter: Character, enemyCharacter: Character) => void;
+  playerStats: {
+    name: string;
+    level: number;
+    coins: number;
+    wins: number;
+    losses: number;
+  };
 }
 
-export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
+export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const [playerStats] = useState({
-    name: 'Player',
-    level: 12,
-    coins: 1250,
-    wins: 23,
-    losses: 7
-  });
 
   const handleStartBattle = () => {
     if (!selectedCharacter) return;

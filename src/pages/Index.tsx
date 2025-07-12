@@ -11,6 +11,13 @@ const Index = () => {
   const [gameState, setGameState] = useState<GameState>('menu');
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [enemyCharacter, setEnemyCharacter] = useState<Character | null>(null);
+  const [playerStats, setPlayerStats] = useState({
+    name: 'Player',
+    level: 12,
+    coins: 1250,
+    wins: 0,
+    losses: 0
+  });
 
   const handleStartBattle = (player: Character, enemy: Character) => {
     setPlayerCharacter(player);
@@ -19,6 +26,12 @@ const Index = () => {
   };
 
   const handleBattleEnd = (winner: 'player' | 'enemy') => {
+    // Update stats based on battle result
+    setPlayerStats(prev => ({
+      ...prev,
+      wins: winner === 'player' ? prev.wins + 1 : prev.wins,
+      losses: winner === 'enemy' ? prev.losses + 1 : prev.losses
+    }));
     setGameState(winner === 'player' ? 'victory' : 'defeat');
   };
 
@@ -29,7 +42,7 @@ const Index = () => {
   };
 
   if (gameState === 'menu') {
-    return <GameMenu onStartBattle={handleStartBattle} />;
+    return <GameMenu onStartBattle={handleStartBattle} playerStats={playerStats} />;
   }
 
   if (gameState === 'battle' && playerCharacter && enemyCharacter) {
@@ -76,7 +89,7 @@ const Index = () => {
     );
   }
 
-  return <GameMenu onStartBattle={handleStartBattle} />;
+  return <GameMenu onStartBattle={handleStartBattle} playerStats={playerStats} />;
 };
 
 export default Index;
