@@ -133,7 +133,7 @@ export const BattleArena = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background p-4">
-      <div className="max-w-md mx-auto space-y-4">
+      <div className="max-w-6xl mx-auto space-y-4">
         {/* Battle Header */}
         <Card className="p-4">
           <div className="text-center space-y-2">
@@ -146,48 +146,71 @@ export const BattleArena = ({
           </div>
         </Card>
 
-        {/* Enemy Character */}
-        <div className="flex justify-center">
-          <CharacterCard character={enemy} isEnemy size="large" />
-        </div>
-
-        {/* Battle Info */}
-        <Card className="p-4">
-          <div className="text-center space-y-2">
-            <h2 className="text-lg font-bold">
-              {currentTurn === 'player' ? 'Your Turn' : 'Enemy Turn'}
-            </h2>
-            <div className="flex justify-center space-x-4 text-sm text-muted-foreground">
-              <span>Round: 1</span>
-              <span>•</span>
-              <span>{currentTurn === 'player' ? '⚔️ Attack!' : '🛡️ Defend!'}</span>
+        {/* Main Battle Area - Three columns */}
+        <div className="grid grid-cols-3 gap-6 items-start">
+          {/* Left Column - Player Hero */}
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              <CharacterCard character={player} size="large" />
             </div>
+            
+            {/* Player Abilities */}
+            <Card className="p-4">
+              <h3 className="font-semibold mb-3 text-center">Your Hero Abilities</h3>
+              <div className="grid grid-cols-1 gap-2">
+                {player.abilities.map((ability) => (
+                  <AbilityButton
+                    key={ability.id}
+                    ability={ability}
+                    onClick={() => useAbility(ability)}
+                    disabled={isProcessing || currentTurn !== 'player' || 
+                             player.energy < ability.energyCost || ability.currentCooldown > 0}
+                    character={player}
+                  />
+                ))}
+              </div>
+            </Card>
           </div>
-        </Card>
 
-        {/* Battle Log */}
-        <BattleLog messages={battleLog} />
+          {/* Center Column - Battle Info & Log */}
+          <div className="space-y-4">
+            {/* Battle Info */}
+            <Card className="p-4">
+              <div className="text-center space-y-2">
+                <h2 className="text-lg font-bold">
+                  {currentTurn === 'player' ? 'Your Turn' : 'Enemy Turn'}
+                </h2>
+                <div className="flex justify-center space-x-4 text-sm text-muted-foreground">
+                  <span>Round: 1</span>
+                  <span>•</span>
+                  <span>{currentTurn === 'player' ? '⚔️ Attack!' : '🛡️ Defend!'}</span>
+                </div>
+              </div>
+            </Card>
 
-        {/* Player Abilities */}
-        <Card className="p-4">
-          <h3 className="font-semibold mb-3">Your Hero Abilities</h3>
-          <div className="grid grid-cols-2 gap-2">
-            {player.abilities.map((ability) => (
-              <AbilityButton
-                key={ability.id}
-                ability={ability}
-                onClick={() => useAbility(ability)}
-                disabled={isProcessing || currentTurn !== 'player' || 
-                         player.energy < ability.energyCost || ability.currentCooldown > 0}
-                character={player}
-              />
-            ))}
+            {/* Battle Log */}
+            <BattleLog messages={battleLog} />
           </div>
-        </Card>
 
-        {/* Player Character */}
-        <div className="flex justify-center">
-          <CharacterCard character={player} size="large" />
+          {/* Right Column - Enemy Monster */}
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              <CharacterCard character={enemy} isEnemy size="large" />
+            </div>
+            
+            {/* Enemy Info Display */}
+            <Card className="p-4">
+              <h3 className="font-semibold mb-3 text-center">Enemy Abilities</h3>
+              <div className="space-y-2">
+                {enemy.abilities.map((ability) => (
+                  <div key={ability.id} className="text-sm p-2 bg-muted rounded">
+                    <div className="font-medium">{ability.name}</div>
+                    <div className="text-xs text-muted-foreground">{ability.description}</div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
         </div>
 
         <Separator />
