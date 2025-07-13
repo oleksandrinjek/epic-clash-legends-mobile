@@ -145,37 +145,47 @@ export const heroes: Character[] = [
 
 export const monsters: Character[] = [
   {
-    id: 'shadow-demon',
-    name: 'Shadow Demon',
+    id: 'scary-tree',
+    name: 'Scary Tree',
     type: 'monster',
-    health: 90,
-    maxHealth: 90,
-    attack: 32,
-    defense: 12,
-    energy: 45,
-    maxEnergy: 45,
-    rarity: 'epic',
-    image: '👹🌙',
+    health: 100,
+    maxHealth: 100,
+    attack: 28,
+    defense: 18,
+    energy: 50,
+    maxEnergy: 50,
+    rarity: 'rare',
+    image: '/lovable-uploads/dce986e6-60b4-47a7-a2e8-471d26eda6c8.png',
     abilities: [
       {
-        id: 'dark-blast',
-        name: 'Dark Blast',
-        damage: 28,
-        energyCost: 18,
+        id: 'branch-whip',
+        name: 'Branch Whip',
+        damage: 25,
+        energyCost: 15,
         cooldown: 0,
         currentCooldown: 0,
-        description: 'Unleashes shadow energy',
+        description: 'Lashes out with twisted branches',
         type: 'attack'
       },
       {
-        id: 'shadow-heal',
-        name: 'Shadow Drain',
-        damage: -15,
-        energyCost: 22,
+        id: 'root-entangle',
+        name: 'Root Entangle',
+        damage: 20,
+        energyCost: 20,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Roots burst from ground to entangle enemy',
+        type: 'special'
+      },
+      {
+        id: 'bark-armor',
+        name: 'Bark Armor',
+        damage: 0,
+        energyCost: 18,
         cooldown: 3,
         currentCooldown: 0,
-        description: 'Drains life from enemy to heal',
-        type: 'heal'
+        description: 'Thickens bark for increased defense',
+        type: 'defend'
       }
     ]
   },
