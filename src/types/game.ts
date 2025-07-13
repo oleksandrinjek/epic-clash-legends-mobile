@@ -1,6 +1,7 @@
 export interface Character {
   id: string;
   name: string;
+  type: 'hero' | 'monster';
   health: number;
   maxHealth: number;
   attack: number;

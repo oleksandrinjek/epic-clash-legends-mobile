@@ -6,6 +6,7 @@ import { BattleLog } from './BattleLog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
 interface BattleArenaProps {
@@ -25,7 +26,7 @@ export const BattleArena = ({
   const [enemy, setEnemy] = useState<Character>(enemyCharacter);
   const [currentTurn, setCurrentTurn] = useState<'player' | 'enemy'>('player');
   const [battleLog, setBattleLog] = useState<string[]>([
-    'Battle begins! Choose your first move.'
+    `Battle begins! ${playerCharacter.name} (Hero) vs ${enemyCharacter.name} (Monster)!`
   ]);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -58,7 +59,7 @@ export const BattleArena = ({
       addToBattleLog(`${player.name} uses ${ability.name} for ${damage} damage!`);
       
       if (newEnemy.health <= 0) {
-        addToBattleLog(`${enemy.name} is defeated! You win!`);
+        addToBattleLog(`${enemy.name} is defeated! Hero wins!`);
         setTimeout(() => onBattleEnd('player'), 1500);
         return;
       }
@@ -71,58 +72,39 @@ export const BattleArena = ({
     }
 
     setPlayer(newPlayer);
-    
-    // Enemy turn after delay
+
+    // Enemy AI turn
     setTimeout(() => {
-      enemyTurn();
-    }, 1500);
-  };
-
-  const enemyTurn = () => {
-    const enemyAbilities = enemy.abilities.filter(a => 
-      enemy.energy >= a.energyCost && a.currentCooldown === 0
-    );
-    
-    if (enemyAbilities.length === 0) {
-      // Enemy passes turn
-      addToBattleLog(`${enemy.name} has no available abilities!`);
+      const enemyAbility = enemy.abilities[Math.floor(Math.random() * enemy.abilities.length)];
       const newEnemy = { ...enemy };
-      newEnemy.energy = Math.min(newEnemy.maxEnergy, newEnemy.energy + 10);
-      setEnemy(newEnemy);
-      endTurn();
-      return;
-    }
-
-    const randomAbility = enemyAbilities[Math.floor(Math.random() * enemyAbilities.length)];
-    const newEnemy = { ...enemy };
-    newEnemy.energy -= randomAbility.energyCost;
-
-    if (randomAbility.type === 'attack') {
-      const damage = Math.max(1, randomAbility.damage - player.defense);
-      setPlayer(prev => {
-        const newPlayer = { ...prev };
-        newPlayer.health = Math.max(0, newPlayer.health - damage);
-        return newPlayer;
-      });
-      addToBattleLog(`${enemy.name} uses ${randomAbility.name} for ${damage} damage!`);
       
-      setTimeout(() => {
-        setPlayer(prev => {
-          if (prev.health <= 0) {
-            addToBattleLog(`${player.name} is defeated! You lose!`);
+      if (newEnemy.energy >= enemyAbility.energyCost && enemyAbility.currentCooldown === 0) {
+        newEnemy.energy -= enemyAbility.energyCost;
+        
+        if (enemyAbility.type === 'attack') {
+          const damage = Math.max(1, enemyAbility.damage - newPlayer.defense);
+          newPlayer.health = Math.max(0, newPlayer.health - damage);
+          setPlayer(newPlayer);
+          addToBattleLog(`${enemy.name} uses ${enemyAbility.name} for ${damage} damage!`);
+          
+          if (newPlayer.health <= 0) {
+            addToBattleLog(`${player.name} is defeated! Monster wins!`);
             setTimeout(() => onBattleEnd('enemy'), 1500);
+            return;
           }
-          return prev;
-        });
-      }, 100);
-    } else if (randomAbility.type === 'heal') {
-      const healAmount = Math.abs(randomAbility.damage);
-      newEnemy.health = Math.min(newEnemy.maxHealth, newEnemy.health + healAmount);
-      addToBattleLog(`${enemy.name} heals for ${healAmount} HP!`);
-    }
-
-    setEnemy(newEnemy);
-    setTimeout(() => endTurn(), 1500);
+        } else if (enemyAbility.type === 'heal') {
+          const healAmount = Math.abs(enemyAbility.damage);
+          newEnemy.health = Math.min(newEnemy.maxHealth, newEnemy.health + healAmount);
+          addToBattleLog(`${enemy.name} heals for ${healAmount} HP!`);
+        }
+        
+        setEnemy(newEnemy);
+      } else {
+        addToBattleLog(`${enemy.name} skips turn (no energy or ability on cooldown)`);
+      }
+      
+      endTurn();
+    }, 1000);
   };
 
   const endTurn = () => {
@@ -152,6 +134,18 @@ export const BattleArena = ({
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background p-4">
       <div className="max-w-md mx-auto space-y-4">
+        {/* Battle Header */}
+        <Card className="p-4">
+          <div className="text-center space-y-2">
+            <h2 className="text-lg font-bold">Hero vs Monster Battle</h2>
+            <div className="flex justify-center items-center space-x-4 text-sm">
+              <Badge className="bg-blue-600 text-white">⚔️ Hero</Badge>
+              <span>vs</span>
+              <Badge className="bg-red-600 text-white">👹 Monster</Badge>
+            </div>
+          </div>
+        </Card>
+
         {/* Enemy Character */}
         <div className="flex justify-center">
           <CharacterCard character={enemy} isEnemy size="large" />
@@ -176,7 +170,7 @@ export const BattleArena = ({
 
         {/* Player Abilities */}
         <Card className="p-4">
-          <h3 className="font-semibold mb-3">Your Abilities</h3>
+          <h3 className="font-semibold mb-3">Your Hero Abilities</h3>
           <div className="grid grid-cols-2 gap-2">
             {player.abilities.map((ability) => (
               <AbilityButton

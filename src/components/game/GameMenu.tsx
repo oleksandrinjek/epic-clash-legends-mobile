@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Character } from '@/types/game';
-import { characters } from '@/data/characters';
+import { heroes, monsters } from '@/data/characters';
 import { CharacterCard } from './CharacterCard';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -24,9 +24,13 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
   const handleStartBattle = () => {
     if (!selectedCharacter) return;
     
-    // Select a random enemy (excluding the selected character)
-    const availableEnemies = characters.filter(c => c.id !== selectedCharacter.id);
-    const enemyCharacter = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
+    // Ensure only heroes can be selected as player characters
+    if (selectedCharacter.type !== 'hero') {
+      return;
+    }
+    
+    // Select a random monster as enemy (heroes only fight monsters)
+    const enemyCharacter = monsters[Math.floor(Math.random() * monsters.length)];
     
     onStartBattle(selectedCharacter, enemyCharacter);
   };
@@ -37,9 +41,9 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Monsters Vs Heroes
+            Heroes vs Monsters
           </h1>
-          <p className="text-muted-foreground">Mobile Battle Arena</p>
+          <p className="text-muted-foreground">Choose your hero to battle monsters!</p>
         </div>
 
         {/* Player Stats */}
@@ -64,11 +68,11 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
           </div>
         </Card>
 
-        {/* Character Selection */}
+        {/* Hero Selection */}
         <Card className="p-4">
-          <h2 className="font-bold mb-4">Choose Your Hero</h2>
+          <h2 className="font-bold mb-4">Choose Your Hero ⚔️</h2>
           <div className="grid grid-cols-2 gap-3">
-            {characters.map((character) => (
+            {heroes.map((character) => (
               <CharacterCard
                 key={character.id}
                 character={character}
@@ -97,7 +101,10 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
                 )}
                 <div>
                   <div className="font-semibold">{selectedCharacter.name}</div>
-                  <Badge variant="outline">{selectedCharacter.rarity}</Badge>
+                  <div className="flex gap-2">
+                    <Badge variant="outline">{selectedCharacter.rarity}</Badge>
+                    <Badge className="bg-blue-600 text-white">⚔️ Hero</Badge>
+                  </div>
                 </div>
               </div>
               
@@ -126,7 +133,7 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
             onClick={handleStartBattle}
             disabled={!selectedCharacter}
           >
-            {selectedCharacter ? '⚔️ Start Battle' : 'Select a Hero'}
+            {selectedCharacter ? '⚔️ Battle Monsters!' : 'Select a Hero'}
           </Button>
           
           <div className="grid grid-cols-2 gap-3">

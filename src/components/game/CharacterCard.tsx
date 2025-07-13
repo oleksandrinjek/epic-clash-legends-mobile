@@ -45,7 +45,10 @@ export const CharacterCard = ({
         'hover:scale-105 hover:shadow-lg',
         isSelected && 'ring-2 ring-primary',
         isEnemy && 'border-destructive',
-        onClick && 'hover:shadow-xl'
+        onClick && 'hover:shadow-xl',
+        // Add type-based styling
+        character.type === 'hero' && 'border-l-4 border-l-blue-500',
+        character.type === 'monster' && 'border-l-4 border-l-red-500'
       )}
       onClick={onClick}
     >

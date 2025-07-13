@@ -1,9 +1,10 @@
 import { Character } from '@/types/game';
 
-export const characters: Character[] = [
+export const heroes: Character[] = [
   {
     id: 'fire-knight',
     name: 'Fire Ninja',
+    type: 'hero',
     health: 100,
     maxHealth: 100,
     attack: 25,
@@ -38,6 +39,7 @@ export const characters: Character[] = [
   {
     id: 'ice-mage',
     name: 'Ice Mage',
+    type: 'hero',
     health: 80,
     maxHealth: 80,
     attack: 30,
@@ -72,6 +74,7 @@ export const characters: Character[] = [
   {
     id: 'shadow-assassin',
     name: 'Guardian',
+    type: 'hero',
     health: 70,
     maxHealth: 70,
     attack: 35,
@@ -106,6 +109,7 @@ export const characters: Character[] = [
   {
     id: 'earth-guardian',
     name: 'Earth Guardian',
+    type: 'hero',
     health: 120,
     maxHealth: 120,
     attack: 20,
@@ -136,10 +140,14 @@ export const characters: Character[] = [
         type: 'defend'
       }
     ]
-  },
+  }
+];
+
+export const monsters: Character[] = [
   {
     id: 'shadow-demon',
     name: 'Shadow Demon',
+    type: 'monster',
     health: 90,
     maxHealth: 90,
     attack: 32,
@@ -174,6 +182,7 @@ export const characters: Character[] = [
   {
     id: 'frost-giant',
     name: 'Frost Giant',
+    type: 'monster',
     health: 140,
     maxHealth: 140,
     attack: 28,
@@ -208,6 +217,7 @@ export const characters: Character[] = [
   {
     id: 'fire-drake',
     name: 'Fire Drake',
+    type: 'monster',
     health: 85,
     maxHealth: 85,
     attack: 38,
@@ -242,6 +252,7 @@ export const characters: Character[] = [
   {
     id: 'void-wraith',
     name: 'Void Wraith',
+    type: 'monster',
     health: 70,
     maxHealth: 70,
     attack: 40,
@@ -276,6 +287,7 @@ export const characters: Character[] = [
   {
     id: 'rock-golem',
     name: 'Rock Golem',
+    type: 'monster',
     health: 160,
     maxHealth: 160,
     attack: 22,
@@ -310,6 +322,7 @@ export const characters: Character[] = [
   {
     id: 'storm-elemental',
     name: 'Storm Elemental',
+    type: 'monster',
     health: 75,
     maxHealth: 75,
     attack: 35,
@@ -342,3 +355,6 @@ export const characters: Character[] = [
     ]
   }
 ];
+
+// Combined array for backward compatibility
+export const characters: Character[] = [...heroes, ...monsters];
