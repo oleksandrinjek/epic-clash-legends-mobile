@@ -108,7 +108,7 @@ export const heroes: Character[] = [
   },
   {
     id: 'earth-guardian',
-    name: 'Earth Guardian',
+    name: 'World Defender',
     type: 'hero',
     health: 120,
     maxHealth: 120,
@@ -117,7 +117,7 @@ export const heroes: Character[] = [
     energy: 30,
     maxEnergy: 30,
     rarity: 'common',
-    image: '🌍🛡️',
+    image: '/lovable-uploads/e5cf715e-7d36-4b2a-9d8d-46cdd081b4ef.png',
     abilities: [
       {
         id: 'rock-throw',
