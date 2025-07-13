@@ -180,6 +180,51 @@ export const monsters: Character[] = [
     ]
   },
   {
+    id: 'rock-golem',
+    name: 'Rock Golem',
+    type: 'monster',
+    health: 120,
+    maxHealth: 120,
+    attack: 30,
+    defense: 25,
+    energy: 40,
+    maxEnergy: 40,
+    rarity: 'epic',
+    image: '/lovable-uploads/01cbd07a-768b-42fe-823c-5b23c25d3166.png',
+    abilities: [
+      {
+        id: 'boulder-throw',
+        name: 'Boulder Throw',
+        damage: 32,
+        energyCost: 20,
+        cooldown: 1,
+        currentCooldown: 0,
+        description: 'Hurls a massive stone at the enemy',
+        type: 'attack'
+      },
+      {
+        id: 'stone-armor',
+        name: 'Stone Armor',
+        damage: 0,
+        energyCost: 15,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Hardens skin, reducing incoming damage',
+        type: 'defend'
+      },
+      {
+        id: 'earth-tremor',
+        name: 'Earth Tremor',
+        damage: 25,
+        energyCost: 25,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Causes the ground to shake violently',
+        type: 'special'
+      }
+    ]
+  },
+  {
     id: 'frost-giant',
     name: 'Frost Giant',
     type: 'monster',
@@ -281,41 +326,6 @@ export const monsters: Character[] = [
         currentCooldown: 0,
         description: 'Becomes incorporeal, avoiding damage',
         type: 'special'
-      }
-    ]
-  },
-  {
-    id: 'rock-golem',
-    name: 'Rock Golem',
-    type: 'monster',
-    health: 160,
-    maxHealth: 160,
-    attack: 22,
-    defense: 30,
-    energy: 25,
-    maxEnergy: 25,
-    rarity: 'common',
-    image: '🗿⛰️',
-    abilities: [
-      {
-        id: 'boulder-toss',
-        name: 'Boulder Toss',
-        damage: 26,
-        energyCost: 15,
-        cooldown: 1,
-        currentCooldown: 0,
-        description: 'Hurls a massive boulder',
-        type: 'attack'
-      },
-      {
-        id: 'stone-skin',
-        name: 'Stone Skin',
-        damage: 0,
-        energyCost: 12,
-        cooldown: 3,
-        currentCooldown: 0,
-        description: 'Hardens skin for ultimate defense',
-        type: 'defend'
       }
     ]
   },
