@@ -285,7 +285,7 @@ export const monsters: Character[] = [
     energy: 35,
     maxEnergy: 35,
     rarity: 'legendary',
-    image: '🧊👹',
+    image: '/lovable-uploads/89b908d6-cb2f-4b4b-8b19-05b893107d24.png',
     abilities: [
       {
         id: 'ice-smash',
@@ -381,7 +381,7 @@ export const monsters: Character[] = [
   },
   {
     id: 'storm-elemental',
-    name: 'Storm Elemental',
+    name: 'Firedemon',
     type: 'monster',
     health: 75,
     maxHealth: 75,
@@ -390,7 +390,7 @@ export const monsters: Character[] = [
     energy: 65,
     maxEnergy: 65,
     rarity: 'epic',
-    image: '⚡🌪️',
+    image: '/lovable-uploads/f5ddbafa-1275-406f-a966-c01489c58475.png',
     abilities: [
       {
         id: 'lightning-bolt',
