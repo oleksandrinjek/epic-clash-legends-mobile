@@ -20,8 +20,10 @@ const Index = () => {
   });
 
   const handleStartBattle = (player: Character, enemy: Character) => {
-    setPlayerCharacter(player);
-    setEnemyCharacter(enemy);
+    // Deep clone to avoid mutating the original data
+    const clone = (obj: any) => JSON.parse(JSON.stringify(obj));
+    setPlayerCharacter(clone(player));
+    setEnemyCharacter(clone(enemy));
     setGameState('battle');
   };
 

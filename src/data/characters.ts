@@ -18,7 +18,7 @@ export const heroes: Character[] = [
         id: 'flame-strike',
         name: 'Flame Strike',
         damage: 30,
-        energyCost: 20,
+        energyCost: 0,
         cooldown: 0,
         currentCooldown: 0,
         description: 'A powerful fire attack',
@@ -33,6 +33,16 @@ export const heroes: Character[] = [
         currentCooldown: 0,
         description: 'Reduces incoming damage by 50%',
         type: 'defend'
+      },
+      {
+        id: 'super-flame',
+        name: 'Inferno Burst',
+        damage: 60,
+        energyCost: 30,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Unleash a devastating inferno!',
+        type: 'super'
       }
     ]
   },
@@ -53,7 +63,7 @@ export const heroes: Character[] = [
         id: 'frost-bolt',
         name: 'Frost Bolt',
         damage: 25,
-        energyCost: 15,
+        energyCost: 0,
         cooldown: 0,
         currentCooldown: 0,
         description: 'Ice projectile that slows enemy',
@@ -68,6 +78,16 @@ export const heroes: Character[] = [
         currentCooldown: 0,
         description: 'Heals 20 HP',
         type: 'heal'
+      },
+      {
+        id: 'super-ice',
+        name: 'Absolute Zero',
+        damage: 55,
+        energyCost: 28,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Freeze the enemy with absolute cold!',
+        type: 'super'
       }
     ]
   },
@@ -88,7 +108,7 @@ export const heroes: Character[] = [
         id: 'shadow-strike',
         name: 'Shadow Strike',
         damage: 40,
-        energyCost: 25,
+        energyCost: 0,
         cooldown: 1,
         currentCooldown: 0,
         description: 'High damage stealth attack',
@@ -103,6 +123,16 @@ export const heroes: Character[] = [
         currentCooldown: 0,
         description: 'Become untargetable for 1 turn',
         type: 'special'
+      },
+      {
+        id: 'super-shadow',
+        name: 'Nightmare Edge',
+        damage: 70,
+        energyCost: 35,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Strike from the shadows with deadly force!',
+        type: 'super'
       }
     ]
   },
@@ -123,7 +153,7 @@ export const heroes: Character[] = [
         id: 'rock-throw',
         name: 'Rock Throw',
         damage: 22,
-        energyCost: 12,
+        energyCost: 0,
         cooldown: 0,
         currentCooldown: 0,
         description: 'Basic earth attack',
@@ -138,6 +168,16 @@ export const heroes: Character[] = [
         currentCooldown: 0,
         description: 'Blocks next attack completely',
         type: 'defend'
+      },
+      {
+        id: 'super-earth',
+        name: 'Gaia Slam',
+        damage: 50,
+        energyCost: 22,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Smash the ground with earth power!',
+        type: 'super'
       }
     ]
   }

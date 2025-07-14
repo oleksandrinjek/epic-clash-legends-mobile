@@ -36,7 +36,8 @@ export const BattleArena = ({
 
   const useAbility = async (ability: Ability) => {
     if (isProcessing || currentTurn !== 'player') return;
-    if (player.energy < ability.energyCost) {
+    // Only check energy for 'super', 'heal', and 'defend' types
+    if ((ability.type === 'super' || ability.type === 'heal' || ability.type === 'defend') && player.energy < ability.energyCost) {
       toast.error('Not enough energy!');
       return;
     }
@@ -49,7 +50,10 @@ export const BattleArena = ({
 
     // Player uses ability
     const newPlayer = { ...player };
-    newPlayer.energy -= ability.energyCost;
+    // Only deduct energy for 'super', 'heal', and 'defend' types
+    if (ability.type === 'super' || ability.type === 'heal' || ability.type === 'defend') {
+      newPlayer.energy -= ability.energyCost;
+    }
     
     if (ability.type === 'attack') {
       const damage = Math.max(1, ability.damage - enemy.defense);
@@ -57,6 +61,18 @@ export const BattleArena = ({
       newEnemy.health = Math.max(0, newEnemy.health - damage);
       setEnemy(newEnemy);
       addToBattleLog(`${player.name} uses ${ability.name} for ${damage} damage!`);
+      
+      if (newEnemy.health <= 0) {
+        addToBattleLog(`${enemy.name} is defeated! Hero wins!`);
+        setTimeout(() => onBattleEnd('player'), 1500);
+        return;
+      }
+    } else if (ability.type === 'super') {
+      const damage = Math.max(1, ability.damage - enemy.defense);
+      const newEnemy = { ...enemy };
+      newEnemy.health = Math.max(0, newEnemy.health - damage);
+      setEnemy(newEnemy);
+      addToBattleLog(`${player.name} uses SUPER ATTACK: ${ability.name} for ${damage} damage!`);
       
       if (newEnemy.health <= 0) {
         addToBattleLog(`${enemy.name} is defeated! Hero wins!`);
@@ -75,34 +91,60 @@ export const BattleArena = ({
 
     // Enemy AI turn
     setTimeout(() => {
-      const enemyAbility = enemy.abilities[Math.floor(Math.random() * enemy.abilities.length)];
-      const newEnemy = { ...enemy };
-      
-      if (newEnemy.energy >= enemyAbility.energyCost && enemyAbility.currentCooldown === 0) {
-        newEnemy.energy -= enemyAbility.energyCost;
-        
-        if (enemyAbility.type === 'attack') {
-          const damage = Math.max(1, enemyAbility.damage - newPlayer.defense);
-          newPlayer.health = Math.max(0, newPlayer.health - damage);
-          setPlayer(newPlayer);
-          addToBattleLog(`${enemy.name} uses ${enemyAbility.name} for ${damage} damage!`);
-          
-          if (newPlayer.health <= 0) {
-            addToBattleLog(`${player.name} is defeated! Monster wins!`);
-            setTimeout(() => onBattleEnd('enemy'), 1500);
-            return;
-          }
-        } else if (enemyAbility.type === 'heal') {
-          const healAmount = Math.abs(enemyAbility.damage);
-          newEnemy.health = Math.min(newEnemy.maxHealth, newEnemy.health + healAmount);
-          addToBattleLog(`${enemy.name} heals for ${healAmount} HP!`);
+      // Filter abilities based on monster's current health
+      let availableAbilities = enemy.abilities.filter(a => enemy.energy >= a.energyCost && a.currentCooldown === 0);
+      let healAbilities = availableAbilities.filter(a => a.type === 'heal');
+      let nonHealAbilities = availableAbilities.filter(a => a.type !== 'heal');
+      let chosenAbility;
+      // Only use heal if health is below 60%
+      if (healAbilities.length > 0 && enemy.health < enemy.maxHealth * 0.6) {
+        // 50% chance to heal if available and low health, otherwise attack
+        if (Math.random() < 0.5 && nonHealAbilities.length > 0) {
+          chosenAbility = nonHealAbilities[Math.floor(Math.random() * nonHealAbilities.length)];
+        } else {
+          chosenAbility = healAbilities[Math.floor(Math.random() * healAbilities.length)];
         }
-        
-        setEnemy(newEnemy);
+      } else if (nonHealAbilities.length > 0) {
+        chosenAbility = nonHealAbilities[Math.floor(Math.random() * nonHealAbilities.length)];
+      } else if (healAbilities.length > 0) {
+        // If only heal is available, use it
+        chosenAbility = healAbilities[Math.floor(Math.random() * healAbilities.length)];
       } else {
+        // No abilities available
         addToBattleLog(`${enemy.name} skips turn (no energy or ability on cooldown)`);
+        endTurn();
+        return;
       }
-      
+      const newEnemy = { ...enemy };
+      newEnemy.energy -= chosenAbility.energyCost;
+      if (chosenAbility.type === 'attack') {
+        const damage = Math.max(1, chosenAbility.damage - newPlayer.defense);
+        newPlayer.health = Math.max(0, newPlayer.health - damage);
+        setPlayer(newPlayer);
+        addToBattleLog(`${enemy.name} uses ${chosenAbility.name} for ${damage} damage!`);
+        if (newPlayer.health <= 0) {
+          addToBattleLog(`${player.name} is defeated! Monster wins!`);
+          setTimeout(() => onBattleEnd('enemy'), 1500);
+          return;
+        }
+      } else if (chosenAbility.type === 'heal') {
+        const healAmount = Math.abs(chosenAbility.damage);
+        newEnemy.health = Math.min(newEnemy.maxHealth, newEnemy.health + healAmount);
+        addToBattleLog(`${enemy.name} heals for ${healAmount} HP!`);
+      } else if (chosenAbility.type === 'super') {
+        const damage = Math.max(1, chosenAbility.damage - newPlayer.defense);
+        newPlayer.health = Math.max(0, newPlayer.health - damage);
+        setPlayer(newPlayer);
+        addToBattleLog(`${enemy.name} uses SUPER ATTACK: ${chosenAbility.name} for ${damage} damage!`);
+        if (newPlayer.health <= 0) {
+          addToBattleLog(`${player.name} is defeated! Monster wins!`);
+          setTimeout(() => onBattleEnd('enemy'), 1500);
+          return;
+        }
+      } else if (chosenAbility.type === 'defend') {
+        addToBattleLog(`${enemy.name} takes a defensive stance!`);
+      }
+      setEnemy(newEnemy);
       endTurn();
     }, 1000);
   };

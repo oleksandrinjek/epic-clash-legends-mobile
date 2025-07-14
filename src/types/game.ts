@@ -21,7 +21,7 @@ export interface Ability {
   cooldown: number;
   currentCooldown: number;
   description: string;
-  type: 'attack' | 'defend' | 'heal' | 'special';
+  type: 'attack' | 'defend' | 'heal' | 'special' | 'super';
 }
 
 export interface GameState {

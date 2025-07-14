@@ -19,6 +19,7 @@ export const AbilityButton = ({ ability, character, onClick, disabled }: Ability
       case 'defend': return '🛡️';
       case 'heal': return '💚';
       case 'special': return '✨';
+      case 'super': return '💥';
     }
   };
 
@@ -28,6 +29,7 @@ export const AbilityButton = ({ ability, character, onClick, disabled }: Ability
       case 'defend': return 'border-blue-500 hover:bg-blue-50';
       case 'heal': return 'border-green-500 hover:bg-green-50';
       case 'special': return 'border-purple-500 hover:bg-purple-50';
+      case 'super': return 'border-yellow-500 hover:bg-yellow-50';
     }
   };
 
@@ -59,6 +61,7 @@ export const AbilityButton = ({ ability, character, onClick, disabled }: Ability
       {/* Damage/Effect */}
       <div className="text-xs text-muted-foreground">
         {ability.type === 'attack' && `${ability.damage} DMG`}
+        {ability.type === 'super' && `${ability.damage} DMG (Super)`}
         {ability.type === 'heal' && `+${Math.abs(ability.damage)} HP`}
         {ability.type === 'defend' && 'Defensive'}
         {ability.type === 'special' && 'Special'}
