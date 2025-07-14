@@ -276,7 +276,7 @@ export const monsters: Character[] = [
   },
   {
     id: 'frost-giant',
-    name: 'Frost Giant',
+    name: 'Waterdemon',
     type: 'monster',
     health: 140,
     maxHealth: 140,
