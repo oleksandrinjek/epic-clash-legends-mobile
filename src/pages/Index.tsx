@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Character } from '@/types/game';
+import { useGame } from '@/context/GameContext';
 import { GameMenu } from '@/components/game/GameMenu';
 import { BattleArena } from '@/components/game/BattleArena';
 import { Card } from '@/components/ui/card';
@@ -8,32 +9,28 @@ import { Button } from '@/components/ui/button';
 type GameState = 'menu' | 'battle' | 'victory' | 'defeat';
 
 const Index = () => {
+  const { playerState, updatePlayerState, getUpgradedHero } = useGame();
   const [gameState, setGameState] = useState<GameState>('menu');
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [enemyCharacter, setEnemyCharacter] = useState<Character | null>(null);
-  const [playerStats, setPlayerStats] = useState({
-    name: 'Player',
-    level: 12,
-    coins: 1250,
-    wins: 0,
-    losses: 0
-  });
 
   const handleStartBattle = (player: Character, enemy: Character) => {
+    // Apply upgrades to the selected hero
+    const upgradedPlayer = getUpgradedHero(player);
+    
     // Deep clone to avoid mutating the original data
     const clone = (obj: any) => JSON.parse(JSON.stringify(obj));
-    setPlayerCharacter(clone(player));
+    setPlayerCharacter(clone(upgradedPlayer));
     setEnemyCharacter(clone(enemy));
     setGameState('battle');
   };
 
   const handleBattleEnd = (winner: 'player' | 'enemy') => {
     // Update stats based on battle result
-    setPlayerStats(prev => ({
-      ...prev,
-      wins: winner === 'player' ? prev.wins + 1 : prev.wins,
-      losses: winner === 'enemy' ? prev.losses + 1 : prev.losses
-    }));
+    updatePlayerState({
+      wins: winner === 'player' ? playerState.wins + 1 : playerState.wins,
+      losses: winner === 'enemy' ? playerState.losses + 1 : playerState.losses
+    });
     setGameState(winner === 'player' ? 'victory' : 'defeat');
   };
 
@@ -44,7 +41,7 @@ const Index = () => {
   };
 
   if (gameState === 'menu') {
-    return <GameMenu onStartBattle={handleStartBattle} playerStats={playerStats} />;
+    return <GameMenu onStartBattle={handleStartBattle} />;
   }
 
   if (gameState === 'battle' && playerCharacter && enemyCharacter) {
@@ -91,7 +88,7 @@ const Index = () => {
     );
   }
 
-  return <GameMenu onStartBattle={handleStartBattle} playerStats={playerStats} />;
+  return <GameMenu onStartBattle={handleStartBattle} />;
 };
 
 export default Index;

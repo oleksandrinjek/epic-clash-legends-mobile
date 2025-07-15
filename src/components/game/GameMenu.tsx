@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Character } from '@/types/game';
+import { useGame } from '@/context/GameContext';
 import { heroes, monsters } from '@/data/characters';
 import { CharacterCard } from './CharacterCard';
 import { Button } from '@/components/ui/button';
@@ -10,16 +11,10 @@ import { Separator } from '@/components/ui/separator';
 
 interface GameMenuProps {
   onStartBattle: (playerCharacter: Character, enemyCharacter: Character) => void;
-  playerStats: {
-    name: string;
-    level: number;
-    coins: number;
-    wins: number;
-    losses: number;
-  };
 }
 
-export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
+export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
+  const { playerState, getUpgradedHero } = useGame();
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
   const handleStartBattle = () => {
@@ -50,20 +45,20 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
         {/* Player Stats */}
         <Card className="p-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-bold text-lg">{playerStats.name}</h2>
-            <Badge variant="secondary">Level {playerStats.level}</Badge>
+            <h2 className="font-bold text-lg">{playerState.name}</h2>
+            <Badge variant="secondary">Level {playerState.level}</Badge>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-primary">{playerStats.coins}</div>
+              <div className="text-2xl font-bold text-primary">{playerState.coins}</div>
               <div className="text-xs text-muted-foreground">Coins</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-green-500">{playerStats.wins}</div>
+              <div className="text-2xl font-bold text-green-500">{playerState.wins}</div>
               <div className="text-xs text-muted-foreground">Wins</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-red-500">{playerStats.losses}</div>
+              <div className="text-2xl font-bold text-red-500">{playerState.losses}</div>
               <div className="text-xs text-muted-foreground">Losses</div>
             </div>
           </div>
@@ -73,15 +68,18 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
         <Card className="p-4">
           <h2 className="font-bold mb-4">Choose Your Hero ⚔️</h2>
           <div className="grid grid-cols-2 gap-3">
-            {heroes.map((character) => (
-              <CharacterCard
-                key={character.id}
-                character={character}
-                size="medium"
-                onClick={() => setSelectedCharacter(character)}
-                isSelected={selectedCharacter?.id === character.id}
-              />
-            ))}
+            {heroes.map((character) => {
+              const upgradedHero = getUpgradedHero(character);
+              return (
+                <CharacterCard
+                  key={character.id}
+                  character={upgradedHero}
+                  size="medium"
+                  onClick={() => setSelectedCharacter(character)}
+                  isSelected={selectedCharacter?.id === character.id}
+                />
+              );
+            })}
           </div>
         </Card>
 
@@ -108,6 +106,64 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
                   </div>
                 </div>
               </div>
+              
+              {/* Show upgraded stats */}
+              {(() => {
+                const upgradedHero = getUpgradedHero(selectedCharacter);
+                const hasUpgrades = upgradedHero.attack !== selectedCharacter.attack ||
+                                  upgradedHero.defense !== selectedCharacter.defense ||
+                                  upgradedHero.health !== selectedCharacter.health ||
+                                  upgradedHero.energy !== selectedCharacter.energy;
+                
+                return (
+                  <div className="grid grid-cols-2 gap-3 p-3 bg-muted/50 rounded-lg">
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Attack</div>
+                      <div className="font-bold text-lg">
+                        {upgradedHero.attack}
+                        {hasUpgrades && upgradedHero.attack > selectedCharacter.attack && (
+                          <span className="text-green-500 text-sm ml-1">
+                            (+{upgradedHero.attack - selectedCharacter.attack})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Defense</div>
+                      <div className="font-bold text-lg">
+                        {upgradedHero.defense}
+                        {hasUpgrades && upgradedHero.defense > selectedCharacter.defense && (
+                          <span className="text-green-500 text-sm ml-1">
+                            (+{upgradedHero.defense - selectedCharacter.defense})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Health</div>
+                      <div className="font-bold text-lg">
+                        {upgradedHero.maxHealth}
+                        {hasUpgrades && upgradedHero.maxHealth > selectedCharacter.maxHealth && (
+                          <span className="text-green-500 text-sm ml-1">
+                            (+{upgradedHero.maxHealth - selectedCharacter.maxHealth})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Energy</div>
+                      <div className="font-bold text-lg">
+                        {upgradedHero.maxEnergy}
+                        {hasUpgrades && upgradedHero.maxEnergy > selectedCharacter.maxEnergy && (
+                          <span className="text-green-500 text-sm ml-1">
+                            (+{upgradedHero.maxEnergy - selectedCharacter.maxEnergy})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
               
               <div className="space-y-2">
                 <h4 className="font-medium text-sm">Abilities:</h4>

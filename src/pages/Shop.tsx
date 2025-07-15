@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShopItem } from '@/types/game';
+import { useGame } from '@/context/GameContext';
 import { shopItems } from '@/data/shopItems';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -9,19 +10,9 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 
-interface ShopProps {
-  playerStats?: {
-    name: string;
-    level: number;
-    coins: number;
-    wins: number;
-    losses: number;
-  };
-}
-
-export const Shop = ({ playerStats = { name: 'Player', level: 12, coins: 1250, wins: 0, losses: 0 } }: ShopProps) => {
+export const Shop = () => {
+  const { playerState, purchaseItem, canAfford } = useGame();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [coins, setCoins] = useState(playerStats.coins);
   const { toast } = useToast();
 
   const categories = [
@@ -57,16 +48,15 @@ export const Shop = ({ playerStats = { name: 'Player', level: 12, coins: 1250, w
   };
 
   const handlePurchase = (item: ShopItem) => {
-    if (coins >= item.price) {
-      setCoins(coins - item.price);
+    if (purchaseItem(item)) {
       toast({
         title: "Purchase Successful! 🎉",
-        description: `You bought ${item.name} for ${item.price} coins!`,
+        description: `You bought ${item.name} for ${item.price} coins! Your heroes are now stronger!`,
       });
     } else {
       toast({
         title: "Insufficient Coins 💸",
-        description: `You need ${item.price - coins} more coins to buy ${item.name}.`,
+        description: `You need ${item.price - playerState.coins} more coins to buy ${item.name}.`,
         variant: "destructive",
       });
     }
@@ -94,7 +84,7 @@ export const Shop = ({ playerStats = { name: 'Player', level: 12, coins: 1250, w
             <div className="flex items-center space-x-2">
               <span className="text-2xl">💰</span>
               <div>
-                <div className="font-bold text-lg">{coins}</div>
+                <div className="font-bold text-lg">{playerState.coins}</div>
                 <div className="text-xs text-muted-foreground">Coins</div>
               </div>
             </div>
@@ -171,7 +161,7 @@ export const Shop = ({ playerStats = { name: 'Player', level: 12, coins: 1250, w
                   </div>
                   <Button
                     onClick={() => handlePurchase(item)}
-                    disabled={coins < item.price}
+                    disabled={!canAfford(item.price)}
                     className="flex items-center space-x-2"
                   >
                     <ShoppingCart className="h-4 w-4" />
@@ -184,8 +174,15 @@ export const Shop = ({ playerStats = { name: 'Player', level: 12, coins: 1250, w
         </div>
 
         {/* Footer */}
-        <div className="text-center text-xs text-muted-foreground pt-4">
-          💡 Tip: Items permanently upgrade your heroes' stats!
+        <div className="text-center space-y-2">
+          <div className="text-xs text-muted-foreground">
+            💡 Tip: Items permanently upgrade your heroes' stats!
+          </div>
+          {playerState.purchasedItems.length > 0 && (
+            <div className="text-xs text-green-600">
+              ✅ You have {playerState.purchasedItems.length} item{playerState.purchasedItems.length > 1 ? 's' : ''} upgrading your heroes!
+            </div>
+          )}
         </div>
       </div>
     </div>
