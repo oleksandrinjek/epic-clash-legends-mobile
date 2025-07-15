@@ -355,7 +355,7 @@ export const monsters: Character[] = [
     energy: 60,
     maxEnergy: 60,
     rarity: 'legendary',
-    image: '👻🌌',
+    image: '/lovable-uploads/378a5bc1-671a-48d5-87f5-c8019170ec64.png',
     abilities: [
       {
         id: 'void-strike',
