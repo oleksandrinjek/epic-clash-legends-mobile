@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Character } from '@/types/game';
 import { heroes, monsters } from '@/data/characters';
 import { CharacterCard } from './CharacterCard';
@@ -137,9 +138,11 @@ export const GameMenu = ({ onStartBattle, playerStats }: GameMenuProps) => {
           </Button>
           
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="h-12">
-              🏪 Shop
-            </Button>
+            <Link to="/shop">
+              <Button variant="outline" className="h-12 w-full">
+                🏪 Shop
+              </Button>
+            </Link>
             <Button variant="outline" className="h-12">
               📊 Leaderboard
             </Button>

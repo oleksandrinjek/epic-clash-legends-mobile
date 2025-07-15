@@ -1,0 +1,195 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ShopItem } from '@/types/game';
+import { shopItems } from '@/data/shopItems';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
+import { ArrowLeft, ShoppingCart } from 'lucide-react';
+
+interface ShopProps {
+  playerStats?: {
+    name: string;
+    level: number;
+    coins: number;
+    wins: number;
+    losses: number;
+  };
+}
+
+export const Shop = ({ playerStats = { name: 'Player', level: 12, coins: 1250, wins: 0, losses: 0 } }: ShopProps) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [coins, setCoins] = useState(playerStats.coins);
+  const { toast } = useToast();
+
+  const categories = [
+    { id: 'all', name: 'All Items', icon: '🛍️' },
+    { id: 'weapon', name: 'Weapons', icon: '⚔️' },
+    { id: 'armor', name: 'Armor', icon: '🛡️' },
+    { id: 'potion', name: 'Potions', icon: '🧪' },
+    { id: 'accessory', name: 'Accessories', icon: '💍' }
+  ];
+
+  const filteredItems = selectedCategory === 'all' 
+    ? shopItems 
+    : shopItems.filter(item => item.type === selectedCategory);
+
+  const getRarityColor = (rarity: ShopItem['rarity']) => {
+    switch (rarity) {
+      case 'common': return 'bg-gray-500';
+      case 'rare': return 'bg-blue-500';
+      case 'epic': return 'bg-purple-500';
+      case 'legendary': return 'bg-orange-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const getStatIcon = (stat: string) => {
+    switch (stat) {
+      case 'attack': return '⚔️';
+      case 'defense': return '🛡️';
+      case 'health': return '❤️';
+      case 'energy': return '⚡';
+      default: return '📊';
+    }
+  };
+
+  const handlePurchase = (item: ShopItem) => {
+    if (coins >= item.price) {
+      setCoins(coins - item.price);
+      toast({
+        title: "Purchase Successful! 🎉",
+        description: `You bought ${item.name} for ${item.price} coins!`,
+      });
+    } else {
+      toast({
+        title: "Insufficient Coins 💸",
+        description: `You need ${item.price - coins} more coins to buy ${item.name}.`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-primary/10 via-background to-secondary/10 p-4">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link to="/">
+              <Button variant="outline" size="icon">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                🏪 Hero Shop
+              </h1>
+              <p className="text-muted-foreground">Upgrade your heroes with powerful items!</p>
+            </div>
+          </div>
+          <Card className="p-3">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">💰</span>
+              <div>
+                <div className="font-bold text-lg">{coins}</div>
+                <div className="text-xs text-muted-foreground">Coins</div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Category Filter */}
+        <Card className="p-4">
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.id)}
+                className="flex items-center space-x-2"
+              >
+                <span>{category.icon}</span>
+                <span>{category.name}</span>
+              </Button>
+            ))}
+          </div>
+        </Card>
+
+        {/* Shop Items */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredItems.map((item) => (
+            <Card key={item.id} className="p-4 hover:shadow-lg transition-shadow">
+              <div className="space-y-3">
+                {/* Item Header */}
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-3xl">{item.image}</span>
+                    <div>
+                      <h3 className="font-bold">{item.name}</h3>
+                      <div className="flex items-center space-x-2">
+                        <Badge 
+                          variant="outline" 
+                          className={`${getRarityColor(item.rarity)} text-white`}
+                        >
+                          {item.rarity}
+                        </Badge>
+                        <Badge variant="secondary">
+                          {item.type}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Item Description */}
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
+                </p>
+
+                {/* Item Effect */}
+                <div className="bg-muted/50 rounded-lg p-3">
+                  <div className="flex items-center space-x-2">
+                    <span>{getStatIcon(item.effect.stat)}</span>
+                    <span className="text-sm font-medium">
+                      +{item.effect.value} {item.effect.stat.charAt(0).toUpperCase() + item.effect.stat.slice(1)}
+                    </span>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Purchase Section */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xl">💰</span>
+                    <span className="text-lg font-bold text-primary">
+                      {item.price}
+                    </span>
+                  </div>
+                  <Button
+                    onClick={() => handlePurchase(item)}
+                    disabled={coins < item.price}
+                    className="flex items-center space-x-2"
+                  >
+                    <ShoppingCart className="h-4 w-4" />
+                    <span>Buy</span>
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-xs text-muted-foreground pt-4">
+          💡 Tip: Items permanently upgrade your heroes' stats!
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Shop;

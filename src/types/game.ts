@@ -41,3 +41,17 @@ export interface Player {
   coins: number;
   characters: Character[];
 }
+
+export interface ShopItem {
+  id: string;
+  name: string;
+  type: 'weapon' | 'armor' | 'potion' | 'accessory';
+  price: number;
+  description: string;
+  image: string;
+  effect: {
+    stat: 'attack' | 'defense' | 'health' | 'energy';
+    value: number;
+  };
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+}
