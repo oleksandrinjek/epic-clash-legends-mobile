@@ -51,7 +51,7 @@ export const Shop = () => {
     if (purchaseItem(item)) {
       toast({
         title: "Purchase Successful! 🎉",
-        description: `You bought ${item.name} for ${item.price} coins! Your heroes are now stronger!`,
+        description: `You bought ${item.name} for ${item.price} coins! It's now in your inventory.`,
       });
     } else {
       toast({
@@ -176,11 +176,11 @@ export const Shop = () => {
         {/* Footer */}
         <div className="text-center space-y-2">
           <div className="text-xs text-muted-foreground">
-            💡 Tip: Items permanently upgrade your heroes' stats!
+            💡 Tip: Items go to your inventory! Use them during battle or as permanent upgrades.
           </div>
-          {playerState.purchasedItems.length > 0 && (
+          {playerState.inventory.length > 0 && (
             <div className="text-xs text-green-600">
-              ✅ You have {playerState.purchasedItems.length} item{playerState.purchasedItems.length > 1 ? 's' : ''} upgrading your heroes!
+              ✅ You have {playerState.inventory.length} item{playerState.inventory.length > 1 ? 's' : ''} in your inventory!
             </div>
           )}
         </div>

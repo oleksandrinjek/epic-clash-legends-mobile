@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Character, Ability } from '@/types/game';
+import { useGame } from '@/context/GameContext';
 import { CharacterCard } from './CharacterCard';
 import { AbilityButton } from './AbilityButton';
 import { BattleLog } from './BattleLog';
+import { Inventory } from './Inventory';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -22,6 +24,7 @@ export const BattleArena = ({
   onBattleEnd,
   onReturnToMenu 
 }: BattleArenaProps) => {
+  const { playerState, useInventoryItem } = useGame();
   const [player, setPlayer] = useState<Character>(playerCharacter);
   const [enemy, setEnemy] = useState<Character>(enemyCharacter);
   const [currentTurn, setCurrentTurn] = useState<'player' | 'enemy'>('player');
@@ -32,6 +35,18 @@ export const BattleArena = ({
 
   const addToBattleLog = (message: string) => {
     setBattleLog(prev => [...prev, message]);
+  };
+
+  const handleUseInventoryItem = (item: any) => {
+    if (currentTurn !== 'player' || isProcessing) return;
+    
+    const updatedPlayer = useInventoryItem(item, player);
+    setPlayer(updatedPlayer);
+    
+    addToBattleLog(`${player.name} uses ${item.name}!`);
+    
+    // Using an item doesn't end the turn, player can still use abilities
+    toast.success(`Used ${item.name}!`);
   };
 
   const useAbility = async (ability: Ability) => {
@@ -188,8 +203,8 @@ export const BattleArena = ({
           </div>
         </Card>
 
-        {/* Main Battle Area - Three columns */}
-        <div className="grid grid-cols-3 gap-6 items-start">
+        {/* Main Battle Area - Four columns */}
+        <div className="grid grid-cols-4 gap-4 items-start">
           {/* Left Column - Player Hero */}
           <div className="space-y-4">
             <div className="flex justify-center">
@@ -198,7 +213,7 @@ export const BattleArena = ({
             
             {/* Player Abilities */}
             <Card className="p-4">
-              <h3 className="font-semibold mb-3 text-center">Your Hero Abilities</h3>
+              <h3 className="font-semibold mb-3 text-center">Hero Abilities</h3>
               <div className="grid grid-cols-1 gap-2">
                 {player.abilities.map((ability) => (
                   <AbilityButton
@@ -212,6 +227,15 @@ export const BattleArena = ({
                 ))}
               </div>
             </Card>
+          </div>
+
+          {/* Inventory Column */}
+          <div className="space-y-4">
+            <Inventory
+              inventory={playerState.inventory}
+              onUseItem={handleUseInventoryItem}
+              disabled={isProcessing || currentTurn !== 'player'}
+            />
           </div>
 
           {/* Center Column - Battle Info & Log */}

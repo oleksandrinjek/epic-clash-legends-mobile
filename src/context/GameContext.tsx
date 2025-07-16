@@ -1,10 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Character, ShopItem } from '@/types/game';
-
-export interface PurchasedItem extends ShopItem {
-  purchaseId: string;
-  appliedToHero?: string;
-}
+import { Character, ShopItem, InventoryItem } from '@/types/game';
 
 interface PlayerState {
   name: string;
@@ -12,14 +7,14 @@ interface PlayerState {
   coins: number;
   wins: number;
   losses: number;
-  purchasedItems: PurchasedItem[];
+  inventory: InventoryItem[];
 }
 
 interface GameContextType {
   playerState: PlayerState;
   updatePlayerState: (updates: Partial<PlayerState>) => void;
   purchaseItem: (item: ShopItem) => boolean;
-  getUpgradedHero: (hero: Character) => Character;
+  useInventoryItem: (inventoryItem: InventoryItem, character: Character) => Character;
   canAfford: (price: number) => boolean;
 }
 
@@ -32,7 +27,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     coins: 1250,
     wins: 0,
     losses: 0,
-    purchasedItems: []
+    inventory: []
   });
 
   const updatePlayerState = (updates: Partial<PlayerState>) => {
@@ -41,46 +36,73 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const purchaseItem = (item: ShopItem): boolean => {
     if (playerState.coins >= item.price) {
-      const purchasedItem: PurchasedItem = {
-        ...item,
-        purchaseId: `${item.id}-${Date.now()}`
-      };
-      
-      setPlayerState(prev => ({
-        ...prev,
-        coins: prev.coins - item.price,
-        purchasedItems: [...prev.purchasedItems, purchasedItem]
-      }));
+      setPlayerState(prev => {
+        const existingItem = prev.inventory.find(invItem => invItem.id === item.id);
+        
+        if (existingItem) {
+          // Increase quantity if item already exists
+          return {
+            ...prev,
+            coins: prev.coins - item.price,
+            inventory: prev.inventory.map(invItem =>
+              invItem.id === item.id
+                ? { ...invItem, quantity: invItem.quantity + 1 }
+                : invItem
+            )
+          };
+        } else {
+          // Add new item to inventory
+          const inventoryItem: InventoryItem = {
+            ...item,
+            inventoryId: `${item.id}-${Date.now()}`,
+            quantity: 1
+          };
+          
+          return {
+            ...prev,
+            coins: prev.coins - item.price,
+            inventory: [...prev.inventory, inventoryItem]
+          };
+        }
+      });
       
       return true;
     }
     return false;
   };
 
-  const getUpgradedHero = (hero: Character): Character => {
-    const upgradedHero = { ...hero };
+  const useInventoryItem = (inventoryItem: InventoryItem, character: Character): Character => {
+    const updatedCharacter = { ...character };
     
-    // Apply all purchased item bonuses to the hero
-    playerState.purchasedItems.forEach(item => {
-      switch (item.effect.stat) {
-        case 'attack':
-          upgradedHero.attack += item.effect.value;
-          break;
-        case 'defense':
-          upgradedHero.defense += item.effect.value;
-          break;
-        case 'health':
-          upgradedHero.health += item.effect.value;
-          upgradedHero.maxHealth += item.effect.value;
-          break;
-        case 'energy':
-          upgradedHero.energy += item.effect.value;
-          upgradedHero.maxEnergy += item.effect.value;
-          break;
-      }
-    });
+    // Apply item effect to character
+    switch (inventoryItem.effect.stat) {
+      case 'attack':
+        updatedCharacter.attack += inventoryItem.effect.value;
+        break;
+      case 'defense':
+        updatedCharacter.defense += inventoryItem.effect.value;
+        break;
+      case 'health':
+        const healthIncrease = inventoryItem.effect.value;
+        updatedCharacter.health = Math.min(updatedCharacter.maxHealth, updatedCharacter.health + healthIncrease);
+        break;
+      case 'energy':
+        const energyIncrease = inventoryItem.effect.value;
+        updatedCharacter.energy = Math.min(updatedCharacter.maxEnergy, updatedCharacter.energy + energyIncrease);
+        break;
+    }
     
-    return upgradedHero;
+    // Remove item from inventory (decrease quantity)
+    setPlayerState(prev => ({
+      ...prev,
+      inventory: prev.inventory.map(item =>
+        item.inventoryId === inventoryItem.inventoryId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      ).filter(item => item.quantity > 0)
+    }));
+    
+    return updatedCharacter;
   };
 
   const canAfford = (price: number): boolean => {
@@ -92,7 +114,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       playerState,
       updatePlayerState,
       purchaseItem,
-      getUpgradedHero,
+      useInventoryItem,
       canAfford
     }}>
       {children}

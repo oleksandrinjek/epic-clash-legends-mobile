@@ -58,26 +58,28 @@ export const shopItems: ShopItem[] = [
     name: 'Greater Healing Potion',
     type: 'potion',
     price: 100,
-    description: 'A powerful potion that permanently increases maximum health.',
+    description: 'A powerful potion that restores health during battle.',
     image: '🧪❤️',
     effect: {
       stat: 'health',
-      value: 15
+      value: 50
     },
-    rarity: 'rare'
+    rarity: 'rare',
+    usableInBattle: true
   },
   {
     id: 'energy-elixir',
     name: 'Energy Elixir',
     type: 'potion',
     price: 120,
-    description: 'A mystical elixir that expands your energy reserves for more powerful abilities.',
+    description: 'A mystical elixir that restores energy during battle.',
     image: '⚡🧪',
     effect: {
       stat: 'energy',
-      value: 10
+      value: 30
     },
-    rarity: 'rare'
+    rarity: 'rare',
+    usableInBattle: true
   },
   {
     id: 'power-ring',

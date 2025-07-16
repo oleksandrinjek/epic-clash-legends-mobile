@@ -54,4 +54,10 @@ export interface ShopItem {
     value: number;
   };
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  usableInBattle?: boolean;
+}
+
+export interface InventoryItem extends ShopItem {
+  inventoryId: string;
+  quantity: number;
 }

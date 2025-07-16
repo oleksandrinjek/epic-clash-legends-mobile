@@ -9,18 +9,18 @@ import { Button } from '@/components/ui/button';
 type GameState = 'menu' | 'battle' | 'victory' | 'defeat';
 
 const Index = () => {
-  const { playerState, updatePlayerState, getUpgradedHero } = useGame();
+  const { playerState, updatePlayerState } = useGame();
   const [gameState, setGameState] = useState<GameState>('menu');
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [enemyCharacter, setEnemyCharacter] = useState<Character | null>(null);
 
   const handleStartBattle = (player: Character, enemy: Character) => {
-    // Apply upgrades to the selected hero
-    const upgradedPlayer = getUpgradedHero(player);
+    // Use the hero as-is, no automatic upgrades
+    // Items will be used from inventory during battle
     
     // Deep clone to avoid mutating the original data
     const clone = (obj: any) => JSON.parse(JSON.stringify(obj));
-    setPlayerCharacter(clone(upgradedPlayer));
+    setPlayerCharacter(clone(player));
     setEnemyCharacter(clone(enemy));
     setGameState('battle');
   };
