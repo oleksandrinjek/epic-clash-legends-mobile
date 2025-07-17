@@ -158,9 +158,11 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                 🏪 Shop
               </Button>
             </Link>
-            <Button variant="outline" className="h-12">
-              📊 Leaderboard
-            </Button>
+            <Link to="/leaderboard">
+              <Button variant="outline" className="h-12 w-full">
+                📊 Leaderboard
+              </Button>
+            </Link>
           </div>
         </div>
 
