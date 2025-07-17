@@ -20,7 +20,7 @@ export const shopItems: ShopItem[] = [
     type: 'weapon',
     price: 200,
     description: 'A magical ice crystal that enhances magical attacks and provides frost damage.',
-    image: '❄️💎',
+    image: '/lovable-uploads/60aa725a-b504-4b45-99c9-c77374d66bfd.png',
     effect: {
       stat: 'attack',
       value: 7
