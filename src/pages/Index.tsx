@@ -5,6 +5,7 @@ import { GameMenu } from '@/components/game/GameMenu';
 import { BattleArena } from '@/components/game/BattleArena';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 type GameState = 'menu' | 'battle' | 'victory' | 'defeat';
 
@@ -27,10 +28,18 @@ const Index = () => {
 
   const handleBattleEnd = (winner: 'player' | 'enemy') => {
     // Update stats based on battle result
-    updatePlayerState({
+    const newState = {
       wins: winner === 'player' ? playerState.wins + 1 : playerState.wins,
-      losses: winner === 'enemy' ? playerState.losses + 1 : playerState.losses
-    });
+      losses: winner === 'enemy' ? playerState.losses + 1 : playerState.losses,
+      coins: winner === 'player' ? playerState.coins + 50 : playerState.coins
+    };
+    
+    updatePlayerState(newState);
+    
+    if (winner === 'player') {
+      toast.success('Victory! You earned 50 coins!');
+    }
+    
     setGameState(winner === 'player' ? 'victory' : 'defeat');
   };
 
