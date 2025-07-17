@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Coins } from 'lucide-react';
 
 export const Shop = () => {
   const { playerState, purchaseItem, canAfford } = useGame();
@@ -82,7 +82,7 @@ export const Shop = () => {
           </div>
           <Card className="p-3">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">💰</span>
+              <Coins className="h-6 w-6 text-primary" />
               <div>
                 <div className="font-bold text-lg">{playerState.coins}</div>
                 <div className="text-xs text-muted-foreground">Coins</div>
@@ -164,7 +164,7 @@ export const Shop = () => {
                 {/* Purchase Section */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl">💰</span>
+                    <Coins className="h-5 w-5 text-primary" />
                     <span className="text-lg font-bold text-primary">
                       {item.price}
                     </span>
