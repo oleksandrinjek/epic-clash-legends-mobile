@@ -116,7 +116,17 @@ export const Shop = () => {
                 {/* Item Header */}
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-3">
-                    <span className="text-3xl">{item.image}</span>
+                    <div className="w-12 h-12 flex items-center justify-center">
+                      {item.image.startsWith('/') || item.image.startsWith('http') ? (
+                        <img 
+                          src={item.image} 
+                          alt={item.name} 
+                          className="w-10 h-10 object-contain"
+                        />
+                      ) : (
+                        <span className="text-3xl">{item.image}</span>
+                      )}
+                    </div>
                     <div>
                       <h3 className="font-bold">{item.name}</h3>
                       <div className="flex items-center space-x-2">
