@@ -3,11 +3,11 @@ import { ShopItem } from '@/types/game';
 export const shopItems: ShopItem[] = [
   {
     id: 'flame-sword',
-    name: 'Flame Sword',
+    name: 'Nederite Sword',
     type: 'weapon',
     price: 350,
     description: 'A legendary sword imbued with fire magic. Increases attack power significantly.',
-    image: '🔥⚔️',
+    image: '/lovable-uploads/fca6bd6e-161c-49a9-ae6f-a947f3376f26.png',
     effect: {
       stat: 'attack',
       value: 10
