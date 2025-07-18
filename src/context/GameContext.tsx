@@ -4,6 +4,7 @@ import { Character, ShopItem, InventoryItem } from '@/types/game';
 interface PlayerState {
   name: string;
   level: number;
+  experience: number;
   coins: number;
   wins: number;
   losses: number;
@@ -23,7 +24,8 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [playerState, setPlayerState] = useState<PlayerState>({
     name: 'Player',
-    level: 12,
+    level: 1,
+    experience: 0,
     coins: 1250,
     wins: 0,
     losses: 0,
