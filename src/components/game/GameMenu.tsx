@@ -69,6 +69,23 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
           </div>
         </Card>
 
+        {/* Village Button */}
+        <Link to="/village">
+          <Button variant="outline" className="w-full h-16 mb-4">
+            <div className="flex items-center space-x-3">
+              <img 
+                src="https://images.unsplash.com/photo-1492321936769-b49830bc1d1e" 
+                alt="Village"
+                className="w-10 h-10 rounded-lg object-cover"
+              />
+              <div className="text-left">
+                <div className="font-bold">🏘️ Go to Village</div>
+                <div className="text-xs text-muted-foreground">Recruit new heroes</div>
+              </div>
+            </div>
+          </Button>
+        </Link>
+
         {/* Hero Selection */}
         <Card className="p-4">
           <h2 className="font-bold mb-4">Choose Your Hero ⚔️</h2>
