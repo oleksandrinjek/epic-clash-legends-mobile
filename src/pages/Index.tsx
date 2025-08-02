@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 type GameState = 'menu' | 'battle' | 'victory' | 'defeat';
 
 const Index = () => {
-  const { playerState, updatePlayerState } = useGame();
+  const { playerState, updatePlayerState, gainExperience } = useGame();
   const [gameState, setGameState] = useState<GameState>('menu');
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [enemyCharacter, setEnemyCharacter] = useState<Character | null>(null);
@@ -37,7 +37,9 @@ const Index = () => {
     updatePlayerState(newState);
     
     if (winner === 'player') {
-      toast.success('Victory! You earned 50 coins!');
+      const expGained = 25; // Base experience for winning
+      gainExperience(expGained);
+      toast.success(`Victory! You earned 50 coins and ${expGained} experience!`);
     }
     
     setGameState(winner === 'player' ? 'victory' : 'defeat');

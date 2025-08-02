@@ -16,6 +16,7 @@ interface GameContextType {
   updatePlayerState: (updates: Partial<PlayerState>) => void;
   purchaseItem: (item: ShopItem) => boolean;
   useInventoryItem: (inventoryItem: InventoryItem, character: Character) => Character;
+  gainExperience: (exp: number) => void;
   canAfford: (price: number) => boolean;
 }
 
@@ -107,6 +108,31 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return updatedCharacter;
   };
 
+  const gainExperience = (exp: number) => {
+    setPlayerState(prev => {
+      const newExp = prev.experience + exp;
+      const expNeededForNextLevel = prev.level * 100; // 100 exp per level
+      
+      if (newExp >= expNeededForNextLevel) {
+        // Level up!
+        const newLevel = prev.level + 1;
+        const remainingExp = newExp - expNeededForNextLevel;
+        
+        return {
+          ...prev,
+          level: newLevel,
+          experience: remainingExp,
+          coins: prev.coins + 25 // Bonus coins for leveling up
+        };
+      }
+      
+      return {
+        ...prev,
+        experience: newExp
+      };
+    });
+  };
+
   const canAfford = (price: number): boolean => {
     return playerState.coins >= price;
   };
@@ -117,6 +143,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       updatePlayerState,
       purchaseItem,
       useInventoryItem,
+      gainExperience,
       canAfford
     }}>
       {children}
