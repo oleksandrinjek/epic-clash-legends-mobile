@@ -61,7 +61,7 @@ export const CharacterCard = ({
           <img 
             src={character.image} 
             alt={character.name}
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-top"
           />
         ) : (
           <div className="flex items-center justify-center h-full bg-gradient-to-b from-background to-muted text-4xl">
