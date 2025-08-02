@@ -320,7 +320,7 @@ export const monsters: Character[] = [
     energy: 55,
     maxEnergy: 55,
     rarity: 'rare',
-    image: '🐲🔥',
+    image: '/lovable-uploads/24eb45af-d49f-4513-bd0e-f2ed3cb6a8bf.png',
     abilities: [
       {
         id: 'flame-breath',
