@@ -416,5 +416,189 @@ export const monsters: Character[] = [
   }
 ];
 
+// Heroes available for purchase in the village
+export const villageHeroes: Character[] = [
+  {
+    id: 'lightning-wizard',
+    name: 'Lightning Wizard',
+    type: 'hero',
+    health: 90,
+    maxHealth: 90,
+    attack: 32,
+    defense: 12,
+    energy: 70,
+    maxEnergy: 70,
+    rarity: 'epic',
+    image: '/lovable-uploads/60aa725a-b504-4b45-99c9-c77374d66bfd.png',
+    abilities: [
+      {
+        id: 'thunder-strike',
+        name: 'Thunder Strike',
+        damage: 35,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Electric attack that stuns',
+        type: 'attack'
+      },
+      {
+        id: 'lightning-shield',
+        name: 'Lightning Shield',
+        damage: 0,
+        energyCost: 20,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Electrifies defense, reflecting damage',
+        type: 'defend'
+      },
+      {
+        id: 'chain-lightning',
+        name: 'Chain Lightning',
+        damage: 65,
+        energyCost: 35,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Lightning that bounces between enemies!',
+        type: 'super'
+      }
+    ]
+  },
+  {
+    id: 'forest-ranger',
+    name: 'Forest Ranger',
+    type: 'hero',
+    health: 95,
+    maxHealth: 95,
+    attack: 28,
+    defense: 18,
+    energy: 45,
+    maxEnergy: 45,
+    rarity: 'rare',
+    image: '/lovable-uploads/4d283304-067e-41fc-9da9-530663f35cbf.png',
+    abilities: [
+      {
+        id: 'arrow-shot',
+        name: 'Arrow Shot',
+        damage: 30,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Precise arrow attack',
+        type: 'attack'
+      },
+      {
+        id: 'nature-heal',
+        name: 'Nature\'s Blessing',
+        damage: -25,
+        energyCost: 20,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Heals 25 HP using nature magic',
+        type: 'heal'
+      },
+      {
+        id: 'multi-shot',
+        name: 'Multi Shot',
+        damage: 50,
+        energyCost: 25,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Fires multiple arrows at once!',
+        type: 'super'
+      }
+    ]
+  },
+  {
+    id: 'crystal-knight',
+    name: 'Crystal Knight',
+    type: 'hero',
+    health: 110,
+    maxHealth: 110,
+    attack: 26,
+    defense: 22,
+    energy: 35,
+    maxEnergy: 35,
+    rarity: 'legendary',
+    image: '/lovable-uploads/fca6bd6e-161c-49a9-ae6f-a947f3376f26.png',
+    abilities: [
+      {
+        id: 'crystal-blade',
+        name: 'Crystal Blade',
+        damage: 28,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Sharp crystalline attack',
+        type: 'attack'
+      },
+      {
+        id: 'crystal-barrier',
+        name: 'Crystal Barrier',
+        damage: 0,
+        energyCost: 18,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Creates protective crystal shield',
+        type: 'defend'
+      },
+      {
+        id: 'prism-blast',
+        name: 'Prism Blast',
+        damage: 75,
+        energyCost: 30,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Devastating light refraction attack!',
+        type: 'super'
+      }
+    ]
+  },
+  {
+    id: 'wind-dancer',
+    name: 'Wind Dancer',
+    type: 'hero',
+    health: 75,
+    maxHealth: 75,
+    attack: 38,
+    defense: 8,
+    energy: 55,
+    maxEnergy: 55,
+    rarity: 'uncommon',
+    image: '/lovable-uploads/60aa725a-b504-4b45-99c9-c77374d66bfd.png',
+    abilities: [
+      {
+        id: 'wind-slash',
+        name: 'Wind Slash',
+        damage: 33,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Swift wind blade attack',
+        type: 'attack'
+      },
+      {
+        id: 'gust-dodge',
+        name: 'Gust Dodge',
+        damage: 0,
+        energyCost: 15,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Wind currents help avoid next attack',
+        type: 'special'
+      },
+      {
+        id: 'tornado',
+        name: 'Tornado',
+        damage: 55,
+        energyCost: 28,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Summons a powerful tornado!',
+        type: 'super'
+      }
+    ]
+  }
+];
+
 // Combined array for backward compatibility
 export const characters: Character[] = [...heroes, ...monsters];

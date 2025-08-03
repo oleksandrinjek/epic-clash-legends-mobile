@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Character } from '@/types/game';
 import { useGame } from '@/context/GameContext';
-import { heroes } from '@/data/characters';
+import { villageHeroes } from '@/data/characters';
 import { CharacterCard } from '@/components/game/CharacterCard';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -14,8 +14,8 @@ const Village = () => {
   const { playerState, updatePlayerState } = useGame();
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
 
-  // Heroes available for purchase (excluding already owned ones if you want to implement ownership)
-  const availableHeroes = heroes;
+  // Heroes available for purchase in the village
+  const availableHeroes = villageHeroes;
 
   const getHeroPrice = (hero: Character) => {
     // Price based on rarity

@@ -8,7 +8,7 @@ export interface Character {
   defense: number;
   energy: number;
   maxEnergy: number;
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
   image: string;
   abilities: Ability[];
 }
@@ -53,7 +53,7 @@ export interface ShopItem {
     stat: 'attack' | 'defense' | 'health' | 'energy';
     value: number;
   };
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
   usableInBattle?: boolean;
 }
 
