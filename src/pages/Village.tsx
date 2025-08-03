@@ -69,36 +69,75 @@ const Village = () => {
           style={{ backgroundImage: 'url(/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png)' }}
         />
         
-        {/* Header overlay */}
-        <div className="relative z-10 max-w-md mx-auto p-4">
-          <div className="bg-amber-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200 mb-4">
-            <div className="flex items-center space-x-4">
-              <Link to="/">
-                <Button variant="outline" size="icon" className="bg-white/80 hover:bg-white">
-                  <ArrowLeft className="h-4 w-4" />
-                </Button>
-              </Link>
-              <div className="flex-1">
-                <h1 className="text-2xl font-bold text-amber-800 flex items-center gap-2">
-                  🏘️ Hero Village
-                </h1>
-                <p className="text-sm text-amber-700">Click the main building to enter</p>
+        {/* Player Avatar and Health Bar - Top Left */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="bg-amber-200/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border-2 border-amber-400 flex items-center gap-3">
+            <div className="w-12 h-12 bg-orange-400 rounded-full flex items-center justify-center border-2 border-amber-600">
+              <span className="text-lg">👤</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              {/* Health Hearts */}
+              <div className="flex gap-1">
+                <span className="text-red-500 text-lg">❤️</span>
+                <span className="text-red-500 text-lg">❤️</span>
+                <span className="text-red-500 text-lg">❤️</span>
+                <span className="text-gray-400 text-lg">🤍</span>
+                <span className="text-gray-400 text-lg">🤍</span>
               </div>
-              <div className="flex items-center space-x-1 bg-yellow-400/80 px-3 py-1 rounded-full shadow-sm">
-                <Coins className="h-4 w-4 text-yellow-800" />
-                <span className="font-bold text-yellow-900">{playerState.coins}</span>
+              {/* Coins */}
+              <div className="flex items-center gap-1 bg-yellow-400/80 px-2 py-1 rounded-full">
+                <Coins className="h-3 w-3 text-yellow-800" />
+                <span className="font-bold text-yellow-900 text-sm">{playerState.coins}</span>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Back to main menu button - Top Right */}
+        <div className="absolute top-4 right-4 z-20">
+          <Link to="/">
+            <Button variant="outline" size="icon" className="bg-amber-200/90 hover:bg-amber-300 border-2 border-amber-400">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+
+        {/* Wood/Resources Icon - Bottom Left */}
+        <div className="absolute bottom-4 left-4 z-20">
+          <Button 
+            className="bg-amber-200/90 hover:bg-amber-300 border-2 border-amber-400 p-4 shadow-lg backdrop-blur-sm"
+            onClick={() => toast.info("Wood collection coming soon!")}
+          >
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-2xl">🪵</span>
+              <span className="text-xs font-bold text-amber-800">Wood</span>
+            </div>
+          </Button>
+        </div>
+
+        {/* Crossed Swords Icon - Bottom Right */}
+        <div className="absolute bottom-4 right-4 z-20">
+          <Button 
+            className="bg-red-200/90 hover:bg-red-300 border-2 border-red-400 p-4 shadow-lg backdrop-blur-sm"
+            onClick={() => toast.info("Battle arena coming soon!")}
+          >
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-2xl">⚔️</span>
+              <span className="text-xs font-bold text-red-800">Battle</span>
+            </div>
+          </Button>
+        </div>
+
         {/* Clickable central building area */}
         <div 
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 cursor-pointer hover:scale-110 transition-transform duration-200 z-20"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 cursor-pointer hover:scale-110 transition-transform duration-200 z-20 flex items-center justify-center"
           onClick={() => setShowVillageDetails(true)}
           title="Click to enter the Heroes' Guild"
         >
-          {/* Invisible clickable area over the central building */}
+          {/* Subtle indicator for clickable area */}
+          <div className="bg-white/20 rounded-full p-3 backdrop-blur-sm border border-white/30 opacity-0 hover:opacity-100 transition-opacity">
+            <span className="text-white text-sm font-bold">Enter</span>
+          </div>
         </div>
       </div>
     );
