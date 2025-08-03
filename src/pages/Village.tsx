@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 const Village = () => {
   const { playerState, updatePlayerState } = useGame();
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
+  const [showVillageDetails, setShowVillageDetails] = useState(false);
 
   // Heroes available for purchase in the village
   const availableHeroes = villageHeroes;
@@ -58,6 +59,52 @@ const Village = () => {
     return colors[rarity];
   };
 
+  if (!showVillageDetails) {
+    // Village Overview - Show the uploaded image with clickable central building
+    return (
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Village Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: 'url(/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png)' }}
+        />
+        
+        {/* Header overlay */}
+        <div className="relative z-10 max-w-md mx-auto p-4">
+          <div className="bg-amber-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200 mb-4">
+            <div className="flex items-center space-x-4">
+              <Link to="/">
+                <Button variant="outline" size="icon" className="bg-white/80 hover:bg-white">
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+              </Link>
+              <div className="flex-1">
+                <h1 className="text-2xl font-bold text-amber-800 flex items-center gap-2">
+                  🏘️ Hero Village
+                </h1>
+                <p className="text-sm text-amber-700">Click the main building to enter</p>
+              </div>
+              <div className="flex items-center space-x-1 bg-yellow-400/80 px-3 py-1 rounded-full shadow-sm">
+                <Coins className="h-4 w-4 text-yellow-800" />
+                <span className="font-bold text-yellow-900">{playerState.coins}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Clickable central building area */}
+        <div 
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 cursor-pointer hover:scale-110 transition-transform duration-200 z-20"
+          onClick={() => setShowVillageDetails(true)}
+          title="Click to enter the Heroes' Guild"
+        >
+          {/* Invisible clickable area over the central building */}
+        </div>
+      </div>
+    );
+  }
+
+  // Village Details - Show the current hero recruitment interface
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 via-green-100 to-amber-50 relative overflow-hidden">
       {/* Sky and clouds background */}
@@ -76,16 +123,19 @@ const Village = () => {
         {/* Village Header */}
         <div className="bg-amber-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200">
           <div className="flex items-center space-x-4">
-            <Link to="/">
-              <Button variant="outline" size="icon" className="bg-white/80 hover:bg-white">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="bg-white/80 hover:bg-white"
+              onClick={() => setShowVillageDetails(false)}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-amber-800 flex items-center gap-2">
-                🏘️ Hero Village
+                🏛️ Heroes' Guild Hall
               </h1>
-              <p className="text-sm text-amber-700">Welcome to our peaceful village</p>
+              <p className="text-sm text-amber-700">Recruit new heroes for your adventure</p>
             </div>
             <div className="flex items-center space-x-1 bg-yellow-400/80 px-3 py-1 rounded-full shadow-sm">
               <Coins className="h-4 w-4 text-yellow-800" />
@@ -98,7 +148,7 @@ const Village = () => {
         <div className="bg-stone-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-stone-200">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl">🏛️</span>
-            <h2 className="font-bold text-stone-800 text-lg">Heroes' Guild Hall</h2>
+            <h2 className="font-bold text-stone-800 text-lg">Available Heroes</h2>
           </div>
           <p className="text-sm text-stone-600 mb-4">Brave heroes seeking adventure await your call</p>
           
