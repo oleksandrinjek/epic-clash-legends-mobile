@@ -59,123 +59,170 @@ const Village = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/10 via-background to-secondary/10 p-4">
-      <div className="max-w-md mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center space-x-4">
-          <Link to="/">
-            <Button variant="outline" size="icon">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              🏘️ Hero Village
-            </h1>
-            <p className="text-sm text-muted-foreground">Recruit new heroes for your adventures</p>
-          </div>
-          <div className="flex items-center space-x-1 bg-yellow-500/20 px-3 py-1 rounded-full">
-            <Coins className="h-4 w-4 text-yellow-600" />
-            <span className="font-bold text-yellow-700">{playerState.coins}</span>
+    <div className="min-h-screen bg-gradient-to-b from-green-200 via-green-100 to-amber-50 relative overflow-hidden">
+      {/* Sky and clouds background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-200 via-blue-100 to-transparent h-1/3"></div>
+      
+      {/* Mountain silhouette */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-green-600 via-green-500 to-transparent opacity-30"></div>
+      
+      {/* Trees scattered around */}
+      <div className="absolute bottom-10 left-4 text-4xl">🌲</div>
+      <div className="absolute bottom-16 right-8 text-3xl">🌳</div>
+      <div className="absolute bottom-20 left-1/4 text-2xl">🌲</div>
+      <div className="absolute bottom-8 right-1/3 text-3xl">🌳</div>
+      
+      <div className="relative z-10 max-w-md mx-auto p-4 space-y-6">
+        {/* Village Header */}
+        <div className="bg-amber-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200">
+          <div className="flex items-center space-x-4">
+            <Link to="/">
+              <Button variant="outline" size="icon" className="bg-white/80 hover:bg-white">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold text-amber-800 flex items-center gap-2">
+                🏘️ Hero Village
+              </h1>
+              <p className="text-sm text-amber-700">Welcome to our peaceful village</p>
+            </div>
+            <div className="flex items-center space-x-1 bg-yellow-400/80 px-3 py-1 rounded-full shadow-sm">
+              <Coins className="h-4 w-4 text-yellow-800" />
+              <span className="font-bold text-yellow-900">{playerState.coins}</span>
+            </div>
           </div>
         </div>
 
-        {/* Available Heroes */}
-        <Card className="p-4">
-          <h2 className="font-bold mb-4">Available Heroes</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {availableHeroes.map((hero) => (
-              <div key={hero.id} className="relative">
-                <CharacterCard
-                  character={hero}
-                  size="medium"
-                  onClick={() => setSelectedHero(hero)}
-                  isSelected={selectedHero?.id === hero.id}
-                />
-                <div className="absolute top-2 right-2">
-                  <Badge className={`text-white text-xs ${getRarityColor(hero.rarity)}`}>
-                    {hero.rarity}
-                  </Badge>
-                </div>
-                <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs font-bold">
-                  {getHeroPrice(hero)} 🪙
-                </div>
-              </div>
-            ))}
+        {/* Village Square - Hero Recruitment */}
+        <div className="bg-stone-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-stone-200">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-2xl">🏛️</span>
+            <h2 className="font-bold text-stone-800 text-lg">Heroes' Guild Hall</h2>
           </div>
-        </Card>
+          <p className="text-sm text-stone-600 mb-4">Brave heroes seeking adventure await your call</p>
+          
+          {/* Hero Buildings Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {availableHeroes.map((hero, index) => {
+              const buildings = ['🏠', '🏡', '🏘️', '🏰'];
+              const building = buildings[index % buildings.length];
+              
+              return (
+                <div key={hero.id} className="relative">
+                  {/* Building background */}
+                  <div className="bg-gradient-to-b from-amber-50 to-amber-100 rounded-lg p-3 border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-200">
+                    <div className="text-center mb-2">
+                      <span className="text-2xl">{building}</span>
+                      <div className="text-xs text-amber-700 font-semibold">{hero.name}'s House</div>
+                    </div>
+                    
+                    <div 
+                      className="cursor-pointer transform hover:scale-105 transition-transform"
+                      onClick={() => setSelectedHero(hero)}
+                    >
+                      <CharacterCard
+                        character={hero}
+                        size="small"
+                        isSelected={selectedHero?.id === hero.id}
+                      />
+                    </div>
+                    
+                    {/* Rarity badge */}
+                    <div className="absolute top-1 right-1">
+                      <Badge className={`text-white text-xs ${getRarityColor(hero.rarity)} shadow-sm`}>
+                        {hero.rarity}
+                      </Badge>
+                    </div>
+                    
+                    {/* Price tag */}
+                    <div className="absolute bottom-1 right-1 bg-yellow-600 text-white px-2 py-1 rounded-md text-xs font-bold shadow-sm">
+                      {getHeroPrice(hero)} 🪙
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-        {/* Selected Hero Details */}
+        {/* Hero Details Inn */}
         {selectedHero && (
-          <Card className="p-4">
-            <h3 className="font-semibold mb-3">Hero Details</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
+          <div className="bg-red-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-red-200">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">🍺</span>
+              <h3 className="font-bold text-red-800 text-lg">The Tavern - Hero Details</h3>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 bg-white/50 p-3 rounded-lg">
                 {selectedHero.image.startsWith('/') ? (
                   <img 
                     src={selectedHero.image} 
                     alt={selectedHero.name}
-                    className="w-12 h-12 rounded-lg object-cover"
+                    className="w-16 h-16 rounded-lg object-cover border-2 border-amber-300"
                   />
                 ) : (
-                  <span className="text-2xl">{selectedHero.image}</span>
+                  <span className="text-4xl">{selectedHero.image}</span>
                 )}
                 <div>
-                  <div className="font-semibold">{selectedHero.name}</div>
+                  <div className="font-bold text-lg text-red-800">{selectedHero.name}</div>
                   <div className="flex gap-2">
-                    <Badge variant="outline">{selectedHero.rarity}</Badge>
+                    <Badge variant="outline" className="border-red-300 text-red-700">{selectedHero.rarity}</Badge>
                     <Badge className="bg-blue-600 text-white">⚔️ Hero</Badge>
                   </div>
                 </div>
               </div>
               
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-3 p-3 bg-muted/50 rounded-lg">
-                <div className="text-center">
-                  <div className="text-sm text-muted-foreground">Attack</div>
-                  <div className="font-bold text-lg">{selectedHero.attack}</div>
+              {/* Stats in tavern style */}
+              <div className="grid grid-cols-2 gap-3 p-3 bg-amber-50/80 rounded-lg border border-amber-200">
+                <div className="text-center bg-white/50 p-2 rounded">
+                  <div className="text-sm text-amber-700">⚔️ Attack</div>
+                  <div className="font-bold text-lg text-amber-800">{selectedHero.attack}</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-sm text-muted-foreground">Defense</div>
-                  <div className="font-bold text-lg">{selectedHero.defense}</div>
+                <div className="text-center bg-white/50 p-2 rounded">
+                  <div className="text-sm text-amber-700">🛡️ Defense</div>
+                  <div className="font-bold text-lg text-amber-800">{selectedHero.defense}</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-sm text-muted-foreground">Health</div>
-                  <div className="font-bold text-lg">{selectedHero.maxHealth}</div>
+                <div className="text-center bg-white/50 p-2 rounded">
+                  <div className="text-sm text-amber-700">❤️ Health</div>
+                  <div className="font-bold text-lg text-amber-800">{selectedHero.maxHealth}</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-sm text-muted-foreground">Energy</div>
-                  <div className="font-bold text-lg">{selectedHero.maxEnergy}</div>
+                <div className="text-center bg-white/50 p-2 rounded">
+                  <div className="text-sm text-amber-700">⚡ Energy</div>
+                  <div className="font-bold text-lg text-amber-800">{selectedHero.maxEnergy}</div>
                 </div>
               </div>
 
               {/* Abilities */}
-              <div className="space-y-2">
-                <h4 className="font-medium text-sm">Abilities:</h4>
+              <div className="space-y-2 bg-white/50 p-3 rounded-lg">
+                <h4 className="font-semibold text-sm text-red-800 flex items-center gap-1">
+                  📜 Hero Abilities:
+                </h4>
                 {selectedHero.abilities.map((ability) => (
-                  <div key={ability.id} className="text-xs space-y-1">
+                  <div key={ability.id} className="text-xs space-y-1 bg-amber-50/50 p-2 rounded">
                     <div className="flex justify-between">
-                      <span className="font-medium">{ability.name}</span>
-                      <span className="text-muted-foreground">{ability.energyCost}⚡</span>
+                      <span className="font-medium text-red-700">{ability.name}</span>
+                      <span className="text-amber-600">{ability.energyCost}⚡</span>
                     </div>
-                    <div className="text-muted-foreground">{ability.description}</div>
+                    <div className="text-red-600">{ability.description}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Purchase Button */}
+              {/* Recruitment Button */}
               <Button 
-                className="w-full" 
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 shadow-lg" 
                 onClick={() => handlePurchaseHero(selectedHero)}
                 disabled={!canAfford(getHeroPrice(selectedHero))}
               >
                 {canAfford(getHeroPrice(selectedHero)) 
-                  ? `Purchase for ${getHeroPrice(selectedHero)} coins` 
-                  : 'Not enough coins'
+                  ? `🤝 Recruit for ${getHeroPrice(selectedHero)} coins` 
+                  : '💰 Not enough coins'
                 }
               </Button>
             </div>
-          </Card>
+          </div>
         )}
       </div>
     </div>
