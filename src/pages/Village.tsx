@@ -69,6 +69,17 @@ const Village = () => {
           style={{ backgroundImage: 'url(/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png)' }}
         />
         
+        {/* Selected Hero positioned over avatar location in background */}
+        {playerState.selectedHero && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 translate-x-[-100px] translate-y-[40px] z-10">
+            <img 
+              src={playerState.selectedHero.image} 
+              alt={playerState.selectedHero.name}
+              className="w-16 h-16 rounded-full object-cover border-2 border-amber-400 shadow-lg"
+            />
+          </div>
+        )}
+
         {/* Back to main menu button - Top Right */}
         <div className="absolute top-4 right-4 z-20">
           <Link to="/">

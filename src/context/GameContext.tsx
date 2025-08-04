@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { Character, ShopItem, InventoryItem } from '@/types/game';
+import { heroes } from '@/data/characters';
 
 interface PlayerState {
   name: string;
@@ -9,6 +10,7 @@ interface PlayerState {
   wins: number;
   losses: number;
   inventory: InventoryItem[];
+  selectedHero: Character | null;
 }
 
 interface GameContextType {
@@ -30,7 +32,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     coins: 1250,
     wins: 0,
     losses: 0,
-    inventory: []
+    inventory: [],
+    selectedHero: heroes[0] // Default to first hero
   });
 
   const updatePlayerState = (updates: Partial<PlayerState>) => {
