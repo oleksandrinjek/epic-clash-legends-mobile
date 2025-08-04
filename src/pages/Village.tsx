@@ -65,7 +65,7 @@ const Village = () => {
       <div className="min-h-screen relative overflow-hidden">
         {/* Village Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-contain bg-center bg-no-repeat"
           style={{ backgroundImage: 'url(/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png)' }}
         />
         
