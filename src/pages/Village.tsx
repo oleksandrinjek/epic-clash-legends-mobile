@@ -62,12 +62,12 @@ const Village = () => {
   if (!showVillageDetails) {
     // Village Overview - Show the uploaded image with clickable central building
     return (
-      <div className="relative w-full h-screen max-h-screen overflow-hidden">
+      <div className="relative inline-block">
         {/* Village Background Image */}
         <img 
           src="/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png"
           alt="Village"
-          className="w-full h-full object-contain"
+          className="block max-w-full h-auto"
         />
         
         {/* Selected Hero positioned in top left corner */}
