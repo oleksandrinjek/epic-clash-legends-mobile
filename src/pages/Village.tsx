@@ -65,7 +65,7 @@ const Village = () => {
       <div className="relative inline-block">
         {/* Village Background Image */}
         <img 
-          src="/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png"
+          src="/lovable-uploads/0162a33b-2213-401b-b897-ad74e61aa78a.png"
           alt="Village"
           className="block max-w-full h-auto"
         />
@@ -105,7 +105,6 @@ const Village = () => {
     );
   }
 
-  // Village Details - Show the current hero recruitment interface
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 via-green-100 to-amber-50 relative overflow-hidden">
       {/* Sky and clouds background */}
