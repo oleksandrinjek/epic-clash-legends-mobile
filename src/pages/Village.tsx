@@ -69,30 +69,6 @@ const Village = () => {
           style={{ backgroundImage: 'url(/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png)' }}
         />
         
-        {/* Player Avatar and Health Bar - Top Left */}
-        <div className="absolute top-4 left-4 z-20">
-          <div className="bg-amber-200/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border-2 border-amber-400 flex items-center gap-3">
-            <div className="w-12 h-12 bg-orange-400 rounded-full flex items-center justify-center border-2 border-amber-600">
-              <span className="text-lg">👤</span>
-            </div>
-            <div className="flex flex-col gap-1">
-              {/* Health Hearts */}
-              <div className="flex gap-1">
-                <span className="text-red-500 text-lg">❤️</span>
-                <span className="text-red-500 text-lg">❤️</span>
-                <span className="text-red-500 text-lg">❤️</span>
-                <span className="text-gray-400 text-lg">🤍</span>
-                <span className="text-gray-400 text-lg">🤍</span>
-              </div>
-              {/* Coins */}
-              <div className="flex items-center gap-1 bg-yellow-400/80 px-2 py-1 rounded-full">
-                <Coins className="h-3 w-3 text-yellow-800" />
-                <span className="font-bold text-yellow-900 text-sm">{playerState.coins}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Back to main menu button - Top Right */}
         <div className="absolute top-4 right-4 z-20">
           <Link to="/">
@@ -100,32 +76,6 @@ const Village = () => {
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-        </div>
-
-        {/* Wood/Resources Icon - Bottom Left */}
-        <div className="absolute bottom-4 left-4 z-20">
-          <Button 
-            className="bg-amber-200/90 hover:bg-amber-300 border-2 border-amber-400 p-4 shadow-lg backdrop-blur-sm"
-            onClick={() => toast.info("Wood collection coming soon!")}
-          >
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-2xl">🪵</span>
-              <span className="text-xs font-bold text-amber-800">Wood</span>
-            </div>
-          </Button>
-        </div>
-
-        {/* Crossed Swords Icon - Bottom Right */}
-        <div className="absolute bottom-4 right-4 z-20">
-          <Button 
-            className="bg-red-200/90 hover:bg-red-300 border-2 border-red-400 p-4 shadow-lg backdrop-blur-sm"
-            onClick={() => toast.info("Battle arena coming soon!")}
-          >
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-2xl">⚔️</span>
-              <span className="text-xs font-bold text-red-800">Battle</span>
-            </div>
-          </Button>
         </div>
 
         {/* Clickable central building area */}
