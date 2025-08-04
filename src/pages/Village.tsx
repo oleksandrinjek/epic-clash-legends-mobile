@@ -76,7 +76,7 @@ const Village = () => {
             <img 
               src={playerState.selectedHero.image} 
               alt={playerState.selectedHero.name}
-              className="w-16 h-16 rounded-full object-cover border-2 border-amber-400 shadow-lg"
+              className="w-24 h-24 rounded-full object-cover border-2 border-amber-400 shadow-lg"
             />
           </div>
         )}
