@@ -14,8 +14,8 @@ interface GameMenuProps {
 }
 
 export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
-  const { playerState } = useGame();
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const { playerState, updatePlayerState } = useGame();
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(playerState.selectedHero);
 
   const handleStartBattle = () => {
     if (!selectedCharacter) return;
@@ -95,7 +95,10 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                 key={character.id}
                 character={character}
                 size="medium"
-                onClick={() => setSelectedCharacter(character)}
+                onClick={() => {
+                  setSelectedCharacter(character);
+                  updatePlayerState({ selectedHero: character });
+                }}
                 isSelected={selectedCharacter?.id === character.id}
               />
             ))}
