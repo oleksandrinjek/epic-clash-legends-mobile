@@ -11,7 +11,7 @@ import { ArrowLeft, Coins } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Village = () => {
-  const { playerState, updatePlayerState } = useGame();
+  const { playerState, updatePlayerState, recruitHero } = useGame();
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
   const [showVillageDetails, setShowVillageDetails] = useState(false);
 
@@ -33,20 +33,25 @@ const Village = () => {
   const handlePurchaseHero = (hero: Character) => {
     const price = getHeroPrice(hero);
     
-    if (playerState.coins < price) {
-      toast.error("Not enough coins to purchase this hero!");
+    // Check if hero is already owned
+    const alreadyOwned = playerState.ownedHeroes.find(ownedHero => ownedHero.id === hero.id);
+    if (alreadyOwned) {
+      toast.error("You already own this hero!");
       return;
     }
-
-    // For now, just deduct coins (you can extend this to add heroes to owned collection)
-    updatePlayerState({
-      coins: playerState.coins - price
-    });
-
-    toast.success(`Successfully purchased ${hero.name} for ${price} coins!`);
+    
+    if (recruitHero(hero, price)) {
+      toast.success(`Successfully recruited ${hero.name} for ${price} coins!`);
+    } else {
+      toast.error("Not enough coins to recruit this hero!");
+    }
   };
 
   const canAfford = (price: number) => playerState.coins >= price;
+  
+  const isHeroOwned = (hero: Character) => {
+    return playerState.ownedHeroes.find(ownedHero => ownedHero.id === hero.id) !== undefined;
+  };
 
   const getRarityColor = (rarity: Character['rarity']) => {
     const colors = {
@@ -264,11 +269,13 @@ const Village = () => {
               <Button 
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 shadow-lg" 
                 onClick={() => handlePurchaseHero(selectedHero)}
-                disabled={!canAfford(getHeroPrice(selectedHero))}
+                disabled={!canAfford(getHeroPrice(selectedHero)) || isHeroOwned(selectedHero)}
               >
-                {canAfford(getHeroPrice(selectedHero)) 
-                  ? `🤝 Recruit for ${getHeroPrice(selectedHero)} coins` 
-                  : '💰 Not enough coins'
+                {isHeroOwned(selectedHero) 
+                  ? '✅ Already Recruited'
+                  : canAfford(getHeroPrice(selectedHero)) 
+                    ? `🤝 Recruit for ${getHeroPrice(selectedHero)} coins` 
+                    : '💰 Not enough coins'
                 }
               </Button>
             </div>

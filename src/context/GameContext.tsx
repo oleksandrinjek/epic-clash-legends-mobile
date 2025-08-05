@@ -11,6 +11,7 @@ interface PlayerState {
   losses: number;
   inventory: InventoryItem[];
   selectedHero: Character | null;
+  ownedHeroes: Character[];
 }
 
 interface GameContextType {
@@ -20,6 +21,7 @@ interface GameContextType {
   useInventoryItem: (inventoryItem: InventoryItem, character: Character) => Character;
   gainExperience: (exp: number) => void;
   canAfford: (price: number) => boolean;
+  recruitHero: (hero: Character, price: number) => boolean;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -33,7 +35,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     wins: 0,
     losses: 0,
     inventory: [],
-    selectedHero: heroes[0] // Default to first hero
+    selectedHero: heroes[0], // Default to first hero
+    ownedHeroes: [...heroes] // Start with the default heroes
   });
 
   const updatePlayerState = (updates: Partial<PlayerState>) => {
@@ -140,6 +143,24 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return playerState.coins >= price;
   };
 
+  const recruitHero = (hero: Character, price: number): boolean => {
+    if (playerState.coins >= price) {
+      // Check if hero is already owned
+      const alreadyOwned = playerState.ownedHeroes.find(ownedHero => ownedHero.id === hero.id);
+      if (alreadyOwned) {
+        return false; // Hero already owned
+      }
+
+      setPlayerState(prev => ({
+        ...prev,
+        coins: prev.coins - price,
+        ownedHeroes: [...prev.ownedHeroes, { ...hero }]
+      }));
+      return true;
+    }
+    return false;
+  };
+
   return (
     <GameContext.Provider value={{
       playerState,
@@ -147,7 +168,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       purchaseItem,
       useInventoryItem,
       gainExperience,
-      canAfford
+      canAfford,
+      recruitHero
     }}>
       {children}
     </GameContext.Provider>

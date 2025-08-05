@@ -90,7 +90,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
         <Card className="p-4">
           <h2 className="font-bold mb-4">Choose Your Hero ⚔️</h2>
           <div className="grid grid-cols-2 gap-3">
-            {heroes.map((character) => (
+            {playerState.ownedHeroes.map((character) => (
               <CharacterCard
                 key={character.id}
                 character={character}
