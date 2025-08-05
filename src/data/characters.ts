@@ -465,7 +465,7 @@ export const villageHeroes: Character[] = [
   },
   {
     id: 'forest-ranger',
-    name: 'Forest Ranger',
+    name: 'Archero',
     type: 'hero',
     health: 95,
     maxHealth: 95,
@@ -474,7 +474,7 @@ export const villageHeroes: Character[] = [
     energy: 45,
     maxEnergy: 45,
     rarity: 'rare',
-    image: '/lovable-uploads/4d283304-067e-41fc-9da9-530663f35cbf.png',
+    image: '/lovable-uploads/6f0c5b59-3cf6-4ef8-9ae2-53e6c96527c3.png',
     abilities: [
       {
         id: 'arrow-shot',
