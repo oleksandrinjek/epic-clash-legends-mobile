@@ -7,6 +7,7 @@ import { CharacterCard } from '@/components/game/CharacterCard';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ArrowLeft, Coins } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -14,6 +15,7 @@ const Village = () => {
   const { playerState, updatePlayerState, recruitHero } = useGame();
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
   const [showVillageDetails, setShowVillageDetails] = useState(false);
+  const [showHeroSelection, setShowHeroSelection] = useState(false);
 
   // Helper function to check if hero is owned
   const isHeroOwned = (hero: Character) => {
@@ -80,13 +82,37 @@ const Village = () => {
         
         {/* Selected Hero positioned in top left corner */}
         {playerState.selectedHero && (
-          <div className="absolute top-4 left-4 z-10">
-            <img 
-              src={playerState.selectedHero.image} 
-              alt={playerState.selectedHero.name}
-              className="w-24 h-24 rounded-full object-cover border-2 border-amber-400 shadow-lg"
-            />
-          </div>
+          <Dialog open={showHeroSelection} onOpenChange={setShowHeroSelection}>
+            <DialogTrigger asChild>
+              <div className="absolute top-4 left-4 z-10 cursor-pointer hover:scale-105 transition-transform">
+                <img 
+                  src={playerState.selectedHero.image} 
+                  alt={playerState.selectedHero.name}
+                  className="w-24 h-24 rounded-full object-cover border-2 border-amber-400 shadow-lg"
+                />
+              </div>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-center">Choose Your Hero ⚔️</DialogTitle>
+              </DialogHeader>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                {playerState.ownedHeroes.map((character) => (
+                  <CharacterCard
+                    key={character.id}
+                    character={character}
+                    size="medium"
+                    onClick={() => {
+                      updatePlayerState({ selectedHero: character });
+                      setShowHeroSelection(false);
+                      toast.success(`${character.name} selected!`);
+                    }}
+                    isSelected={playerState.selectedHero?.id === character.id}
+                  />
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
 
         {/* Back to main menu button - Top Right */}
