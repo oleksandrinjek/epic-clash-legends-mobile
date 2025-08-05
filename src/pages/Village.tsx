@@ -15,8 +15,8 @@ const Village = () => {
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
   const [showVillageDetails, setShowVillageDetails] = useState(false);
 
-  // Heroes available for purchase in the village
-  const availableHeroes = villageHeroes;
+  // Heroes available for purchase in the village (filter out owned heroes)
+  const availableHeroes = villageHeroes.filter(hero => !isHeroOwned(hero));
 
   const getHeroPrice = (hero: Character) => {
     // Price based on rarity
@@ -42,6 +42,8 @@ const Village = () => {
     
     if (recruitHero(hero, price)) {
       toast.success(`Successfully recruited ${hero.name} for ${price} coins!`);
+      // Clear selection since hero is no longer available
+      setSelectedHero(null);
     } else {
       toast.error("Not enough coins to recruit this hero!");
     }
