@@ -15,6 +15,11 @@ const Village = () => {
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
   const [showVillageDetails, setShowVillageDetails] = useState(false);
 
+  // Helper function to check if hero is owned
+  const isHeroOwned = (hero: Character) => {
+    return playerState.ownedHeroes.find(ownedHero => ownedHero.id === hero.id) !== undefined;
+  };
+
   // Heroes available for purchase in the village (filter out owned heroes)
   const availableHeroes = villageHeroes.filter(hero => !isHeroOwned(hero));
 
@@ -50,10 +55,6 @@ const Village = () => {
   };
 
   const canAfford = (price: number) => playerState.coins >= price;
-  
-  const isHeroOwned = (hero: Character) => {
-    return playerState.ownedHeroes.find(ownedHero => ownedHero.id === hero.id) !== undefined;
-  };
 
   const getRarityColor = (rarity: Character['rarity']) => {
     const colors = {
