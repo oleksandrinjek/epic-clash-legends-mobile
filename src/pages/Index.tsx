@@ -3,6 +3,7 @@ import { Character } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 import { GameMenu } from '@/components/game/GameMenu';
 import { BattleArena } from '@/components/game/BattleArena';
+import { PlayerNameForm } from '@/components/game/PlayerNameForm';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -50,6 +51,11 @@ const Index = () => {
     setPlayerCharacter(null);
     setEnemyCharacter(null);
   };
+
+  // Show name form if player hasn't set their name yet
+  if (playerState.name === 'Player') {
+    return <PlayerNameForm />;
+  }
 
   if (gameState === 'menu') {
     return <GameMenu onStartBattle={handleStartBattle} />;
