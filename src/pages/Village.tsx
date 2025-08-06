@@ -110,6 +110,20 @@ const Village = () => {
                 <DialogTitle className="text-2xl font-bold text-center">Choose Your Hero ⚔️</DialogTitle>
               </DialogHeader>
               
+              {/* Avatar Preview Section */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <div className="text-sm font-semibold mb-3 text-gray-700 text-center">
+                  Current Avatar Preview:
+                </div>
+                <div className="flex justify-center mb-4">
+                  <img 
+                    src={playerState.selectedHero.image} 
+                    alt={playerState.selectedHero.name}
+                    className={`w-20 h-20 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
+                  />
+                </div>
+              </div>
+
               {/* Color Palette Section */}
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
                 <div className="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
