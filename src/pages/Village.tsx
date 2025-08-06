@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Character } from '@/types/game';
 import { useGame } from '@/context/GameContext';
@@ -81,6 +81,29 @@ const Village = () => {
     };
     return colors[rarity];
   };
+
+  // Background music effect
+  useEffect(() => {
+    const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.wav');
+    audio.loop = true;
+    audio.volume = 0.3;
+    
+    const playAudio = async () => {
+      try {
+        await audio.play();
+      } catch (error) {
+        // Handle autoplay restrictions
+        console.log('Autoplay prevented, user interaction required');
+      }
+    };
+
+    playAudio();
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
 
   if (!showVillageDetails) {
     // Village Overview - Show the uploaded image with clickable central building
