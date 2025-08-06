@@ -110,40 +110,45 @@ const Village = () => {
                 <DialogTitle className="text-2xl font-bold text-center">Choose Your Hero ⚔️</DialogTitle>
               </DialogHeader>
               
-              {/* Avatar Preview Section */}
+              {/* Avatar Preview and Color Palette Row */}
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <div className="text-sm font-semibold mb-3 text-gray-700 text-center">
-                  Current Avatar Preview:
-                </div>
-                <div className="flex justify-center mb-4">
-                  <img 
-                    src={playerState.selectedHero.image} 
-                    alt={playerState.selectedHero.name}
-                    className={`w-20 h-20 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
-                  />
-                </div>
-              </div>
+                <div className="flex gap-6 items-center">
+                  {/* Avatar Preview - Left Side */}
+                  <div className="flex-shrink-0">
+                    <div className="text-sm font-semibold mb-3 text-gray-700 text-center">
+                      Current Avatar Preview:
+                    </div>
+                    <div className="flex justify-center">
+                      <img 
+                        src={playerState.selectedHero.image} 
+                        alt={playerState.selectedHero.name}
+                        className={`w-20 h-20 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
+                      />
+                    </div>
+                  </div>
 
-              {/* Color Palette Section */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <div className="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
-                  🎨 Avatar Border Color:
-                </div>
-                <div className="grid grid-cols-8 gap-2">
-                  {colorOptions.map((colorOption) => (
-                    <button
-                      key={colorOption.name}
-                      onClick={() => {
-                        setAvatarBorderColor(colorOption.class);
-                        toast.success(`Border color changed to ${colorOption.name}!`);
-                      }}
-                      className={`w-10 h-10 rounded-full border-2 hover:scale-110 transition-transform ${
-                        avatarBorderColor === colorOption.class ? 'ring-2 ring-gray-500' : ''
-                      }`}
-                      style={{ backgroundColor: colorOption.color }}
-                      title={colorOption.name}
-                    />
-                  ))}
+                  {/* Color Palette - Right Side */}
+                  <div className="flex-1">
+                    <div className="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+                      🎨 Avatar Border Color:
+                    </div>
+                    <div className="grid grid-cols-8 gap-2">
+                      {colorOptions.map((colorOption) => (
+                        <button
+                          key={colorOption.name}
+                          onClick={() => {
+                            setAvatarBorderColor(colorOption.class);
+                            toast.success(`Border color changed to ${colorOption.name}!`);
+                          }}
+                          className={`w-10 h-10 rounded-full border-2 hover:scale-110 transition-transform ${
+                            avatarBorderColor === colorOption.class ? 'ring-2 ring-gray-500' : ''
+                          }`}
+                          style={{ backgroundColor: colorOption.color }}
+                          title={colorOption.name}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
