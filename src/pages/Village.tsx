@@ -95,78 +95,61 @@ const Village = () => {
         
         {/* Selected Hero positioned in top left corner */}
         {playerState.selectedHero && (
-          <>
-            {/* Avatar with color picker */}
-            <div className="absolute top-4 left-4 z-10">
-              <div className="relative">
-                {/* Main avatar - Hero Selection Dialog */}
-                <Dialog open={showHeroSelection} onOpenChange={setShowHeroSelection}>
-                  <DialogTrigger asChild>
-                    <div className="cursor-pointer hover:scale-105 transition-transform">
-                      <img 
-                        src={playerState.selectedHero.image} 
-                        alt={playerState.selectedHero.name}
-                        className={`w-24 h-24 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
-                      />
-                    </div>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold text-center">Choose Your Hero ⚔️</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                      {playerState.ownedHeroes.map((character) => (
-                        <CharacterCard
-                          key={character.id}
-                          character={character}
-                          size="medium"
-                          onClick={() => {
-                            updatePlayerState({ selectedHero: character });
-                            setShowHeroSelection(false);
-                            toast.success(`${character.name} selected!`);
-                          }}
-                          isSelected={playerState.selectedHero?.id === character.id}
-                        />
-                      ))}
-                    </div>
-                  </DialogContent>
-                </Dialog>
-
-                {/* Color palette toggle button */}
-                <button
-                  onClick={() => setShowColorPalette(!showColorPalette)}
-                  className="absolute -bottom-2 -right-2 w-6 h-6 bg-white rounded-full border-2 border-gray-300 flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                  title="Change border color"
-                >
-                  🎨
-                </button>
-
-                {/* Color palette */}
-                {showColorPalette && (
-                  <div className="absolute top-0 left-28 bg-white rounded-lg p-3 shadow-xl border border-gray-200 z-20">
-                    <div className="text-xs font-semibold mb-2 text-gray-700">Choose Border Color:</div>
-                    <div className="grid grid-cols-4 gap-2">
-                      {colorOptions.map((colorOption) => (
-                        <button
-                          key={colorOption.name}
-                          onClick={() => {
-                            setAvatarBorderColor(colorOption.class);
-                            setShowColorPalette(false);
-                            toast.success(`Border color changed to ${colorOption.name}!`);
-                          }}
-                          className={`w-8 h-8 rounded-full border-2 hover:scale-110 transition-transform ${
-                            avatarBorderColor === colorOption.class ? 'ring-2 ring-gray-500' : ''
-                          }`}
-                          style={{ backgroundColor: colorOption.color }}
-                          title={colorOption.name}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
+          <Dialog open={showHeroSelection} onOpenChange={setShowHeroSelection}>
+            <DialogTrigger asChild>
+              <div className="absolute top-4 left-4 z-10 cursor-pointer hover:scale-105 transition-transform">
+                <img 
+                  src={playerState.selectedHero.image} 
+                  alt={playerState.selectedHero.name}
+                  className={`w-24 h-24 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
+                />
               </div>
-            </div>
-          </>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-center">Choose Your Hero ⚔️</DialogTitle>
+              </DialogHeader>
+              
+              {/* Color Palette Section */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <div className="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+                  🎨 Avatar Border Color:
+                </div>
+                <div className="grid grid-cols-8 gap-2">
+                  {colorOptions.map((colorOption) => (
+                    <button
+                      key={colorOption.name}
+                      onClick={() => {
+                        setAvatarBorderColor(colorOption.class);
+                        toast.success(`Border color changed to ${colorOption.name}!`);
+                      }}
+                      className={`w-10 h-10 rounded-full border-2 hover:scale-110 transition-transform ${
+                        avatarBorderColor === colorOption.class ? 'ring-2 ring-gray-500' : ''
+                      }`}
+                      style={{ backgroundColor: colorOption.color }}
+                      title={colorOption.name}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                {playerState.ownedHeroes.map((character) => (
+                  <CharacterCard
+                    key={character.id}
+                    character={character}
+                    size="medium"
+                    onClick={() => {
+                      updatePlayerState({ selectedHero: character });
+                      setShowHeroSelection(false);
+                      toast.success(`${character.name} selected!`);
+                    }}
+                    isSelected={playerState.selectedHero?.id === character.id}
+                  />
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
 
         {/* Back to main menu button - Top Right */}
