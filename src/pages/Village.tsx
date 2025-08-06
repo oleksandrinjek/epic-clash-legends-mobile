@@ -82,26 +82,41 @@ const Village = () => {
     return colors[rarity];
   };
 
-  // Background music effect
+  // Background music effect - only plays on village page
   useEffect(() => {
-    const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.wav');
-    audio.loop = true;
-    audio.volume = 0.3;
+    let audio: HTMLAudioElement | null = null;
     
-    const playAudio = async () => {
+    const initializeMusic = async () => {
+      audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.wav');
+      audio.loop = true;
+      audio.volume = 0.3;
+      
       try {
         await audio.play();
       } catch (error) {
         // Handle autoplay restrictions
         console.log('Autoplay prevented, user interaction required');
+        
+        // Add click listener to start music on first interaction
+        const handleFirstInteraction = async () => {
+          if (audio) {
+            await audio.play();
+            document.removeEventListener('click', handleFirstInteraction);
+          }
+        };
+        document.addEventListener('click', handleFirstInteraction);
       }
     };
 
-    playAudio();
+    initializeMusic();
 
+    // Cleanup function - stops music when leaving village page
     return () => {
-      audio.pause();
-      audio.currentTime = 0;
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio = null;
+      }
     };
   }, []);
 
