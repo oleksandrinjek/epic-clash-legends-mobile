@@ -87,7 +87,7 @@ const Village = () => {
     let audio: HTMLAudioElement | null = null;
     
     const initializeMusic = async () => {
-      audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.wav');
+      audio = new Audio('/audio/village-theme.mp3');
       audio.loop = true;
       audio.volume = 0.3;
       
