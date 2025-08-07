@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Character, Ability } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 import { CharacterCard } from './CharacterCard';
@@ -32,6 +32,32 @@ export const BattleArena = ({
     `Battle begins! ${playerCharacter.name} (Hero) vs ${enemyCharacter.name} (Monster)!`
   ]);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Background music effect - only plays during battle
+  useEffect(() => {
+    let audio: HTMLAudioElement | null = null;
+    
+    const initializeMusic = async () => {
+      audio = new Audio('/audio/battle-theme.mp3');
+      audio.loop = true;
+      audio.volume = 0.3;
+      
+      try {
+        await audio.play();
+      } catch (error) {
+        console.log('Battle music could not autoplay due to browser restrictions');
+      }
+    };
+
+    initializeMusic();
+
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, []);
 
   const addToBattleLog = (message: string) => {
     setBattleLog(prev => [...prev, message]);
