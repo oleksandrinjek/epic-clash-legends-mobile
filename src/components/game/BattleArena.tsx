@@ -124,7 +124,6 @@ export const BattleArena = ({
         return;
       }
     } else if (ability.type === 'super') {
-      playAttackSound();
       const damage = Math.max(1, ability.damage - enemy.defense);
       const newEnemy = { ...enemy };
       newEnemy.health = Math.max(0, newEnemy.health - damage);
@@ -190,7 +189,6 @@ export const BattleArena = ({
         newEnemy.health = Math.min(newEnemy.maxHealth, newEnemy.health + healAmount);
         addToBattleLog(`${enemy.name} heals for ${healAmount} HP!`);
       } else if (chosenAbility.type === 'super') {
-        playAttackSound();
         const damage = Math.max(1, chosenAbility.damage - newPlayer.defense);
         newPlayer.health = Math.max(0, newPlayer.health - damage);
         setPlayer(newPlayer);
