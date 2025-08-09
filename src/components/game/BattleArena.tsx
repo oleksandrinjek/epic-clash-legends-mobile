@@ -75,6 +75,14 @@ export const BattleArena = ({
     toast.success(`Used ${item.name}!`);
   };
 
+  const playAttackSound = () => {
+    const attackAudio = new Audio('/audio/attack-sound.mp3');
+    attackAudio.volume = 0.5;
+    attackAudio.play().catch(error => {
+      console.log('Attack sound could not play:', error);
+    });
+  };
+
   const useAbility = async (ability: Ability) => {
     if (isProcessing || currentTurn !== 'player') return;
     // Only check energy for 'super', 'heal', and 'defend' types
@@ -97,6 +105,7 @@ export const BattleArena = ({
     }
     
     if (ability.type === 'attack') {
+      playAttackSound();
       const damage = Math.max(1, ability.damage - enemy.defense);
       const newEnemy = { ...enemy };
       newEnemy.health = Math.max(0, newEnemy.health - damage);
@@ -109,6 +118,7 @@ export const BattleArena = ({
         return;
       }
     } else if (ability.type === 'super') {
+      playAttackSound();
       const damage = Math.max(1, ability.damage - enemy.defense);
       const newEnemy = { ...enemy };
       newEnemy.health = Math.max(0, newEnemy.health - damage);
@@ -159,6 +169,7 @@ export const BattleArena = ({
       const newEnemy = { ...enemy };
       newEnemy.energy -= chosenAbility.energyCost;
       if (chosenAbility.type === 'attack') {
+        playAttackSound();
         const damage = Math.max(1, chosenAbility.damage - newPlayer.defense);
         newPlayer.health = Math.max(0, newPlayer.health - damage);
         setPlayer(newPlayer);
@@ -173,6 +184,7 @@ export const BattleArena = ({
         newEnemy.health = Math.min(newEnemy.maxHealth, newEnemy.health + healAmount);
         addToBattleLog(`${enemy.name} heals for ${healAmount} HP!`);
       } else if (chosenAbility.type === 'super') {
+        playAttackSound();
         const damage = Math.max(1, chosenAbility.damage - newPlayer.defense);
         newPlayer.health = Math.max(0, newPlayer.health - damage);
         setPlayer(newPlayer);
