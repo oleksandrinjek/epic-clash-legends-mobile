@@ -81,6 +81,12 @@ export const BattleArena = ({
     attackAudio.play().catch(error => {
       console.log('Attack sound could not play:', error);
     });
+    
+    // Stop after 3 seconds
+    setTimeout(() => {
+      attackAudio.pause();
+      attackAudio.currentTime = 0;
+    }, 3000);
   };
 
   const useAbility = async (ability: Ability) => {
