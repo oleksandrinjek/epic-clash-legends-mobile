@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Character, ShopItem, InventoryItem } from '@/types/game';
 import { heroes } from '@/data/characters';
+import { usePlayerPersistence } from '@/hooks/use-player-persistence';
 
 interface PlayerState {
   name: string;
@@ -22,11 +23,25 @@ interface GameContextType {
   gainExperience: (exp: number) => void;
   canAfford: (price: number) => boolean;
   recruitHero: (hero: Character, price: number) => boolean;
+  saveProgress: () => Promise<void>;
+  loadProgress: () => Promise<void>;
+  isAuthenticated: boolean;
+  initializePlayer: (name: string) => Promise<void>;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
+  const {
+    playerId,
+    isLoading,
+    isAuthenticated,
+    initializePlayer: initPlayer,
+    loadPlayerState: loadState,
+    savePlayerState: saveState,
+    autoSave,
+  } = usePlayerPersistence();
+
   const [playerState, setPlayerState] = useState<PlayerState>({
     name: 'Player',
     level: 1,
@@ -40,7 +55,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const updatePlayerState = (updates: Partial<PlayerState>) => {
-    setPlayerState(prev => ({ ...prev, ...updates }));
+    setPlayerState(prev => {
+      const newState = { ...prev, ...updates };
+      // Auto-save after state updates
+      if (isAuthenticated) {
+        autoSave(newState);
+      }
+      return newState;
+    });
   };
 
   const purchaseItem = (item: ShopItem): boolean => {
@@ -161,6 +183,57 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
+  // Save progress to database
+  const saveProgress = useCallback(async () => {
+    if (!isAuthenticated) return;
+    
+    try {
+      await saveState({
+        name: playerState.name,
+        level: playerState.level,
+        experience: playerState.experience,
+        coins: playerState.coins,
+        wins: playerState.wins,
+        losses: playerState.losses,
+        inventory: playerState.inventory,
+        ownedHeroes: playerState.ownedHeroes,
+      });
+    } catch (error) {
+      console.error('Error saving progress:', error);
+    }
+  }, [isAuthenticated, saveState, playerState]);
+
+  // Load progress from database
+  const loadProgress = useCallback(async () => {
+    if (!isAuthenticated) return;
+    
+    try {
+      const savedState = await loadState();
+      if (savedState) {
+        setPlayerState(prev => ({
+          ...prev,
+          ...savedState,
+          selectedHero: prev.selectedHero, // Keep current selection
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading progress:', error);
+    }
+  }, [isAuthenticated, loadState]);
+
+  // Initialize player
+  const initializePlayer = useCallback(async (name: string) => {
+    await initPlayer(name);
+    setPlayerState(prev => ({ ...prev, name }));
+  }, [initPlayer]);
+
+  // Load progress when authenticated
+  useEffect(() => {
+    if (isAuthenticated && playerId) {
+      loadProgress();
+    }
+  }, [isAuthenticated, playerId, loadProgress]);
+
   return (
     <GameContext.Provider value={{
       playerState,
@@ -169,7 +242,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       useInventoryItem,
       gainExperience,
       canAfford,
-      recruitHero
+      recruitHero,
+      saveProgress,
+      loadProgress,
+      isAuthenticated,
+      initializePlayer
     }}>
       {children}
     </GameContext.Provider>

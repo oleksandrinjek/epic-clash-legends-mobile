@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Character } from '@/types/game';
 import { useGame } from '@/context/GameContext';
@@ -8,14 +8,21 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { ProgressTracker } from './ProgressTracker';
+import { Save, Download, Cloud, Upload, Download as ExportIcon, Settings } from 'lucide-react';
+import { ProgressExport } from '@/lib/progress-export';
 
 interface GameMenuProps {
   onStartBattle: (playerCharacter: Character, enemyCharacter: Character) => void;
 }
 
 export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
-  const { playerState, updatePlayerState } = useGame();
+  const { playerState, updatePlayerState, saveProgress, loadProgress, isAuthenticated } = useGame();
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(playerState.selectedHero);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleStartBattle = () => {
     if (!selectedCharacter) return;
@@ -68,6 +75,55 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
             </div>
           </div>
         </Card>
+
+        {/* Progress Tracker */}
+        <ProgressTracker />
+
+        {/* Cloud Save Status */}
+        {isAuthenticated && (
+          <Card className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Cloud className="h-4 w-4 text-green-500" />
+                <span className="text-sm font-medium">Cloud Save Active</span>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    setIsLoading(true);
+                    try {
+                      await loadProgress();
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  <Download className="h-3 w-3 mr-1" />
+                  {isLoading ? 'Loading...' : 'Load'}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    setIsSaving(true);
+                    try {
+                      await saveProgress();
+                    } finally {
+                      setIsSaving(false);
+                    }
+                  }}
+                  disabled={isSaving}
+                >
+                  <Save className="h-3 w-3 mr-1" />
+                  {isSaving ? 'Saving...' : 'Save'}
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
 
         {/* Village Button */}
         <Link to="/village">
@@ -190,6 +246,80 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
             </Link>
           </div>
         </div>
+
+        {/* Settings Section */}
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Settings & Data
+            </h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSettings(!showSettings)}
+            >
+              {showSettings ? 'Hide' : 'Show'}
+            </Button>
+          </div>
+          
+          {showSettings && (
+            <div className="space-y-3 pt-3 border-t">
+              {/* Export Progress */}
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => ProgressExport.exportProgress(playerState)}
+              >
+                <ExportIcon className="h-4 w-4 mr-2" />
+                Export Progress
+              </Button>
+              
+              {/* Import Progress */}
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Import Progress
+              </Button>
+              
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                className="hidden"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    try {
+                      const result = await ProgressExport.importProgress(file);
+                      if (result.success && result.data) {
+                        // Update player state with imported data
+                        updatePlayerState(result.data);
+                        // Show success message
+                        alert('Progress imported successfully!');
+                      } else {
+                        alert(`Import failed: ${result.error}`);
+                      }
+                    } catch (error) {
+                      alert('Failed to import progress file.');
+                    }
+                  }
+                }}
+              />
+              
+              {/* Progress Summary */}
+              <div className="text-xs text-muted-foreground p-3 bg-muted/50 rounded-lg">
+                <pre className="whitespace-pre-wrap font-mono">
+                  {ProgressExport.formatProgressData(playerState)}
+                </pre>
+              </div>
+            </div>
+          )}
+        </Card>
 
         {/* Footer */}
         <div className="text-center text-xs text-muted-foreground pt-4">

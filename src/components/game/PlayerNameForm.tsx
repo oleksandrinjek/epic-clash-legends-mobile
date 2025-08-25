@@ -11,7 +11,7 @@ interface PlayerNameFormData {
 }
 
 export const PlayerNameForm = () => {
-  const { updatePlayerState } = useGame();
+  const { initializePlayer, isAuthenticated } = useGame();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<PlayerNameFormData>({
@@ -24,8 +24,13 @@ export const PlayerNameForm = () => {
     if (!data.name.trim()) return;
     
     setIsSubmitting(true);
-    updatePlayerState({ name: data.name.trim() });
-    setIsSubmitting(false);
+    try {
+      await initializePlayer(data.name.trim());
+    } catch (error) {
+      console.error('Error initializing player:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
