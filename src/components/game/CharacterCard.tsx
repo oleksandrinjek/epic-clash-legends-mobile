@@ -43,7 +43,7 @@ export const CharacterCard = ({
         sizeClasses[size],
         'relative overflow-hidden cursor-pointer transition-all duration-200',
         'hover:scale-105 hover:shadow-lg',
-        isSelected && 'ring-2 ring-primary',
+        isSelected && 'ring-2 ring-primary ring-offset-2 bg-primary/5',
         isEnemy && 'border-destructive',
         onClick && 'hover:shadow-xl',
         // Add type-based styling
@@ -52,6 +52,15 @@ export const CharacterCard = ({
       )}
       onClick={onClick}
     >
+      {/* Selection Indicator */}
+      {isSelected && (
+        <div className="absolute top-2 right-2 z-10">
+          <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+            ✓
+          </div>
+        </div>
+      )}
+      
       {/* Rarity Border */}
       <div className={cn('absolute top-0 left-0 right-0 h-1', getRarityColor(character.rarity))} />
       

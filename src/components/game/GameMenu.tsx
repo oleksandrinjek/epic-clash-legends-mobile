@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ProgressTracker } from './ProgressTracker';
+
 import { Save, Download, Cloud, Upload, Download as ExportIcon, Settings } from 'lucide-react';
 import { ProgressExport } from '@/lib/progress-export';
 
@@ -49,6 +49,18 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
           <p className="text-muted-foreground">Choose your hero to battle monsters!</p>
         </div>
 
+        {/* Quick Start Guide */}
+        <Card className="p-4 bg-blue-50 border-blue-200">
+          <div className="text-center space-y-2">
+            <div className="text-lg">🎯 How to Start</div>
+            <div className="text-sm text-blue-700 space-y-1">
+              <p>1. <strong>Select a Hero</strong> from the cards below</p>
+              <p>2. <strong>Review their stats</strong> and abilities</p>
+              <p>3. <strong>Click "Battle Monsters!"</strong> to begin your adventure!</p>
+            </div>
+          </div>
+        </Card>
+
         {/* Player Stats */}
         <Card className="p-4">
           <div className="flex items-center justify-between mb-3">
@@ -76,8 +88,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
           </div>
         </Card>
 
-        {/* Progress Tracker */}
-        <ProgressTracker />
+
 
         {/* Cloud Save Status */}
         {isAuthenticated && (
@@ -143,22 +154,59 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
         </Link>
 
         {/* Hero Selection */}
-        <Card className="p-4">
-          <h2 className="font-bold mb-4">Choose Your Hero ⚔️</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {playerState.ownedHeroes.map((character) => (
-              <CharacterCard
-                key={character.id}
-                character={character}
-                size="medium"
-                onClick={() => {
-                  setSelectedCharacter(character);
-                  updatePlayerState({ selectedHero: character });
-                }}
-                isSelected={selectedCharacter?.id === character.id}
-              />
-            ))}
-          </div>
+        <Card className="p-4 border-2 border-primary/20">
+          <h2 className="font-bold mb-4 text-lg flex items-center gap-2">
+            ⚔️ Choose Your Hero
+            {selectedCharacter && (
+              <Badge variant="secondary" className="ml-auto">
+                Selected: {selectedCharacter.name}
+              </Badge>
+            )}
+          </h2>
+          
+
+          
+          {playerState.ownedHeroes.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="text-4xl mb-2">🏰</div>
+              <p className="font-medium">No heroes available</p>
+              <p className="text-sm">Visit the Village to recruit heroes!</p>
+              <Link to="/village" className="mt-3 inline-block">
+                <Button variant="outline" size="sm">
+                  Go to Village
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                {playerState.ownedHeroes.map((character) => (
+                  <CharacterCard
+                    key={character.id}
+                    character={character}
+                    size="medium"
+                    onClick={() => {
+                      setSelectedCharacter(character);
+                      updatePlayerState({ selectedHero: character });
+                    }}
+                    isSelected={selectedCharacter?.id === character.id}
+                  />
+                ))}
+              </div>
+              
+              {/* Hero Selection Instructions */}
+              <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  💡 Click on a hero to select them for battle
+                </p>
+                {selectedCharacter && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Ready to fight with {selectedCharacter.name}!
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </Card>
 
         {/* Selected Character Info */}

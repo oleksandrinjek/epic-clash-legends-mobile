@@ -213,7 +213,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setPlayerState(prev => ({
           ...prev,
           ...savedState,
-          selectedHero: prev.selectedHero, // Keep current selection
+          // Ensure we have a valid selectedHero - either from saved state or default to first owned hero
+          selectedHero: (savedState as any).selectedHero || savedState.ownedHeroes[0] || prev.selectedHero,
         }));
       }
     } catch (error) {
@@ -233,6 +234,23 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       loadProgress();
     }
   }, [isAuthenticated, playerId, loadProgress]);
+
+  // Ensure we always have heroes and a selected hero
+  useEffect(() => {
+    if (playerState.ownedHeroes.length === 0) {
+      setPlayerState(prev => ({
+        ...prev,
+        ownedHeroes: [...heroes],
+        selectedHero: heroes[0]
+      }));
+    } else if (!playerState.selectedHero || !playerState.ownedHeroes.find(h => h.id === playerState.selectedHero?.id)) {
+      // If no hero is selected or selected hero is not owned, select the first owned hero
+      setPlayerState(prev => ({
+        ...prev,
+        selectedHero: prev.ownedHeroes[0]
+      }));
+    }
+  }, [playerState.ownedHeroes.length, playerState.selectedHero]);
 
   return (
     <GameContext.Provider value={{

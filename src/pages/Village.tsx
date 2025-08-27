@@ -265,9 +265,16 @@ const Village = () => {
               </h1>
               <p className="text-sm text-amber-700">Recruit new heroes for your adventure</p>
             </div>
-            <div className="flex items-center space-x-1 bg-yellow-400/80 px-3 py-1 rounded-full shadow-sm">
-              <Coins className="h-4 w-4 text-yellow-800" />
-              <span className="font-bold text-yellow-900">{playerState.coins}</span>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 bg-yellow-400/80 px-3 py-1 rounded-full shadow-sm">
+                <Coins className="h-4 w-4 text-yellow-800" />
+                <span className="font-bold text-yellow-900">{playerState.coins}</span>
+              </div>
+              <Link to="/leaderboard">
+                <Button variant="outline" size="sm" className="bg-white/80 hover:bg-white text-amber-800 border-amber-300">
+                  📊 Progress
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

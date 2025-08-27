@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Crown, Trophy, Medal, Award } from 'lucide-react';
 import goldCoin from '@/assets/gold-coin.png';
+import { ProgressTracker } from '@/components/game/ProgressTracker';
 
 // Mock leaderboard data (in a real app, this would come from a database)
 const mockLeaderboardData = [
@@ -107,6 +108,62 @@ export const Leaderboard = () => {
             </div>
           </div>
         </Card>
+
+        {/* Progress Tracker */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ProgressTracker />
+          
+          {/* Quick Stats Card */}
+          <Card className="p-4">
+            <div className="space-y-4">
+              <h3 className="font-bold text-lg">Quick Stats</h3>
+              
+              {/* Experience Progress */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Experience Progress</span>
+                  <span className="text-xs text-muted-foreground">
+                    {playerState.experience} / {playerState.level * 100} XP
+                  </span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(playerState.experience / (playerState.level * 100)) * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Next Level Info */}
+              <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-sm text-muted-foreground">Next Level</div>
+                <div className="text-lg font-bold text-primary">Level {playerState.level + 1}</div>
+                <div className="text-xs text-muted-foreground">
+                  {Math.max(0, (playerState.level * 100) - playerState.experience)} XP needed
+                </div>
+              </div>
+
+              {/* Achievement Summary */}
+              <div className="space-y-2">
+                <div className="text-sm font-medium">Achievements</div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span>Heroes Collected:</span>
+                    <Badge variant="outline" className="text-xs">
+                      {playerState.ownedHeroes.length}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Total Items:</span>
+                    <Badge variant="outline" className="text-xs">
+                      {playerState.inventory.reduce((total, item) => total + item.quantity, 0)}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
 
         {/* Top 3 Podium */}
         <div className="grid grid-cols-3 gap-4">
