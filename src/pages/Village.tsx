@@ -123,12 +123,12 @@ const Village = () => {
   if (!showVillageDetails) {
     // Village Overview - Show the uploaded image with clickable central building
     return (
-      <div className="relative inline-block">
+      <div className="relative flex justify-center items-start">
         {/* Village Background Image */}
         <img 
-          src="/lovable-uploads/0162a33b-2213-401b-b897-ad74e61aa78a.png"
+          src="/lovable-uploads/3fcfc7b7-b1e7-4a6b-9768-25ed5e80443f.png"
           alt="Village"
-          className="block max-w-full h-auto"
+          className="w-full h-auto"
         />
         
         {/* Selected Hero positioned in top left corner */}
@@ -139,7 +139,7 @@ const Village = () => {
                 <img 
                   src={playerState.selectedHero.image} 
                   alt={playerState.selectedHero.name}
-                  className={`w-24 h-24 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
+                  className={`w-40 h-40 rounded-full object-cover border-[8px] ${avatarBorderColor} shadow-lg`}
                 />
               </div>
             </DialogTrigger>
@@ -212,8 +212,8 @@ const Village = () => {
         {/* Back to main menu button - Top Right */}
         <div className="absolute top-4 right-4 z-20">
           <Link to="/">
-            <Button variant="outline" size="icon" className="bg-amber-200/90 hover:bg-amber-300 border-2 border-amber-400">
-              <ArrowLeft className="h-4 w-4" />
+            <Button variant="outline" size="icon" className="bg-amber-200/90 hover:bg-amber-300 border-2 border-amber-400 w-16 h-16">
+              <ArrowLeft className="h-8 w-8" />
             </Button>
           </Link>
         </div>
