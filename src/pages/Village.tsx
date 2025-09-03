@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Character } from '@/types/game';
 import { useGame } from '@/context/GameContext';
-import { villageHeroes } from '@/data/characters';
+import { villageHeroes, monsters } from '@/data/characters';
 import { CharacterCard } from '@/components/game/CharacterCard';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 
 const Village = () => {
   const { playerState, updatePlayerState, recruitHero } = useGame();
+  const navigate = useNavigate();
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
   const [showVillageDetails, setShowVillageDetails] = useState(false);
   const [showHeroSelection, setShowHeroSelection] = useState(false);
@@ -67,6 +68,16 @@ const Village = () => {
     } else {
       toast.error("Not enough coins to recruit this hero!");
     }
+  };
+
+  const handleStartBattle = () => {
+    if (!playerState.selectedHero) {
+      toast.error("Please select a hero first!");
+      return;
+    }
+    
+    // Navigate to main page with battle state
+    navigate('/', { state: { startBattle: true } });
   };
 
   const canAfford = (price: number) => playerState.coins >= price;
@@ -211,11 +222,15 @@ const Village = () => {
 
         {/* Navigation buttons - Top Right */}
         <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
-          <Link to="/">
-            <Button variant="outline" size="icon" className="bg-red-200/90 hover:bg-red-300 border-2 border-red-400 w-16 h-16" title="Battle Monsters">
-              <Swords className="h-8 w-8" />
-            </Button>
-          </Link>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="bg-red-200/90 hover:bg-red-300 border-2 border-red-400 w-16 h-16" 
+            title="Battle Monsters"
+            onClick={handleStartBattle}
+          >
+            <Swords className="h-8 w-8" />
+          </Button>
           <Link to="/">
             <Button variant="outline" size="icon" className="bg-amber-200/90 hover:bg-amber-300 border-2 border-amber-400 w-16 h-16">
               <ArrowLeft className="h-8 w-8" />

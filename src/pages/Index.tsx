@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Character } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 import { GameMenu } from '@/components/game/GameMenu';
@@ -7,11 +7,14 @@ import { PlayerNameForm } from '@/components/game/PlayerNameForm';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useLocation } from 'react-router-dom';
+import { monsters } from '@/data/characters';
 
 type GameState = 'menu' | 'battle' | 'victory' | 'defeat';
 
 const Index = () => {
   const { playerState, updatePlayerState, gainExperience } = useGame();
+  const location = useLocation();
   const [gameState, setGameState] = useState<GameState>('menu');
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [enemyCharacter, setEnemyCharacter] = useState<Character | null>(null);
@@ -51,6 +54,19 @@ const Index = () => {
     setPlayerCharacter(null);
     setEnemyCharacter(null);
   };
+
+  // Auto-start battle if coming from village
+  useEffect(() => {
+    const locationState = location.state as any;
+    if (locationState?.startBattle && playerState.selectedHero) {
+      // Clear the location state to prevent repeated battles
+      window.history.replaceState({}, document.title);
+      
+      // Start battle with selected hero
+      const enemyCharacter = monsters[Math.floor(Math.random() * monsters.length)];
+      handleStartBattle(playerState.selectedHero, enemyCharacter);
+    }
+  }, [location.state, playerState.selectedHero]);
 
   // Show name form if player hasn't set their name yet
   if (playerState.name === 'Player') {
