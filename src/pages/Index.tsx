@@ -55,7 +55,7 @@ const Index = () => {
     setEnemyCharacter(null);
   };
 
-  // Auto-start battle if coming from village
+  // Auto-start battle if coming from village with battle flag
   useEffect(() => {
     const locationState = location.state as any;
     if (locationState?.startBattle && playerState.selectedHero) {
@@ -66,7 +66,7 @@ const Index = () => {
       const enemyCharacter = monsters[Math.floor(Math.random() * monsters.length)];
       handleStartBattle(playerState.selectedHero, enemyCharacter);
     }
-  }, [location.state, playerState.selectedHero]);
+  }, [location.state]);
 
   // Show name form if player hasn't set their name yet
   if (playerState.name === 'Player') {
