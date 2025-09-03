@@ -519,7 +519,7 @@ export const villageHeroes: Character[] = [
     energy: 35,
     maxEnergy: 35,
     rarity: 'legendary',
-    image: '/lovable-uploads/fca6bd6e-161c-49a9-ae6f-a947f3376f26.png',
+    image: '/lovable-uploads/3f7f3ac7-d7f3-4749-9853-12923e6e8e4e.png',
     abilities: [
       {
         id: 'crystal-blade',
