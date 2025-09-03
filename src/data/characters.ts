@@ -597,6 +597,231 @@ export const villageHeroes: Character[] = [
         type: 'super'
       }
     ]
+  },
+  {
+    id: 'steel-warrior',
+    name: 'Steel Warrior',
+    type: 'hero',
+    health: 130,
+    maxHealth: 130,
+    attack: 24,
+    defense: 28,
+    energy: 40,
+    maxEnergy: 40,
+    rarity: 'epic',
+    image: '/lovable-uploads/4d283304-067e-41fc-9da9-530663f35cbf.png',
+    abilities: [
+      {
+        id: 'steel-strike',
+        name: 'Steel Strike',
+        damage: 26,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Heavy metallic blow',
+        type: 'attack'
+      },
+      {
+        id: 'iron-wall',
+        name: 'Iron Wall',
+        damage: 0,
+        energyCost: 20,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Becomes nearly invulnerable for one turn',
+        type: 'defend'
+      },
+      {
+        id: 'meteor-crash',
+        name: 'Meteor Crash',
+        damage: 70,
+        energyCost: 35,
+        cooldown: 5,
+        currentCooldown: 0,
+        description: 'Devastating falling strike!',
+        type: 'super'
+      }
+    ]
+  },
+  {
+    id: 'shadow-blade',
+    name: 'Shadow Blade',
+    type: 'hero',
+    health: 85,
+    maxHealth: 85,
+    attack: 35,
+    defense: 12,
+    energy: 60,
+    maxEnergy: 60,
+    rarity: 'rare',
+    image: '/lovable-uploads/24eb45af-d49f-4513-bd0e-f2ed3cb6a8bf.png',
+    abilities: [
+      {
+        id: 'shadow-cut',
+        name: 'Shadow Cut',
+        damage: 32,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Swift shadow attack',
+        type: 'attack'
+      },
+      {
+        id: 'stealth',
+        name: 'Stealth',
+        damage: 0,
+        energyCost: 25,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Becomes invisible, next attack deals double damage',
+        type: 'special'
+      },
+      {
+        id: 'shadow-storm',
+        name: 'Shadow Storm',
+        damage: 58,
+        energyCost: 30,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Unleashes a whirlwind of shadow blades!',
+        type: 'super'
+      }
+    ]
+  },
+  {
+    id: 'flame-sorceress',
+    name: 'Flame Sorceress',
+    type: 'hero',
+    health: 70,
+    maxHealth: 70,
+    attack: 40,
+    defense: 8,
+    energy: 65,
+    maxEnergy: 65,
+    rarity: 'legendary',
+    image: '/lovable-uploads/fca6bd6e-161c-49a9-ae6f-a947f3376f26.png',
+    abilities: [
+      {
+        id: 'fire-orb',
+        name: 'Fire Orb',
+        damage: 36,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Burning magical projectile',
+        type: 'attack'
+      },
+      {
+        id: 'phoenix-rebirth',
+        name: 'Phoenix Rebirth',
+        damage: -40,
+        energyCost: 30,
+        cooldown: 5,
+        currentCooldown: 0,
+        description: 'Heals 40 HP and increases next attack damage',
+        type: 'heal'
+      },
+      {
+        id: 'inferno-wave',
+        name: 'Inferno Wave',
+        damage: 80,
+        energyCost: 40,
+        cooldown: 5,
+        currentCooldown: 0,
+        description: 'Devastating wave of pure fire!',
+        type: 'super'
+      }
+    ]
+  },
+  {
+    id: 'nature-guardian',
+    name: 'Nature Guardian',
+    type: 'hero',
+    health: 100,
+    maxHealth: 100,
+    attack: 20,
+    defense: 20,
+    energy: 50,
+    maxEnergy: 50,
+    rarity: 'uncommon',
+    image: '/lovable-uploads/e5cf715e-7d36-4b2a-9d8d-46cdd081b4ef.png',
+    abilities: [
+      {
+        id: 'vine-whip',
+        name: 'Vine Whip',
+        damage: 22,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Natural plant attack',
+        type: 'attack'
+      },
+      {
+        id: 'regeneration',
+        name: 'Regeneration',
+        damage: -15,
+        energyCost: 15,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Heals 15 HP every turn for 3 turns',
+        type: 'heal'
+      },
+      {
+        id: 'forest-fury',
+        name: 'Forest Fury',
+        damage: 45,
+        energyCost: 25,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Summons the power of the forest!',
+        type: 'super'
+      }
+    ]
+  },
+  {
+    id: 'frost-knight',
+    name: 'Frost Knight',
+    type: 'hero',
+    health: 120,
+    maxHealth: 120,
+    attack: 22,
+    defense: 25,
+    energy: 35,
+    maxEnergy: 35,
+    rarity: 'epic',
+    image: '/lovable-uploads/e7915244-1e70-4485-970e-fc9da5872d72.png',
+    abilities: [
+      {
+        id: 'frost-sword',
+        name: 'Frost Sword',
+        damage: 24,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Icy blade attack that slows enemy',
+        type: 'attack'
+      },
+      {
+        id: 'ice-armor',
+        name: 'Ice Armor',
+        damage: 0,
+        energyCost: 18,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Reduces all damage by 75% for 2 turns',
+        type: 'defend'
+      },
+      {
+        id: 'blizzard',
+        name: 'Blizzard',
+        damage: 65,
+        energyCost: 32,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Freezing storm that damages and slows!',
+        type: 'super'
+      }
+    ]
   }
 ];
 
