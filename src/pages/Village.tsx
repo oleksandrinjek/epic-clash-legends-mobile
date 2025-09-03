@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ArrowLeft, Coins } from 'lucide-react';
+import { ArrowLeft, Coins, Swords } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Village = () => {
@@ -209,8 +209,13 @@ const Village = () => {
           </Dialog>
         )}
 
-        {/* Back to main menu button - Top Right */}
-        <div className="absolute top-4 right-4 z-20">
+        {/* Navigation buttons - Top Right */}
+        <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
+          <Link to="/battle">
+            <Button variant="outline" size="icon" className="bg-red-200/90 hover:bg-red-300 border-2 border-red-400 w-16 h-16">
+              <Swords className="h-8 w-8" />
+            </Button>
+          </Link>
           <Link to="/">
             <Button variant="outline" size="icon" className="bg-amber-200/90 hover:bg-amber-300 border-2 border-amber-400 w-16 h-16">
               <ArrowLeft className="h-8 w-8" />
