@@ -211,8 +211,8 @@ const Village = () => {
 
         {/* Navigation buttons - Top Right */}
         <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
-          <Link to="/battle">
-            <Button variant="outline" size="icon" className="bg-red-200/90 hover:bg-red-300 border-2 border-red-400 w-16 h-16">
+          <Link to="/">
+            <Button variant="outline" size="icon" className="bg-red-200/90 hover:bg-red-300 border-2 border-red-400 w-16 h-16" title="Battle Monsters">
               <Swords className="h-8 w-8" />
             </Button>
           </Link>
