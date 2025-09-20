@@ -133,14 +133,14 @@ const Village = () => {
           className="w-full h-auto"
         />
         
-        {/* Selected Hero positioned in top left corner */}
-        {playerState.selectedHero && (
+        {/* Avatar Hero positioned in top left corner */}
+        {playerState.avatarHero && (
           <Dialog open={showHeroSelection} onOpenChange={setShowHeroSelection}>
             <DialogTrigger asChild>
               <div className="absolute top-4 left-4 z-10 cursor-pointer hover:scale-105 transition-transform">
                 <img 
-                  src={playerState.selectedHero.image} 
-                  alt={playerState.selectedHero.name}
+                  src={playerState.avatarHero.image} 
+                  alt={playerState.avatarHero.name}
                   className={`w-40 h-40 rounded-full object-cover border-[8px] ${avatarBorderColor} shadow-lg`}
                 />
               </div>
@@ -160,8 +160,8 @@ const Village = () => {
                     </div>
                     <div className="flex justify-center">
                       <img 
-                        src={playerState.selectedHero.image} 
-                        alt={playerState.selectedHero.name}
+                        src={playerState.avatarHero.image} 
+                        alt={playerState.avatarHero.name}
                         className={`w-20 h-20 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
                       />
                     </div>
@@ -199,11 +199,11 @@ const Village = () => {
                     character={character}
                     size="medium"
                     onClick={() => {
-                      updatePlayerState({ selectedHero: character });
+                      updatePlayerState({ avatarHero: character });
                       setShowHeroSelection(false);
-                      toast.success(`${character.name} selected!`);
+                      toast.success(`${character.name} selected as avatar!`);
                     }}
-                    isSelected={playerState.selectedHero?.id === character.id}
+                    isSelected={playerState.avatarHero?.id === character.id}
                   />
                 ))}
               </div>

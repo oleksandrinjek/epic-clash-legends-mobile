@@ -11,7 +11,8 @@ interface PlayerState {
   wins: number;
   losses: number;
   inventory: InventoryItem[];
-  selectedHero: Character | null;
+  selectedHero: Character | null; // For battles
+  avatarHero: Character | null; // For avatar display
   ownedHeroes: Character[];
 }
 
@@ -50,7 +51,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     wins: 0,
     losses: 0,
     inventory: [],
-    selectedHero: heroes[0], // Default to first hero
+    selectedHero: heroes[0], // For battles
+    avatarHero: heroes[0], // For avatar display
     ownedHeroes: [...heroes] // Start with the default heroes
   });
 
@@ -213,8 +215,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setPlayerState(prev => ({
           ...prev,
           ...savedState,
-          // Ensure we have a valid selectedHero - either from saved state or default to first owned hero
+          // Ensure we have valid heroes - either from saved state or default to first owned hero
           selectedHero: (savedState as any).selectedHero || savedState.ownedHeroes[0] || prev.selectedHero,
+          avatarHero: (savedState as any).avatarHero || savedState.ownedHeroes[0] || prev.avatarHero,
         }));
       }
     } catch (error) {
@@ -235,22 +238,29 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [isAuthenticated, playerId, loadProgress]);
 
-  // Ensure we always have heroes and a selected hero
+  // Ensure we always have heroes and selected heroes
   useEffect(() => {
     if (playerState.ownedHeroes.length === 0) {
       setPlayerState(prev => ({
         ...prev,
         ownedHeroes: [...heroes],
-        selectedHero: heroes[0]
+        selectedHero: heroes[0],
+        avatarHero: heroes[0]
       }));
-    } else if (!playerState.selectedHero || !playerState.ownedHeroes.find(h => h.id === playerState.selectedHero?.id)) {
-      // If no hero is selected or selected hero is not owned, select the first owned hero
-      setPlayerState(prev => ({
-        ...prev,
-        selectedHero: prev.ownedHeroes[0]
-      }));
+    } else {
+      // Ensure we have valid selected heroes
+      const needsSelectedHero = !playerState.selectedHero || !playerState.ownedHeroes.find(h => h.id === playerState.selectedHero?.id);
+      const needsAvatarHero = !playerState.avatarHero || !playerState.ownedHeroes.find(h => h.id === playerState.avatarHero?.id);
+      
+      if (needsSelectedHero || needsAvatarHero) {
+        setPlayerState(prev => ({
+          ...prev,
+          selectedHero: needsSelectedHero ? prev.ownedHeroes[0] : prev.selectedHero,
+          avatarHero: needsAvatarHero ? prev.ownedHeroes[0] : prev.avatarHero
+        }));
+      }
     }
-  }, [playerState.ownedHeroes.length, playerState.selectedHero]);
+  }, [playerState.ownedHeroes.length, playerState.selectedHero, playerState.avatarHero]);
 
   return (
     <GameContext.Provider value={{
