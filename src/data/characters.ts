@@ -413,6 +413,271 @@ export const monsters: Character[] = [
         type: 'attack'
       }
     ]
+  },
+  {
+    id: 'shadow-beast',
+    name: 'Shadow Beast',
+    type: 'monster',
+    health: 95,
+    maxHealth: 95,
+    attack: 33,
+    defense: 12,
+    energy: 45,
+    maxEnergy: 45,
+    rarity: 'rare',
+    image: '/lovable-uploads/378a5bc1-671a-48d5-87f5-c8019170ec64.png',
+    abilities: [
+      {
+        id: 'dark-claw',
+        name: 'Dark Claw',
+        damage: 30,
+        energyCost: 15,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Slashes with shadowy claws',
+        type: 'attack'
+      },
+      {
+        id: 'shadow-leap',
+        name: 'Shadow Leap',
+        damage: 25,
+        energyCost: 20,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Teleports behind enemy for surprise attack',
+        type: 'special'
+      }
+    ]
+  },
+  {
+    id: 'bone-dragon',
+    name: 'Bone Dragon',
+    type: 'monster',
+    health: 160,
+    maxHealth: 160,
+    attack: 35,
+    defense: 15,
+    energy: 50,
+    maxEnergy: 50,
+    rarity: 'legendary',
+    image: '/lovable-uploads/24eb45af-d49f-4513-bd0e-f2ed3cb6a8bf.png',
+    abilities: [
+      {
+        id: 'bone-breath',
+        name: 'Bone Breath',
+        damage: 40,
+        energyCost: 25,
+        cooldown: 1,
+        currentCooldown: 0,
+        description: 'Breathes cursed bone fragments',
+        type: 'attack'
+      },
+      {
+        id: 'death-roar',
+        name: 'Death Roar',
+        damage: 22,
+        energyCost: 20,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Terrifying roar that weakens enemy defense',
+        type: 'special'
+      },
+      {
+        id: 'necro-heal',
+        name: 'Necro Heal',
+        damage: -30,
+        energyCost: 30,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Absorbs dark energy to heal',
+        type: 'heal'
+      }
+    ]
+  },
+  {
+    id: 'crystal-spider',
+    name: 'Crystal Spider',
+    type: 'monster',
+    health: 65,
+    maxHealth: 65,
+    attack: 42,
+    defense: 8,
+    energy: 60,
+    maxEnergy: 60,
+    rarity: 'epic',
+    image: '/lovable-uploads/3f7f3ac7-d7f3-4749-9853-12923e6e8e4e.png',
+    abilities: [
+      {
+        id: 'crystal-bite',
+        name: 'Crystal Bite',
+        damage: 38,
+        energyCost: 18,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Venomous bite with crystal fangs',
+        type: 'attack'
+      },
+      {
+        id: 'web-trap',
+        name: 'Web Trap',
+        damage: 15,
+        energyCost: 22,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Entangles enemy in crystal webs',
+        type: 'special'
+      }
+    ]
+  },
+  {
+    id: 'poison-plant',
+    name: 'Poison Plant',
+    type: 'monster',
+    health: 80,
+    maxHealth: 80,
+    attack: 26,
+    defense: 14,
+    energy: 40,
+    maxEnergy: 40,
+    rarity: 'uncommon',
+    image: '/lovable-uploads/dce986e6-60b4-47a7-a2e8-471d26eda6c8.png',
+    abilities: [
+      {
+        id: 'toxic-spore',
+        name: 'Toxic Spore',
+        damage: 24,
+        energyCost: 12,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Releases poisonous spores',
+        type: 'attack'
+      },
+      {
+        id: 'poison-cloud',
+        name: 'Poison Cloud',
+        damage: 18,
+        energyCost: 18,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Creates a lingering poison cloud',
+        type: 'special'
+      },
+      {
+        id: 'root-regeneration',
+        name: 'Root Regeneration',
+        damage: -12,
+        energyCost: 15,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Heals by absorbing nutrients from soil',
+        type: 'heal'
+      }
+    ]
+  },
+  {
+    id: 'lava-golem',
+    name: 'Lava Golem',
+    type: 'monster',
+    health: 130,
+    maxHealth: 130,
+    attack: 32,
+    defense: 22,
+    energy: 35,
+    maxEnergy: 35,
+    rarity: 'epic',
+    image: '/lovable-uploads/f5ddbafa-1275-406f-a966-c01489c58475.png',
+    abilities: [
+      {
+        id: 'magma-punch',
+        name: 'Magma Punch',
+        damage: 35,
+        energyCost: 20,
+        cooldown: 1,
+        currentCooldown: 0,
+        description: 'Molten fist burns through armor',
+        type: 'attack'
+      },
+      {
+        id: 'lava-armor',
+        name: 'Lava Armor',
+        damage: 0,
+        energyCost: 25,
+        cooldown: 4,
+        currentCooldown: 0,
+        description: 'Molten skin damages attackers',
+        type: 'defend'
+      }
+    ]
+  },
+  {
+    id: 'ice-wraith',
+    name: 'Ice Wraith',
+    type: 'monster',
+    health: 70,
+    maxHealth: 70,
+    attack: 36,
+    defense: 6,
+    energy: 55,
+    maxEnergy: 55,
+    rarity: 'rare',
+    image: '/lovable-uploads/89b908d6-cb2f-4b4b-8b19-05b893107d24.png',
+    abilities: [
+      {
+        id: 'frost-touch',
+        name: 'Frost Touch',
+        damage: 32,
+        energyCost: 16,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Freezing touch that slows enemy',
+        type: 'attack'
+      },
+      {
+        id: 'ice-storm',
+        name: 'Ice Storm',
+        damage: 28,
+        energyCost: 24,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Summons a swirling ice storm',
+        type: 'special'
+      }
+    ]
+  },
+  {
+    id: 'metal-scorpion',
+    name: 'Metal Scorpion',
+    type: 'monster',
+    health: 85,
+    maxHealth: 85,
+    attack: 34,
+    defense: 16,
+    energy: 45,
+    maxEnergy: 45,
+    rarity: 'rare',
+    image: '/lovable-uploads/4d283304-067e-41fc-9da9-530663f35cbf.png',
+    abilities: [
+      {
+        id: 'steel-sting',
+        name: 'Steel Sting',
+        damage: 36,
+        energyCost: 18,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Piercing metallic tail strike',
+        type: 'attack'
+      },
+      {
+        id: 'armor-pierce',
+        name: 'Armor Pierce',
+        damage: 45,
+        energyCost: 25,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Ignores enemy defense completely',
+        type: 'special'
+      }
+    ]
   }
 ];
 
