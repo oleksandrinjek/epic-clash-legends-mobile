@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ArrowLeft, Coins, Swords } from 'lucide-react';
+import { ArrowLeft, Coins } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Village = () => {
@@ -70,15 +70,6 @@ const Village = () => {
     }
   };
 
-  const handleStartBattle = () => {
-    if (!playerState.selectedHero) {
-      toast.error("Please select a hero first!");
-      return;
-    }
-    
-    // Navigate to main page with battle state
-    navigate('/', { state: { startBattle: true } });
-  };
 
   const canAfford = (price: number) => playerState.coins >= price;
 
