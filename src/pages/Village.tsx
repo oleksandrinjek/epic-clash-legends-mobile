@@ -20,6 +20,8 @@ const Village = () => {
   const [showHeroSelection, setShowHeroSelection] = useState(false);
   const [showColorPalette, setShowColorPalette] = useState(false);
   const [avatarBorderColor, setAvatarBorderColor] = useState('border-amber-400');
+  const [showBattleDialog, setShowBattleDialog] = useState(false);
+  const [battleHero, setBattleHero] = useState<Character | null>(null);
 
   const colorOptions = [
     { name: 'Amber', class: 'border-amber-400', color: '#fbbf24' },
@@ -234,26 +236,85 @@ const Village = () => {
         </div>
 
         {/* Battle Arena (Swords Icon) - Bottom Right */}
-        <div 
-          className="absolute bottom-8 right-8 cursor-pointer hover:scale-110 transition-transform duration-200 z-20"
-          onClick={() => {
-            const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
-            navigate('/', { 
-              state: { 
-                startBattle: true, 
-                player: playerState.selectedHero,
-                enemy: randomMonster
-              } 
-            });
-          }}
-          title="Click to start a battle"
-        >
-          <img 
-            src={swordsIcon} 
-            alt="Battle Arena" 
-            className="w-24 h-24 rounded-xl shadow-lg hover:shadow-xl transition-shadow border-4 border-amber-400"
-          />
-        </div>
+        <Dialog open={showBattleDialog} onOpenChange={setShowBattleDialog}>
+          <DialogTrigger asChild>
+            <div 
+              className="absolute bottom-8 right-8 cursor-pointer hover:scale-110 transition-transform duration-200 z-20"
+              title="Click to start a battle"
+            >
+              <img 
+                src={swordsIcon} 
+                alt="Battle Arena" 
+                className="w-24 h-24 rounded-xl shadow-lg hover:shadow-xl transition-shadow border-4 border-amber-400"
+              />
+            </div>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold text-center">⚔️ Choose Your Battle Hero</DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-6">
+              {/* Heroes Selection Grid */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Your Heroes:</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {playerState.ownedHeroes.map((character) => (
+                    <CharacterCard
+                      key={character.id}
+                      character={character}
+                      size="medium"
+                      onClick={() => setBattleHero(character)}
+                      isSelected={battleHero?.id === character.id}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Selected Hero Section */}
+              {battleHero && (
+                <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-300">
+                  <h3 className="text-lg font-semibold mb-3 text-amber-900">Selected Hero:</h3>
+                  <div className="flex items-center gap-4">
+                    <img 
+                      src={battleHero.image} 
+                      alt={battleHero.name}
+                      className="w-20 h-20 rounded-lg object-cover border-2 border-amber-400"
+                    />
+                    <div>
+                      <div className="font-bold text-xl text-amber-900">{battleHero.name}</div>
+                      <div className="flex gap-2 mt-1">
+                        <Badge variant="outline" className="border-amber-400">⚔️ {battleHero.attack}</Badge>
+                        <Badge variant="outline" className="border-amber-400">🛡️ {battleHero.defense}</Badge>
+                        <Badge variant="outline" className="border-amber-400">❤️ {battleHero.maxHealth}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Battle Button */}
+              <Button 
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 text-lg"
+                disabled={!battleHero}
+                onClick={() => {
+                  if (battleHero) {
+                    const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
+                    navigate('/', { 
+                      state: { 
+                        startBattle: true, 
+                        player: battleHero,
+                        enemy: randomMonster
+                      } 
+                    });
+                  }
+                }}
+              >
+                ⚔️ Battle Monsters
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
