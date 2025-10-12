@@ -31,19 +31,38 @@ const Index = () => {
   };
 
   const handleBattleEnd = (winner: 'player' | 'enemy') => {
+    // Calculate rewards based on enemy rarity
+    let coinsEarned = 0;
+    let expGained = 0;
+    
+    if (winner === 'player' && enemyCharacter) {
+      const rarityRewards = {
+        common: { coins: 25, exp: 15 },
+        uncommon: { coins: 50, exp: 30 },
+        rare: { coins: 100, exp: 60 },
+        epic: { coins: 200, exp: 120 },
+        legendary: { coins: 500, exp: 300 }
+      };
+      
+      const rewards = rarityRewards[enemyCharacter.rarity] || rarityRewards.common;
+      coinsEarned = rewards.coins;
+      expGained = rewards.exp;
+    }
+    
     // Update stats based on battle result
     const newState = {
       wins: winner === 'player' ? playerState.wins + 1 : playerState.wins,
       losses: winner === 'enemy' ? playerState.losses + 1 : playerState.losses,
-      coins: winner === 'player' ? playerState.coins + 50 : playerState.coins
+      coins: winner === 'player' ? playerState.coins + coinsEarned : playerState.coins
     };
     
     updatePlayerState(newState);
     
     if (winner === 'player') {
-      const expGained = 25; // Base experience for winning
       gainExperience(expGained);
-      toast.success(`Victory! You earned 50 coins and ${expGained} experience!`);
+      toast.success(`Victory! You earned ${coinsEarned} coins and ${expGained} experience!`, {
+        description: enemyCharacter ? `Defeated ${enemyCharacter.rarity} enemy: ${enemyCharacter.name}` : undefined
+      });
     }
     
     setGameState(winner === 'player' ? 'victory' : 'defeat');
