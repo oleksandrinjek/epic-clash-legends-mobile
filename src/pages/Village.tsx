@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ArrowLeft, Coins } from 'lucide-react';
 import { toast } from 'sonner';
+import swordsIcon from '@/assets/swords.jpg';
 
 const Village = () => {
   const { playerState, updatePlayerState, recruitHero } = useGame();
@@ -230,6 +231,28 @@ const Village = () => {
           <div className="bg-white/20 rounded-full p-3 backdrop-blur-sm border border-white/30 opacity-0 hover:opacity-100 transition-opacity">
             <span className="text-white text-sm font-bold">Enter</span>
           </div>
+        </div>
+
+        {/* Battle Arena (Swords Icon) - Bottom Right */}
+        <div 
+          className="absolute bottom-8 right-8 cursor-pointer hover:scale-110 transition-transform duration-200 z-20"
+          onClick={() => {
+            const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
+            navigate('/', { 
+              state: { 
+                startBattle: true, 
+                player: playerState.selectedHero,
+                enemy: randomMonster
+              } 
+            });
+          }}
+          title="Click to start a battle"
+        >
+          <img 
+            src={swordsIcon} 
+            alt="Battle Arena" 
+            className="w-24 h-24 rounded-xl shadow-lg hover:shadow-xl transition-shadow border-4 border-amber-400"
+          />
         </div>
       </div>
     );
