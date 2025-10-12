@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import swordsIcon from '@/assets/swords.jpg';
 
 const Village = () => {
-  const { playerState, updatePlayerState, recruitHero } = useGame();
+  const { playerState, updatePlayerState, recruitHero, levelUpHero } = useGame();
   const navigate = useNavigate();
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
   const [showVillageDetails, setShowVillageDetails] = useState(false);
@@ -273,8 +273,30 @@ const Village = () => {
 
               {/* Selected Hero Section */}
               {battleHero && (
-                <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-300">
-                  <h3 className="text-lg font-semibold mb-3 text-amber-900">Selected Hero:</h3>
+                <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-300 relative">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-semibold text-amber-900">Selected Hero:</h3>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        const currentLevel = battleHero.level || 1;
+                        const cost = currentLevel * 100;
+                        if (levelUpHero(battleHero.id)) {
+                          toast.success(`${battleHero.name} leveled up to level ${currentLevel + 1}!`, {
+                            description: `Cost: ${cost} coins`
+                          });
+                          // Update battleHero to reflect new stats
+                          const updatedHero = playerState.ownedHeroes.find(h => h.id === battleHero.id);
+                          if (updatedHero) setBattleHero(updatedHero);
+                        } else {
+                          toast.error(`Need ${cost} coins to level up!`);
+                        }
+                      }}
+                      className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                    >
+                      ⬆️ Level Up ({(battleHero.level || 1) * 100} 🪙)
+                    </Button>
+                  </div>
                   <div className="flex items-center gap-4">
                     <img 
                       src={battleHero.image} 
@@ -282,7 +304,10 @@ const Village = () => {
                       className="w-20 h-20 rounded-lg object-cover border-2 border-amber-400"
                     />
                     <div>
-                      <div className="font-bold text-xl text-amber-900">{battleHero.name}</div>
+                      <div className="font-bold text-xl text-amber-900">
+                        {battleHero.name}
+                        <Badge className="ml-2 bg-blue-500">Lvl {battleHero.level || 1}</Badge>
+                      </div>
                       <div className="flex gap-2 mt-1">
                         <Badge variant="outline" className="border-amber-400">⚔️ {battleHero.attack}</Badge>
                         <Badge variant="outline" className="border-amber-400">🛡️ {battleHero.defense}</Badge>

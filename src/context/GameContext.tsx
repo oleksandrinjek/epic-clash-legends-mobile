@@ -24,6 +24,7 @@ interface GameContextType {
   gainExperience: (exp: number) => void;
   canAfford: (price: number) => boolean;
   recruitHero: (hero: Character, price: number) => boolean;
+  levelUpHero: (heroId: string) => boolean;
   saveProgress: () => Promise<void>;
   loadProgress: () => Promise<void>;
   isAuthenticated: boolean;
@@ -51,9 +52,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     wins: 0,
     losses: 0,
     inventory: [],
-    selectedHero: heroes[0], // For battles
-    avatarHero: heroes[0], // For avatar display
-    ownedHeroes: [...heroes] // Start with the default heroes
+    selectedHero: { ...heroes[0], level: 1 }, // For battles
+    avatarHero: { ...heroes[0], level: 1 }, // For avatar display
+    ownedHeroes: heroes.map(h => ({ ...h, level: 1 })) // Start with the default heroes
   });
 
   const updatePlayerState = (updates: Partial<PlayerState>) => {
@@ -178,11 +179,52 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       setPlayerState(prev => ({
         ...prev,
         coins: prev.coins - price,
-        ownedHeroes: [...prev.ownedHeroes, { ...hero }]
+        ownedHeroes: [...prev.ownedHeroes, { ...hero, level: 1 }]
       }));
       return true;
     }
     return false;
+  };
+
+  const levelUpHero = (heroId: string): boolean => {
+    const hero = playerState.ownedHeroes.find(h => h.id === heroId);
+    if (!hero) return false;
+
+    const currentLevel = hero.level || 1;
+    const levelUpCost = currentLevel * 100; // Cost increases with level
+
+    if (playerState.coins < levelUpCost) return false;
+
+    setPlayerState(prev => ({
+      ...prev,
+      coins: prev.coins - levelUpCost,
+      ownedHeroes: prev.ownedHeroes.map(h => {
+        if (h.id === heroId) {
+          const newLevel = currentLevel + 1;
+          // Increase stats by 10% per level
+          return {
+            ...h,
+            level: newLevel,
+            attack: Math.floor(h.attack * 1.1),
+            defense: Math.floor(h.defense * 1.1),
+            maxHealth: Math.floor(h.maxHealth * 1.1),
+            health: Math.floor(h.maxHealth * 1.1),
+            maxEnergy: Math.floor(h.maxEnergy * 1.05),
+            energy: Math.floor(h.maxEnergy * 1.05),
+          };
+        }
+        return h;
+      }),
+      // Update selected heroes if they are the leveled hero
+      selectedHero: prev.selectedHero?.id === heroId 
+        ? prev.ownedHeroes.find(h => h.id === heroId) || prev.selectedHero
+        : prev.selectedHero,
+      avatarHero: prev.avatarHero?.id === heroId
+        ? prev.ownedHeroes.find(h => h.id === heroId) || prev.avatarHero
+        : prev.avatarHero,
+    }));
+
+    return true;
   };
 
   // Save progress to database
@@ -271,6 +313,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       gainExperience,
       canAfford,
       recruitHero,
+      levelUpHero,
       saveProgress,
       loadProgress,
       isAuthenticated,

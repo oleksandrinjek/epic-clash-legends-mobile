@@ -11,6 +11,7 @@ export interface Character {
   rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
   image: string;
   abilities: Ability[];
+  level?: number;
 }
 
 export interface Ability {
