@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
 
 import { Save, Download, Cloud, Upload, Download as ExportIcon, Settings } from 'lucide-react';
 import { ProgressExport } from '@/lib/progress-export';
@@ -17,7 +18,7 @@ interface GameMenuProps {
 }
 
 export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
-  const { playerState, updatePlayerState, saveProgress, loadProgress, isAuthenticated } = useGame();
+  const { playerState, updatePlayerState, saveProgress, loadProgress, isAuthenticated, levelUpHero } = useGame();
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(playerState.selectedHero);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -212,7 +213,32 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
         {/* Selected Character Info */}
         {selectedCharacter && (
           <Card className="p-4">
-            <h3 className="font-semibold mb-3">Selected Hero</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold">Selected Hero</h3>
+              <Button
+                size="sm"
+                onClick={() => {
+                  const currentLevel = selectedCharacter.level || 1;
+                  const cost = currentLevel * 100;
+                  if (levelUpHero(selectedCharacter.id)) {
+                    toast.success(`${selectedCharacter.name} leveled up to level ${currentLevel + 1}!`, {
+                      description: `Cost: ${cost} coins`
+                    });
+                    // Update selected character to reflect new stats
+                    const updatedHero = playerState.ownedHeroes.find(h => h.id === selectedCharacter.id);
+                    if (updatedHero) {
+                      setSelectedCharacter(updatedHero);
+                      updatePlayerState({ selectedHero: updatedHero });
+                    }
+                  } else {
+                    toast.error(`Need ${cost} coins to level up!`);
+                  }
+                }}
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+              >
+                ⬆️ Level Up ({(selectedCharacter.level || 1) * 100} 🪙)
+              </Button>
+            </div>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 {selectedCharacter.image.startsWith('/') ? (
@@ -229,6 +255,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                   <div className="flex gap-2">
                     <Badge variant="outline">{selectedCharacter.rarity}</Badge>
                     <Badge className="bg-blue-600 text-white">⚔️ Hero</Badge>
+                    <Badge className="bg-blue-500">Lvl {selectedCharacter.level || 1}</Badge>
                   </div>
                 </div>
               </div>
