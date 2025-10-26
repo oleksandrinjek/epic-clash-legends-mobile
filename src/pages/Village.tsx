@@ -21,7 +21,12 @@ const Village = () => {
   const [showColorPalette, setShowColorPalette] = useState(false);
   const [avatarBorderColor, setAvatarBorderColor] = useState('border-amber-400');
   const [showBattleDialog, setShowBattleDialog] = useState(false);
-  const [battleHero, setBattleHero] = useState<Character | null>(null);
+  const [battleHeroId, setBattleHeroId] = useState<string | null>(null);
+  
+  // Derive battleHero from ownedHeroes to keep it in sync
+  const battleHero = battleHeroId 
+    ? playerState.ownedHeroes.find(h => h.id === battleHeroId) || null 
+    : null;
 
   const colorOptions = [
     { name: 'Amber', class: 'border-amber-400', color: '#fbbf24' },
@@ -264,7 +269,7 @@ const Village = () => {
                       key={character.id}
                       character={character}
                       size="medium"
-                      onClick={() => setBattleHero(character)}
+                      onClick={() => setBattleHeroId(character.id)}
                       isSelected={battleHero?.id === character.id}
                     />
                   ))}
@@ -285,9 +290,6 @@ const Village = () => {
                           toast.success(`${battleHero.name} leveled up to level ${currentLevel + 1}!`, {
                             description: `Cost: ${cost} coins`
                           });
-                          // Update battleHero to reflect new stats
-                          const updatedHero = playerState.ownedHeroes.find(h => h.id === battleHero.id);
-                          if (updatedHero) setBattleHero(updatedHero);
                         } else {
                           toast.error(`Need ${cost} coins to level up!`);
                         }
