@@ -152,10 +152,13 @@ export const BattleArena = ({
       let healAbilities = availableAbilities.filter(a => a.type === 'heal');
       let nonHealAbilities = availableAbilities.filter(a => a.type !== 'heal');
       let chosenAbility;
+      
       // Only use heal if health is below 60%
       if (healAbilities.length > 0 && enemy.health < enemy.maxHealth * 0.6) {
-        // 50% chance to heal if available and low health, otherwise attack
-        if (Math.random() < 0.5 && nonHealAbilities.length > 0) {
+        // 50% chance to heal when low health
+        if (Math.random() < 0.5) {
+          chosenAbility = healAbilities[Math.floor(Math.random() * healAbilities.length)];
+        } else if (nonHealAbilities.length > 0) {
           chosenAbility = nonHealAbilities[Math.floor(Math.random() * nonHealAbilities.length)];
         } else {
           chosenAbility = healAbilities[Math.floor(Math.random() * healAbilities.length)];
