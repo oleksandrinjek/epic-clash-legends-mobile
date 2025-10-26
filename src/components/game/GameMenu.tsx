@@ -19,11 +19,16 @@ interface GameMenuProps {
 
 export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
   const { playerState, updatePlayerState, saveProgress, loadProgress, isAuthenticated, levelUpHero } = useGame();
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(playerState.selectedHero);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(playerState.selectedHero?.id || null);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Derive selectedCharacter from ownedHeroes to keep it in sync
+  const selectedCharacter = selectedCharacterId 
+    ? playerState.ownedHeroes.find(h => h.id === selectedCharacterId) || null 
+    : null;
 
   const handleStartBattle = () => {
     if (!selectedCharacter) return;
@@ -187,7 +192,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                     character={character}
                     size="medium"
                     onClick={() => {
-                      setSelectedCharacter(character);
+                      setSelectedCharacterId(character.id);
                       updatePlayerState({ selectedHero: character });
                     }}
                     isSelected={selectedCharacter?.id === character.id}
@@ -224,12 +229,6 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                     toast.success(`${selectedCharacter.name} leveled up to level ${currentLevel + 1}!`, {
                       description: `Cost: ${cost} coins`
                     });
-                    // Update selected character to reflect new stats
-                    const updatedHero = playerState.ownedHeroes.find(h => h.id === selectedCharacter.id);
-                    if (updatedHero) {
-                      setSelectedCharacter(updatedHero);
-                      updatePlayerState({ selectedHero: updatedHero });
-                    }
                   } else {
                     toast.error(`Need ${cost} coins to level up!`);
                   }
