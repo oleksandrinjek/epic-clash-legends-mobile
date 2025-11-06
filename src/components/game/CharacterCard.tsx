@@ -65,7 +65,7 @@ export const CharacterCard = ({
       <div className={cn('absolute top-0 left-0 right-0 h-1', getRarityColor(character.rarity))} />
       
       {/* Character Image */}
-      <div className="relative h-28 overflow-hidden">
+      <div className="relative h-36 overflow-hidden">
         {character.image.startsWith('/') || character.image.startsWith('http') ? (
           <img 
             src={character.image} 
