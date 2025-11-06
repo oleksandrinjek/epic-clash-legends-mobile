@@ -505,7 +505,7 @@ export const monsters: Character[] = [
     energy: 60,
     maxEnergy: 60,
     rarity: 'epic',
-    image: '/lovable-uploads/3f7f3ac7-d7f3-4749-9853-12923e6e8e4e.png',
+    image: '/lovable-uploads/crystal-spider.png',
     abilities: [
       {
         id: 'crystal-bite',
