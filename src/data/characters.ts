@@ -625,7 +625,7 @@ export const monsters: Character[] = [
       {
         id: 'frost-touch',
         name: 'Frost Touch',
-        damage: 32,
+        damage: 17,
         energyCost: 16,
         cooldown: 0,
         currentCooldown: 0,
