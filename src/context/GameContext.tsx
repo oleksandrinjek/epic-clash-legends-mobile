@@ -141,25 +141,22 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const gainExperience = (exp: number) => {
     setPlayerState(prev => {
-      const newExp = prev.experience + exp;
-      const expNeededForNextLevel = prev.level * 100; // 100 exp per level
+      let currentLevel = prev.level;
+      let currentExp = prev.experience + exp;
+      let totalCoinsEarned = 0;
       
-      if (newExp >= expNeededForNextLevel) {
-        // Level up!
-        const newLevel = prev.level + 1;
-        const remainingExp = newExp - expNeededForNextLevel;
-        
-        return {
-          ...prev,
-          level: newLevel,
-          experience: remainingExp,
-          coins: prev.coins + 25 // Bonus coins for leveling up
-        };
+      // Check for multiple level ups
+      while (currentExp >= currentLevel * 100) {
+        currentExp -= currentLevel * 100;
+        currentLevel += 1;
+        totalCoinsEarned += 25; // Bonus coins for each level up
       }
       
       return {
         ...prev,
-        experience: newExp
+        level: currentLevel,
+        experience: currentExp,
+        coins: prev.coins + totalCoinsEarned
       };
     });
   };
