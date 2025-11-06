@@ -585,7 +585,7 @@ export const monsters: Character[] = [
     energy: 35,
     maxEnergy: 35,
     rarity: 'epic',
-    image: '/lovable-uploads/f5ddbafa-1275-406f-a966-c01489c58475.png',
+    image: '/lovable-uploads/lava-golem.png',
     abilities: [
       {
         id: 'magma-punch',
