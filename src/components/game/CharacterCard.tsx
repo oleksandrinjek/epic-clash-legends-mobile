@@ -2,6 +2,8 @@ import { Character } from '@/types/game';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface CharacterCardProps {
@@ -84,9 +86,56 @@ export const CharacterCard = ({
       
       {/* Character Info */}
       <div className="p-2 space-y-2">
-        <div className="text-center">
-          <h3 className="font-bold text-sm leading-tight">{character.name}</h3>
-          <Badge variant="outline" className="text-xs">
+        <div className="text-center relative">
+          <div className="flex items-center justify-center gap-1">
+            <h3 className="font-bold text-sm leading-tight">{character.name}</h3>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button 
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Info className="w-3.5 h-3.5" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80" onClick={(e) => e.stopPropagation()}>
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-sm">Механика боя</h4>
+                  
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <p className="font-medium text-primary">Нанесение урона:</p>
+                      <p className="text-muted-foreground mt-1">
+                        Урон = (Урон способности + Атака) - Защита противника
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <p className="font-medium text-primary">Восстановление HP:</p>
+                      <p className="text-muted-foreground mt-1">
+                        Способности типа "heal" восстанавливают здоровье. HP не может превысить максимальное значение.
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <p className="font-medium text-primary">Восстановление Energy:</p>
+                      <p className="text-muted-foreground mt-1">
+                        +10 энергии в начале каждого хода. Энергия тратится на использование способностей.
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <p className="font-medium text-primary">Перезарядка способностей:</p>
+                      <p className="text-muted-foreground mt-1">
+                        После использования способности начинается перезарядка (cooldown). Уменьшается на 1 каждый ход.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <Badge variant="outline" className="text-xs mt-1">
             {character.rarity}
           </Badge>
         </div>
