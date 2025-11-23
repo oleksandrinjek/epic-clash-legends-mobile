@@ -32,6 +32,8 @@ export const BattleArena = ({
     `Battle begins! ${playerCharacter.name} (Hero) vs ${enemyCharacter.name} (Monster)!`
   ]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activeAbilityId, setActiveAbilityId] = useState<string | null>(null);
+  const [damageDisplay, setDamageDisplay] = useState<{ target: 'player' | 'enemy', value: number, type: 'damage' | 'heal' } | null>(null);
 
   // Background music effect - only plays during battle
   useEffect(() => {
@@ -102,6 +104,7 @@ export const BattleArena = ({
     }
 
     setIsProcessing(true);
+    setActiveAbilityId(ability.id);
 
     // Player uses ability
     const newPlayer = { ...player };
@@ -116,11 +119,16 @@ export const BattleArena = ({
       const newEnemy = { ...enemy };
       newEnemy.health = Math.max(0, newEnemy.health - damage);
       setEnemy(newEnemy);
+      setDamageDisplay({ target: 'enemy', value: damage, type: 'damage' });
+      setTimeout(() => setDamageDisplay(null), 1500);
       addToBattleLog(`${player.name} uses ${ability.name} for ${damage} damage!`);
       
       if (newEnemy.health <= 0) {
         addToBattleLog(`${enemy.name} is defeated! Hero wins!`);
-        setTimeout(() => onBattleEnd('player'), 1500);
+        setTimeout(() => {
+          setActiveAbilityId(null);
+          onBattleEnd('player');
+        }, 1500);
         return;
       }
     } else if (ability.type === 'super') {
@@ -128,22 +136,31 @@ export const BattleArena = ({
       const newEnemy = { ...enemy };
       newEnemy.health = Math.max(0, newEnemy.health - damage);
       setEnemy(newEnemy);
+      setDamageDisplay({ target: 'enemy', value: damage, type: 'damage' });
+      setTimeout(() => setDamageDisplay(null), 1500);
       addToBattleLog(`${player.name} uses SUPER ATTACK: ${ability.name} for ${damage} damage!`);
       
       if (newEnemy.health <= 0) {
         addToBattleLog(`${enemy.name} is defeated! Hero wins!`);
-        setTimeout(() => onBattleEnd('player'), 1500);
+        setTimeout(() => {
+          setActiveAbilityId(null);
+          onBattleEnd('player');
+        }, 1500);
         return;
       }
     } else if (ability.type === 'heal') {
       const healAmount = Math.abs(ability.damage);
       newPlayer.health = Math.min(newPlayer.maxHealth, newPlayer.health + healAmount);
+      setDamageDisplay({ target: 'player', value: healAmount, type: 'heal' });
+      setTimeout(() => setDamageDisplay(null), 1500);
       addToBattleLog(`${player.name} heals for ${healAmount} HP!`);
     } else if (ability.type === 'defend') {
       addToBattleLog(`${player.name} takes a defensive stance!`);
     }
 
     setPlayer(newPlayer);
+    
+    setTimeout(() => setActiveAbilityId(null), 800);
 
     // Enemy AI turn
     setTimeout(() => {
@@ -192,12 +209,16 @@ export const BattleArena = ({
       if (chosenAbility.type === 'heal') {
         const healAmount = Math.abs(chosenAbility.damage);
         currentEnemy.health = Math.min(currentEnemy.maxHealth, currentEnemy.health + healAmount);
+        setDamageDisplay({ target: 'enemy', value: healAmount, type: 'heal' });
+        setTimeout(() => setDamageDisplay(null), 1500);
         addToBattleLog(`${currentEnemy.name} uses ${chosenAbility.name} and heals for ${healAmount} HP!`);
         setEnemy(currentEnemy);
       } else if (chosenAbility.type === 'attack' || chosenAbility.type === 'super') {
         playAttackSound();
         const damage = Math.max(1, chosenAbility.damage - newPlayer.defense);
         newPlayer.health = Math.max(0, newPlayer.health - damage);
+        setDamageDisplay({ target: 'player', value: damage, type: 'damage' });
+        setTimeout(() => setDamageDisplay(null), 1500);
         
         const attackType = chosenAbility.type === 'super' ? 'SUPER ATTACK' : 'attack';
         addToBattleLog(`${currentEnemy.name} uses ${attackType}: ${chosenAbility.name} for ${damage} damage!`);
@@ -266,8 +287,15 @@ export const BattleArena = ({
         <div className="grid grid-cols-4 gap-4 items-start">
           {/* Left Column - Player Hero */}
           <div className="space-y-4">
-            <div className="flex justify-center">
+            <div className="flex justify-center relative">
               <CharacterCard character={player} size="large" />
+              {damageDisplay?.target === 'player' && (
+                <div className={`absolute top-0 left-1/2 -translate-x-1/2 text-3xl font-bold animate-fade-in ${
+                  damageDisplay.type === 'damage' ? 'text-red-500' : 'text-green-500'
+                }`}>
+                  {damageDisplay.type === 'damage' ? '-' : '+'}{damageDisplay.value}
+                </div>
+              )}
             </div>
             
             {/* Player Abilities */}
@@ -275,14 +303,20 @@ export const BattleArena = ({
               <h3 className="font-semibold mb-3 text-center">Hero Abilities</h3>
               <div className="grid grid-cols-1 gap-2">
                 {player.abilities.map((ability) => (
-                  <AbilityButton
-                    key={ability.id}
-                    ability={ability}
-                    onClick={() => useAbility(ability)}
-                    disabled={isProcessing || currentTurn !== 'player' || 
-                             player.energy < ability.energyCost || ability.currentCooldown > 0}
-                    character={player}
-                  />
+                  <div 
+                    key={ability.id} 
+                    className={`transition-all duration-300 ${
+                      activeAbilityId === ability.id ? 'ring-2 ring-primary ring-offset-2 rounded-lg scale-105' : ''
+                    }`}
+                  >
+                    <AbilityButton
+                      ability={ability}
+                      onClick={() => useAbility(ability)}
+                      disabled={isProcessing || currentTurn !== 'player' || 
+                               player.energy < ability.energyCost || ability.currentCooldown > 0}
+                      character={player}
+                    />
+                  </div>
                 ))}
               </div>
             </Card>
@@ -319,8 +353,15 @@ export const BattleArena = ({
 
           {/* Right Column - Enemy Monster */}
           <div className="space-y-4">
-            <div className="flex justify-center">
+            <div className="flex justify-center relative">
               <CharacterCard character={enemy} isEnemy size="large" />
+              {damageDisplay?.target === 'enemy' && (
+                <div className={`absolute top-0 left-1/2 -translate-x-1/2 text-3xl font-bold animate-fade-in ${
+                  damageDisplay.type === 'damage' ? 'text-red-500' : 'text-green-500'
+                }`}>
+                  {damageDisplay.type === 'damage' ? '-' : '+'}{damageDisplay.value}
+                </div>
+              )}
             </div>
             
             {/* Enemy Info Display */}
