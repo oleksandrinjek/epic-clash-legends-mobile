@@ -299,7 +299,7 @@ export const BattleArena = ({
             </div>
             
             {/* Player Abilities */}
-            <Card className="p-4">
+            <Card className="p-4 flex-1 flex flex-col">
               <h3 className="font-semibold mb-3 text-center">Hero Abilities</h3>
               <div className="grid grid-cols-1 gap-2">
                 {player.abilities.map((ability) => (
@@ -365,7 +365,7 @@ export const BattleArena = ({
             </div>
             
             {/* Enemy Info Display */}
-            <Card className="p-4">
+            <Card className="p-4 flex-1 flex flex-col">
               <h3 className="font-semibold mb-3 text-center">Enemy Abilities</h3>
               <div className="space-y-2">
                 {enemy.abilities.map((ability) => (
