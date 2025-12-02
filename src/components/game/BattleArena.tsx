@@ -167,8 +167,14 @@ export const BattleArena = ({
       const currentEnemy = { ...enemy };
       
       // Filter abilities based on energy and cooldown
+      // For 'attack' type, no energy is required (same logic as player)
       const availableAbilities = currentEnemy.abilities.filter(
-        a => currentEnemy.energy >= a.energyCost && a.currentCooldown === 0
+        a => {
+          // Attack type abilities don't require energy
+          if (a.type === 'attack') return a.currentCooldown === 0;
+          // Other types (super, heal, defend) require energy
+          return currentEnemy.energy >= a.energyCost && a.currentCooldown === 0;
+        }
       );
       
       if (availableAbilities.length === 0) {
@@ -202,8 +208,10 @@ export const BattleArena = ({
         }
       }
       
-      // Deduct energy
-      currentEnemy.energy -= chosenAbility.energyCost;
+      // Deduct energy (only for super, heal, defend types, not for regular attack)
+      if (chosenAbility.type === 'super' || chosenAbility.type === 'heal' || chosenAbility.type === 'defend') {
+        currentEnemy.energy -= chosenAbility.energyCost;
+      }
       
       // Execute the chosen ability (only ONE action per turn)
       if (chosenAbility.type === 'heal') {
@@ -369,9 +377,22 @@ export const BattleArena = ({
               <h3 className="font-semibold mb-3 text-center">Enemy Abilities</h3>
               <div className="space-y-2">
                 {enemy.abilities.map((ability) => (
-                  <div key={ability.id} className="text-sm p-2 bg-muted rounded">
-                    <div className="font-medium">{ability.name}</div>
-                    <div className="text-xs text-muted-foreground">{ability.description}</div>
+                  <div key={ability.id} className="text-sm p-3 bg-muted rounded border border-border">
+                    <div className="flex justify-between items-start mb-1">
+                      <div className="font-medium">{ability.name}</div>
+                      <Badge variant="outline" className="ml-2">
+                        {ability.type === 'attack' || ability.type === 'super' ? `⚔️ ${ability.damage}` : ability.type === 'heal' ? `💚 ${Math.abs(ability.damage)}` : '🛡️'}
+                      </Badge>
+                    </div>
+                    <div className="text-xs text-muted-foreground mb-2">{ability.description}</div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-muted-foreground">
+                        {ability.type === 'attack' ? 'Free' : `⚡ ${ability.energyCost}`}
+                      </span>
+                      {ability.cooldown > 0 && (
+                        <span className="text-muted-foreground">CD: {ability.cooldown}</span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
