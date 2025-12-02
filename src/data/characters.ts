@@ -694,7 +694,7 @@ export const villageHeroes: Character[] = [
     energy: 70,
     maxEnergy: 70,
     rarity: 'epic',
-    image: '/lovable-uploads/60aa725a-b504-4b45-99c9-c77374d66bfd.png',
+    image: '/lovable-uploads/lightning-wizard.png',
     abilities: [
       {
         id: 'thunder-strike',
