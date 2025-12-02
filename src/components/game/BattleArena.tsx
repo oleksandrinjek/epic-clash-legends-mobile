@@ -284,9 +284,9 @@ export const BattleArena = ({
         </Card>
 
         {/* Main Battle Area - Four columns */}
-        <div className="grid grid-cols-4 gap-4 items-start">
+        <div className="grid grid-cols-4 gap-4">
           {/* Left Column - Player Hero */}
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             <div className="flex justify-center relative">
               <CharacterCard character={player} size="large" />
               {damageDisplay?.target === 'player' && (
@@ -323,7 +323,7 @@ export const BattleArena = ({
           </div>
 
           {/* Inventory Column */}
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             <Inventory
               inventory={playerState.inventory}
               onUseItem={handleUseInventoryItem}
@@ -332,7 +332,7 @@ export const BattleArena = ({
           </div>
 
           {/* Center Column - Battle Info & Log */}
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             {/* Battle Info */}
             <Card className="p-4">
               <div className="text-center space-y-2">
@@ -352,7 +352,7 @@ export const BattleArena = ({
           </div>
 
           {/* Right Column - Enemy Monster */}
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             <div className="flex justify-center relative">
               <CharacterCard character={enemy} isEnemy size="large" />
               {damageDisplay?.target === 'enemy' && (
