@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Character, Ability } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 import { CharacterCard } from './CharacterCard';
@@ -34,6 +34,19 @@ export const BattleArena = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeAbilityId, setActiveAbilityId] = useState<string | null>(null);
   const [damageDisplay, setDamageDisplay] = useState<{ target: 'player' | 'enemy', value: number, type: 'damage' | 'heal' } | null>(null);
+  
+  // Refs to track latest state for async operations
+  const enemyRef = useRef<Character>(enemy);
+  const playerRef = useRef<Character>(player);
+  
+  // Keep refs in sync with state
+  useEffect(() => {
+    enemyRef.current = enemy;
+  }, [enemy]);
+  
+  useEffect(() => {
+    playerRef.current = player;
+  }, [player]);
 
   // Background music effect - only plays during battle
   useEffect(() => {
@@ -164,7 +177,8 @@ export const BattleArena = ({
 
     // Enemy AI turn
     setTimeout(() => {
-      const currentEnemy = { ...enemy };
+      const currentEnemy = { ...enemyRef.current };
+      const currentPlayer = { ...playerRef.current };
       
       // Filter abilities based on energy and cooldown
       // For 'attack' type, no energy is required (same logic as player)
@@ -217,19 +231,19 @@ export const BattleArena = ({
         setEnemy(currentEnemy);
       } else if (chosenAbility.type === 'attack' || chosenAbility.type === 'super') {
         playAttackSound();
-        const damage = Math.max(1, chosenAbility.damage - newPlayer.defense);
-        newPlayer.health = Math.max(0, newPlayer.health - damage);
+        const damage = Math.max(1, chosenAbility.damage - currentPlayer.defense);
+        currentPlayer.health = Math.max(0, currentPlayer.health - damage);
         setDamageDisplay({ target: 'player', value: damage, type: 'damage' });
         setTimeout(() => setDamageDisplay(null), 1500);
         
         const attackType = chosenAbility.type === 'super' ? 'SUPER ATTACK' : 'attack';
         addToBattleLog(`${currentEnemy.name} uses ${attackType}: ${chosenAbility.name} for ${damage} damage!`);
         
-        setPlayer(newPlayer);
+        setPlayer(currentPlayer);
         setEnemy(currentEnemy);
         
-        if (newPlayer.health <= 0) {
-          addToBattleLog(`${player.name} is defeated! Monster wins!`);
+        if (currentPlayer.health <= 0) {
+          addToBattleLog(`${currentPlayer.name} is defeated! Monster wins!`);
           setTimeout(() => onBattleEnd('enemy'), 1500);
           return;
         }
