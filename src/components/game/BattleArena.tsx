@@ -183,23 +183,23 @@ export const BattleArena = ({
         return;
       }
       
-      // Monsters cannot heal - only use attack/super/defend abilities
-      const combatAbilities = availableAbilities.filter(a => a.type !== 'heal');
-      
-      if (combatAbilities.length === 0) {
-        addToBattleLog(`${currentEnemy.name} skips turn (no combat abilities available)`);
-        endTurn();
-        return;
-      }
-      
-      // Prefer attack abilities
-      const attackAbilities = combatAbilities.filter(a => a.type === 'attack' || a.type === 'super');
+      // Monster chooses ONE action: heal OR attack (not both)
+      const healAbilities = availableAbilities.filter(a => a.type === 'heal');
+      const attackAbilities = availableAbilities.filter(a => a.type === 'attack' || a.type === 'super');
+      const defendAbilities = availableAbilities.filter(a => a.type === 'defend');
       
       let chosenAbility: Ability;
-      if (attackAbilities.length > 0) {
+      
+      // If low health (below 30%) and heal available, prioritize healing
+      if (healAbilities.length > 0 && currentEnemy.health < currentEnemy.maxHealth * 0.3) {
+        chosenAbility = healAbilities[Math.floor(Math.random() * healAbilities.length)];
+      } else if (attackAbilities.length > 0) {
+        // Otherwise prefer attacks
         chosenAbility = attackAbilities[Math.floor(Math.random() * attackAbilities.length)];
+      } else if (defendAbilities.length > 0) {
+        chosenAbility = defendAbilities[Math.floor(Math.random() * defendAbilities.length)];
       } else {
-        chosenAbility = combatAbilities[Math.floor(Math.random() * combatAbilities.length)];
+        chosenAbility = availableAbilities[Math.floor(Math.random() * availableAbilities.length)];
       }
       
       // Deduct energy (only for super, heal, defend types, not for regular attack)
