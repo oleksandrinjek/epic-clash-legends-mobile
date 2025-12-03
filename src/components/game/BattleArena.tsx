@@ -183,29 +183,23 @@ export const BattleArena = ({
         return;
       }
       
-      // Separate abilities by type
-      const healAbilities = availableAbilities.filter(a => a.type === 'heal');
-      const attackAbilities = availableAbilities.filter(a => a.type === 'attack' || a.type === 'super');
+      // Monsters cannot heal - only use attack/super/defend abilities
+      const combatAbilities = availableAbilities.filter(a => a.type !== 'heal');
+      
+      if (combatAbilities.length === 0) {
+        addToBattleLog(`${currentEnemy.name} skips turn (no combat abilities available)`);
+        endTurn();
+        return;
+      }
+      
+      // Prefer attack abilities
+      const attackAbilities = combatAbilities.filter(a => a.type === 'attack' || a.type === 'super');
       
       let chosenAbility: Ability;
-      
-      // Decision logic: heal if low health (below 50%) and heal is available
-      if (healAbilities.length > 0 && currentEnemy.health < currentEnemy.maxHealth * 0.5) {
-        // 60% chance to heal when low health
-        if (Math.random() < 0.6) {
-          chosenAbility = healAbilities[Math.floor(Math.random() * healAbilities.length)];
-        } else if (attackAbilities.length > 0) {
-          chosenAbility = attackAbilities[Math.floor(Math.random() * attackAbilities.length)];
-        } else {
-          chosenAbility = availableAbilities[Math.floor(Math.random() * availableAbilities.length)];
-        }
+      if (attackAbilities.length > 0) {
+        chosenAbility = attackAbilities[Math.floor(Math.random() * attackAbilities.length)];
       } else {
-        // Prefer attacks when not low health
-        if (attackAbilities.length > 0) {
-          chosenAbility = attackAbilities[Math.floor(Math.random() * attackAbilities.length)];
-        } else {
-          chosenAbility = availableAbilities[Math.floor(Math.random() * availableAbilities.length)];
-        }
+        chosenAbility = combatAbilities[Math.floor(Math.random() * combatAbilities.length)];
       }
       
       // Deduct energy (only for super, heal, defend types, not for regular attack)
@@ -311,20 +305,15 @@ export const BattleArena = ({
               <h3 className="font-semibold mb-3 text-center">Hero Abilities</h3>
               <div className="grid grid-cols-1 gap-2">
                 {player.abilities.map((ability) => (
-                  <div 
-                    key={ability.id} 
-                    className={`transition-all duration-300 ${
-                      activeAbilityId === ability.id ? 'ring-2 ring-primary ring-offset-2 rounded-lg scale-105' : ''
-                    }`}
-                  >
-                    <AbilityButton
-                      ability={ability}
-                      onClick={() => useAbility(ability)}
-                      disabled={isProcessing || currentTurn !== 'player' || 
-                               player.energy < ability.energyCost || ability.currentCooldown > 0}
-                      character={player}
-                    />
-                  </div>
+                  <AbilityButton
+                    key={ability.id}
+                    ability={ability}
+                    onClick={() => useAbility(ability)}
+                    disabled={isProcessing || currentTurn !== 'player' || 
+                             player.energy < ability.energyCost || ability.currentCooldown > 0}
+                    character={player}
+                    isActive={activeAbilityId === ability.id}
+                  />
                 ))}
               </div>
             </Card>

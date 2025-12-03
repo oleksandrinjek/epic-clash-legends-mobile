@@ -8,9 +8,10 @@ interface AbilityButtonProps {
   character: Character;
   onClick: () => void;
   disabled?: boolean;
+  isActive?: boolean;
 }
 
-export const AbilityButton = ({ ability, character, onClick, disabled }: AbilityButtonProps) => {
+export const AbilityButton = ({ ability, character, onClick, disabled, isActive }: AbilityButtonProps) => {
   const canUse = character.energy >= ability.energyCost && ability.currentCooldown === 0;
   
   const getAbilityIcon = (type: Ability['type']) => {
@@ -25,11 +26,21 @@ export const AbilityButton = ({ ability, character, onClick, disabled }: Ability
 
   const getAbilityColor = (type: Ability['type']) => {
     switch (type) {
-      case 'attack': return 'border-red-500 hover:bg-red-50';
-      case 'defend': return 'border-blue-500 hover:bg-blue-50';
-      case 'heal': return 'border-green-500 hover:bg-green-50';
-      case 'special': return 'border-purple-500 hover:bg-purple-50';
-      case 'super': return 'border-yellow-500 hover:bg-yellow-50';
+      case 'attack': return 'border-red-500 hover:bg-red-50 dark:hover:bg-red-950';
+      case 'defend': return 'border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950';
+      case 'heal': return 'border-green-500 hover:bg-green-50 dark:hover:bg-green-950';
+      case 'special': return 'border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-950';
+      case 'super': return 'border-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-950';
+    }
+  };
+
+  const getActiveGlow = (type: Ability['type']) => {
+    switch (type) {
+      case 'attack': return 'shadow-[0_0_20px_rgba(239,68,68,0.7)] bg-red-100 dark:bg-red-900 border-red-400 scale-105';
+      case 'defend': return 'shadow-[0_0_20px_rgba(59,130,246,0.7)] bg-blue-100 dark:bg-blue-900 border-blue-400 scale-105';
+      case 'heal': return 'shadow-[0_0_20px_rgba(34,197,94,0.7)] bg-green-100 dark:bg-green-900 border-green-400 scale-105';
+      case 'special': return 'shadow-[0_0_20px_rgba(168,85,247,0.7)] bg-purple-100 dark:bg-purple-900 border-purple-400 scale-105';
+      case 'super': return 'shadow-[0_0_20px_rgba(234,179,8,0.7)] bg-yellow-100 dark:bg-yellow-900 border-yellow-400 scale-105';
     }
   };
 
@@ -37,10 +48,11 @@ export const AbilityButton = ({ ability, character, onClick, disabled }: Ability
     <Button
       variant="outline"
       className={cn(
-        'h-auto p-3 flex flex-col items-start space-y-1 relative',
+        'h-auto p-3 flex flex-col items-start space-y-1 relative transition-all duration-300',
         getAbilityColor(ability.type),
         !canUse && 'opacity-50 cursor-not-allowed',
-        disabled && 'pointer-events-none'
+        disabled && 'pointer-events-none',
+        isActive && getActiveGlow(ability.type)
       )}
       onClick={onClick}
       disabled={disabled || !canUse}
