@@ -231,9 +231,9 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
           </div>
 
           {/* Center Column - Hero Selection */}
-          <div className="space-y-4">
-            <Card className="p-4 border-2 border-primary/20 h-full">
-              <h2 className="font-bold mb-4 text-lg flex items-center gap-2">
+          <div className="space-y-4 min-h-0">
+            <Card className="p-4 border-2 border-primary/20 h-full flex flex-col overflow-hidden">
+              <h2 className="font-bold mb-4 text-lg flex items-center gap-2 flex-shrink-0">
                 ⚔️ Choose Your Hero
                 {selectedCharacter && (
                   <Badge variant="secondary" className="ml-auto">
@@ -254,13 +254,13 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                   </Link>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="flex-1 overflow-y-auto min-h-0">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {playerState.ownedHeroes.map((character) => (
                       <CharacterCard
                         key={character.id}
                         character={character}
-                        size="medium"
+                        size="small"
                         onClick={() => {
                           setSelectedCharacterId(character.id);
                           updatePlayerState({ selectedHero: character });
@@ -269,9 +269,9 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                       />
                     ))}
                   </div>
-                  <div className="text-center p-3 bg-muted/30 rounded-lg">
-                    <p className="text-sm text-muted-foreground">
-                      💡 Click on a hero to select them
+                  <div className="text-center p-2 bg-muted/30 rounded-lg mt-3">
+                    <p className="text-xs text-muted-foreground">
+                      💡 Click to select
                     </p>
                   </div>
                 </div>
