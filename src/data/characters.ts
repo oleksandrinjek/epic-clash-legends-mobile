@@ -678,6 +678,51 @@ export const monsters: Character[] = [
         type: 'special'
       }
     ]
+  },
+  {
+    id: 'metal-scorpion',
+    name: 'Металлический Скорпион',
+    type: 'monster',
+    health: 145,
+    maxHealth: 145,
+    attack: 58,
+    defense: 22,
+    energy: 85,
+    maxEnergy: 85,
+    rarity: 'epic',
+    image: '/lovable-uploads/metal-scorpion.png',
+    abilities: [
+      {
+        id: 'claw-strike',
+        name: 'Удар Клешнёй',
+        damage: 52,
+        energyCost: 0,
+        cooldown: 0,
+        currentCooldown: 0,
+        description: 'Мощный удар металлической клешнёй',
+        type: 'attack'
+      },
+      {
+        id: 'tail-sting',
+        name: 'Жало Хвоста',
+        damage: 75,
+        energyCost: 40,
+        cooldown: 2,
+        currentCooldown: 0,
+        description: 'Ядовитый укол хвостом',
+        type: 'super'
+      },
+      {
+        id: 'metal-shell',
+        name: 'Металлический Панцирь',
+        damage: 0,
+        energyCost: 30,
+        cooldown: 3,
+        currentCooldown: 0,
+        description: 'Укрепляет защиту на 50%',
+        type: 'defend'
+      }
+    ]
   }
 ];
 
