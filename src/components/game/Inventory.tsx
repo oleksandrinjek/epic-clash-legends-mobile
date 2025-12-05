@@ -16,46 +16,41 @@ export const Inventory = ({ inventory, onUseItem, disabled = false }: InventoryP
 
   if (inventory.length === 0) {
     return (
-      <Card className="p-4">
-        <h3 className="font-semibold mb-2">Inventory</h3>
-        <p className="text-sm text-muted-foreground">Your inventory is empty.</p>
+      <Card className="p-3">
+        <h3 className="font-semibold text-sm mb-1">🎒 Инвентарь</h3>
+        <p className="text-xs text-muted-foreground">Пусто</p>
       </Card>
     );
   }
 
   return (
-    <Card className="p-4">
-      <h3 className="font-semibold mb-3">Inventory</h3>
+    <Card className="p-3">
+      <h3 className="font-semibold text-sm mb-2">🎒 Инвентарь</h3>
       
       {usableItems.length > 0 && (
-        <div className="mb-4">
-          <h4 className="text-sm font-medium mb-2">Battle Items</h4>
-          <div className="space-y-2">
+        <div className="mb-2">
+          <div className="grid grid-cols-2 gap-2">
             {usableItems.map((item) => (
-              <div key={item.inventoryId} className="flex items-center justify-between p-2 bg-muted rounded">
-                <div className="flex items-center space-x-2">
+              <div key={item.inventoryId} className="flex items-center justify-between p-2 bg-muted rounded text-xs">
+                <div className="flex items-center space-x-1">
                   <img 
                     src={item.image} 
                     alt={item.name} 
-                    className="w-8 h-8 object-cover rounded"
+                    className="w-6 h-6 object-cover rounded"
                   />
                   <div>
-                    <div className="text-sm font-medium">{item.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {item.effect.stat === 'health' ? 'Restores' : 'Increases'} {item.effect.stat} by {item.effect.value}
-                    </div>
+                    <div className="font-medium truncate">{item.name}</div>
+                    <div className="text-muted-foreground">x{item.quantity}</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Badge variant="secondary">x{item.quantity}</Badge>
-                  <Button
-                    size="sm"
-                    onClick={() => onUseItem(item)}
-                    disabled={disabled}
-                  >
-                    Use
-                  </Button>
-                </div>
+                <Button
+                  size="sm"
+                  className="h-6 px-2 text-xs"
+                  onClick={() => onUseItem(item)}
+                  disabled={disabled}
+                >
+                  ✓
+                </Button>
               </div>
             ))}
           </div>
@@ -64,25 +59,19 @@ export const Inventory = ({ inventory, onUseItem, disabled = false }: InventoryP
 
       {equipmentItems.length > 0 && (
         <div>
-          {usableItems.length > 0 && <Separator className="my-3" />}
-          <h4 className="text-sm font-medium mb-2">Equipment</h4>
-          <div className="space-y-2">
+          {usableItems.length > 0 && <Separator className="my-2" />}
+          <div className="grid grid-cols-2 gap-2">
             {equipmentItems.map((item) => (
-              <div key={item.inventoryId} className="flex items-center justify-between p-2 bg-muted rounded">
-                <div className="flex items-center space-x-2">
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
-                    className="w-8 h-8 object-cover rounded"
-                  />
-                  <div>
-                    <div className="text-sm font-medium">{item.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      +{item.effect.value} {item.effect.stat}
-                    </div>
-                  </div>
+              <div key={item.inventoryId} className="flex items-center p-2 bg-muted rounded text-xs">
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className="w-6 h-6 object-cover rounded mr-1"
+                />
+                <div>
+                  <div className="font-medium truncate">{item.name}</div>
+                  <div className="text-muted-foreground">+{item.effect.value} {item.effect.stat}</div>
                 </div>
-                <Badge variant="secondary">x{item.quantity}</Badge>
               </div>
             ))}
           </div>

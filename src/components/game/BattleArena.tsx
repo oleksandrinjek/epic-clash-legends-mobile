@@ -285,132 +285,96 @@ export const BattleArena = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background p-4">
-      <div className="max-w-6xl mx-auto space-y-4">
-        {/* Battle Header */}
-        <Card className="p-4">
-          <div className="text-center space-y-2">
-            <h2 className="text-lg font-bold">Hero vs Monster Battle</h2>
-            <div className="flex justify-center items-center space-x-4 text-sm">
-              <Badge className="bg-blue-600 text-white">⚔️ Hero</Badge>
-              <span>vs</span>
-              <Badge className="bg-red-600 text-white">👹 Monster</Badge>
-            </div>
+    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background p-2">
+      <div className="max-w-md mx-auto space-y-3">
+        {/* Battle Header - Compact */}
+        <Card className="p-2">
+          <div className="flex justify-between items-center">
+            <Badge className="bg-blue-600 text-white text-xs">⚔️ Hero</Badge>
+            <span className="font-bold text-sm">
+              {currentTurn === 'player' ? '🎯 Твой ход' : '⏳ Ход врага'}
+            </span>
+            <Badge className="bg-red-600 text-white text-xs">👹 Monster</Badge>
           </div>
         </Card>
 
-        {/* Main Battle Area - Four columns */}
-        <div className="grid grid-cols-4 gap-4 items-stretch">
-          {/* Left Column - Player Hero */}
-          <div className="space-y-4 w-full flex flex-col">
-            <div className="flex justify-center relative">
-              <CharacterCard character={player} size="large" />
-              {damageDisplay?.target === 'player' && (
-                <div className={`absolute top-0 left-1/2 -translate-x-1/2 text-3xl font-bold animate-fade-in ${
-                  damageDisplay.type === 'damage' ? 'text-red-500' : 'text-green-500'
-                }`}>
-                  {damageDisplay.type === 'damage' ? '-' : '+'}{damageDisplay.value}
-                </div>
-              )}
-            </div>
-            
-            {/* Player Abilities */}
-            <Card className="p-4 flex-1 flex flex-col">
-              <h3 className="font-semibold mb-3 text-center">Hero Abilities</h3>
-              <div className="grid grid-cols-1 gap-2">
-                {player.abilities.map((ability) => (
-                  <AbilityButton
-                    key={ability.id}
-                    ability={ability}
-                    onClick={() => useAbility(ability)}
-                    disabled={isProcessing || currentTurn !== 'player' || 
-                             player.energy < ability.energyCost || ability.currentCooldown > 0}
-                    character={player}
-                    isActive={activeAbilityId === ability.id}
-                  />
-                ))}
+        {/* Characters Row */}
+        <div className="grid grid-cols-2 gap-2">
+          {/* Player Hero */}
+          <div className="relative">
+            <CharacterCard character={player} size="medium" />
+            {damageDisplay?.target === 'player' && (
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl font-bold animate-fade-in ${
+                damageDisplay.type === 'damage' ? 'text-red-500' : 'text-green-500'
+              }`}>
+                {damageDisplay.type === 'damage' ? '-' : '+'}{damageDisplay.value}
               </div>
-            </Card>
+            )}
           </div>
 
-          {/* Inventory Column */}
-          <div className="space-y-4 w-full flex flex-col">
-            <Inventory
-              inventory={playerState.inventory}
-              onUseItem={handleUseInventoryItem}
-              disabled={isProcessing || currentTurn !== 'player'}
-            />
-          </div>
-
-          {/* Center Column - Battle Info & Log */}
-          <div className="space-y-4 w-full flex flex-col">
-            {/* Battle Info */}
-            <Card className="p-4">
-              <div className="text-center space-y-2">
-                <h2 className="text-lg font-bold">
-                  {currentTurn === 'player' ? 'Your Turn' : 'Enemy Turn'}
-                </h2>
-                <div className="flex justify-center space-x-4 text-sm text-muted-foreground">
-                  <span>Round: 1</span>
-                  <span>•</span>
-                  <span>{currentTurn === 'player' ? '⚔️ Attack!' : '🛡️ Defend!'}</span>
-                </div>
+          {/* Enemy Monster */}
+          <div className="relative">
+            <CharacterCard character={enemy} isEnemy size="medium" />
+            {damageDisplay?.target === 'enemy' && (
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl font-bold animate-fade-in ${
+                damageDisplay.type === 'damage' ? 'text-red-500' : 'text-green-500'
+              }`}>
+                {damageDisplay.type === 'damage' ? '-' : '+'}{damageDisplay.value}
               </div>
-            </Card>
-
-            {/* Battle Log */}
-            <BattleLog messages={battleLog} />
-          </div>
-
-          {/* Right Column - Enemy Monster */}
-          <div className="space-y-4 w-full flex flex-col">
-            <div className="flex justify-center relative">
-              <CharacterCard character={enemy} isEnemy size="large" />
-              {damageDisplay?.target === 'enemy' && (
-                <div className={`absolute top-0 left-1/2 -translate-x-1/2 text-3xl font-bold animate-fade-in ${
-                  damageDisplay.type === 'damage' ? 'text-red-500' : 'text-green-500'
-                }`}>
-                  {damageDisplay.type === 'damage' ? '-' : '+'}{damageDisplay.value}
-                </div>
-              )}
-            </div>
-            
-            {/* Enemy Info Display */}
-            <Card className="p-4 flex-1 flex flex-col">
-              <h3 className="font-semibold mb-3 text-center">Enemy Abilities</h3>
-              <div className="space-y-2">
-                {enemy.abilities.map((ability) => (
-                  <div key={ability.id} className="text-sm p-3 bg-muted rounded border border-border">
-                    <div className="flex justify-between items-start mb-1">
-                      <div className="font-medium">{ability.name}</div>
-                      <Badge variant="outline" className="ml-2">
-                        {ability.type === 'attack' || ability.type === 'super' ? `⚔️ ${ability.damage}` : ability.type === 'heal' ? `💚 ${Math.abs(ability.damage)}` : '🛡️'}
-                      </Badge>
-                    </div>
-                    <div className="text-xs text-muted-foreground mb-2">{ability.description}</div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-muted-foreground">
-                        {ability.type === 'attack' ? 'Free' : `⚡ ${ability.energyCost}`}
-                      </span>
-                      {ability.cooldown > 0 && (
-                        <span className="text-muted-foreground">CD: {ability.cooldown}</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            )}
           </div>
         </div>
 
-        <Separator />
+        {/* Hero Abilities */}
+        <Card className="p-3">
+          <h3 className="font-semibold mb-2 text-sm">⚔️ Твои способности</h3>
+          <div className="grid grid-cols-3 gap-2">
+            {player.abilities.map((ability) => (
+              <AbilityButton
+                key={ability.id}
+                ability={ability}
+                onClick={() => useAbility(ability)}
+                disabled={isProcessing || currentTurn !== 'player' || 
+                         player.energy < ability.energyCost || ability.currentCooldown > 0}
+                character={player}
+                isActive={activeAbilityId === ability.id}
+              />
+            ))}
+          </div>
+        </Card>
+
+        {/* Enemy Abilities - Compact */}
+        <Card className="p-3">
+          <h3 className="font-semibold mb-2 text-sm">👹 Способности врага</h3>
+          <div className="grid grid-cols-3 gap-2">
+            {enemy.abilities.map((ability) => (
+              <div key={ability.id} className="text-xs p-2 bg-muted rounded border border-border">
+                <div className="font-medium truncate">{ability.name}</div>
+                <div className="flex justify-between text-muted-foreground">
+                  <span>
+                    {ability.type === 'attack' || ability.type === 'super' ? `⚔️${ability.damage}` : ability.type === 'heal' ? `💚${Math.abs(ability.damage)}` : '🛡️'}
+                  </span>
+                  <span>{ability.type === 'attack' ? '0⚡' : `${ability.energyCost}⚡`}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Inventory - Compact */}
+        <Inventory
+          inventory={playerState.inventory}
+          onUseItem={handleUseInventoryItem}
+          disabled={isProcessing || currentTurn !== 'player'}
+        />
+
+        {/* Battle Log - Compact */}
+        <BattleLog messages={battleLog} />
 
         {/* Controls */}
-        <div className="flex justify-center">
-          <Button variant="outline" onClick={onReturnToMenu}>
-            Return to Menu
-          </Button>
-        </div>
+        <Button variant="outline" size="sm" className="w-full" onClick={onReturnToMenu}>
+          ← Вернуться в меню
+        </Button>
       </div>
     </div>
   );
