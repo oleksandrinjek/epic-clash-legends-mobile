@@ -45,7 +45,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/10 via-background to-secondary/10 p-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-primary/10 via-background to-secondary/10 p-4">
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Header */}
         <div className="text-center space-y-2">
@@ -231,7 +231,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
           </div>
 
           {/* Center Column - Hero Selection */}
-          <div className="lg:col-span-2 min-h-0">
+          <div className="min-h-0">
             <Card className="p-4 border-2 border-primary/20 h-full flex flex-col overflow-hidden min-h-[500px]">
               <h2 className="font-bold mb-4 text-lg flex items-center gap-2 flex-shrink-0">
                 ⚔️ Choose Your Hero
@@ -243,7 +243,7 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
               </h2>
               
               {playerState.ownedHeroes.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-muted-foreground flex-1">
                   <div className="text-4xl mb-2">🏰</div>
                   <p className="font-medium">No heroes available</p>
                   <p className="text-sm">Visit the Village to recruit heroes!</p>
@@ -276,26 +276,121 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
                   </div>
                 </div>
               )}
+
+              {/* Battle Button inside hero selection */}
+              <div className="flex-shrink-0 pt-4 mt-auto">
+                <Button 
+                  className="w-full h-14 text-lg" 
+                  onClick={handleStartBattle}
+                  disabled={!selectedCharacter}
+                >
+                  {selectedCharacter ? '⚔️ Battle Monsters!' : 'Select a Hero'}
+                </Button>
+              </div>
             </Card>
+          </div>
+
+          {/* Right Column - Selected Hero & How to Start */}
+          <div className="space-y-4">
+            {/* Quick Start */}
+            <Card className="p-4 bg-blue-50 border-blue-200">
+              <div className="text-center space-y-2">
+                <div className="text-lg">🎯 How to Start</div>
+                <div className="text-sm text-blue-700 space-y-1">
+                  <p>1. <strong>Select a Hero</strong></p>
+                  <p>2. <strong>Review stats</strong></p>
+                  <p>3. <strong>Battle!</strong></p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Selected Character Info */}
+            {selectedCharacter ? (
+              <Card className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">Selected Hero</h3>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      const currentLevel = selectedCharacter.level || 1;
+                      const cost = currentLevel * 100;
+                      if (levelUpHero(selectedCharacter.id)) {
+                        toast.success(`${selectedCharacter.name} leveled up to level ${currentLevel + 1}!`, {
+                          description: `Cost: ${cost} coins`
+                        });
+                      } else {
+                        toast.error(`Need ${cost} coins to level up!`);
+                      }
+                    }}
+                    className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                  >
+                    ⬆️ Level Up ({(selectedCharacter.level || 1) * 100} 🪙)
+                  </Button>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    {selectedCharacter.image.startsWith('/') ? (
+                      <img 
+                        src={selectedCharacter.image} 
+                        alt={selectedCharacter.name}
+                        className="w-12 h-12 rounded-lg object-cover"
+                      />
+                    ) : (
+                      <span className="text-2xl">{selectedCharacter.image}</span>
+                    )}
+                    <div>
+                      <div className="font-semibold">{selectedCharacter.name}</div>
+                      <div className="flex gap-1 flex-wrap">
+                        <Badge variant="outline" className="text-xs">{selectedCharacter.rarity}</Badge>
+                        <Badge className="bg-blue-500 text-xs">Lvl {selectedCharacter.level || 1}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 p-3 bg-muted/50 rounded-lg">
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground">Attack</div>
+                      <div className="font-bold">{selectedCharacter.attack}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground">Defense</div>
+                      <div className="font-bold">{selectedCharacter.defense}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground">Health</div>
+                      <div className="font-bold">{selectedCharacter.maxHealth}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground">Energy</div>
+                      <div className="font-bold">{selectedCharacter.maxEnergy}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">Abilities:</h4>
+                    {selectedCharacter.abilities.map((ability) => (
+                      <div key={ability.id} className="text-xs space-y-1">
+                        <div className="flex justify-between">
+                          <span className="font-medium">{ability.name}</span>
+                          <span className="text-muted-foreground">{ability.energyCost}⚡</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            ) : (
+              <Card className="p-4 text-center text-muted-foreground">
+                <div className="text-4xl mb-2">👆</div>
+                <p>Select a hero to see details</p>
+              </Card>
+            )}
           </div>
         </div>
 
         {/* Footer */}
         <div className="text-center text-xs text-muted-foreground pt-4">
           Version 1.0.0 • Made with ❤️
-        </div>
-      </div>
-
-      {/* Fixed Battle Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t">
-        <div className="max-w-7xl mx-auto">
-          <Button 
-            className="w-full h-14 text-lg" 
-            onClick={handleStartBattle}
-            disabled={!selectedCharacter}
-          >
-            {selectedCharacter ? '⚔️ Battle Monsters!' : 'Select a Hero'}
-          </Button>
         </div>
       </div>
     </div>
