@@ -45,8 +45,8 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/10 via-background to-secondary/10 p-4">
-      <div className="max-w-7xl mx-auto space-y-4">
+    <div className="h-screen overflow-hidden bg-gradient-to-b from-primary/10 via-background to-secondary/10 p-4 flex flex-col">
+      <div className="max-w-7xl mx-auto space-y-4 flex flex-col flex-1 min-h-0">
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -56,10 +56,10 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
         </div>
 
         {/* Main Horizontal Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 min-h-0">
           
           {/* Left Column - Player Info & Navigation */}
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-y-auto min-h-0">
             {/* Player Stats */}
             <Card className="p-4">
               <div className="flex items-center justify-between mb-3">
@@ -231,8 +231,8 @@ export const GameMenu = ({ onStartBattle }: GameMenuProps) => {
           </div>
 
           {/* Center Column - Hero Selection */}
-          <div className="min-h-0">
-            <Card className="p-4 border-2 border-primary/20 h-full flex flex-col overflow-hidden min-h-[500px]">
+          <div className="min-h-0 flex flex-col">
+            <Card className="p-4 border-2 border-primary/20 flex-1 flex flex-col overflow-hidden">
               <h2 className="font-bold mb-4 text-lg flex items-center gap-2 flex-shrink-0">
                 ⚔️ Choose Your Hero
                 {selectedCharacter && (
