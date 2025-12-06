@@ -299,8 +299,8 @@ export const BattleArena = ({
           </div>
         </Card>
 
-        {/* Main Battle Area - Four columns */}
-        <div className="grid grid-cols-4 gap-4 items-stretch">
+        {/* Main Battle Area - Dynamic columns */}
+        <div className={`grid gap-4 items-stretch ${playerState.inventory.length > 0 ? 'grid-cols-4' : 'grid-cols-3'}`}>
           {/* Left Column - Player Hero */}
           <div className="space-y-4 w-full flex flex-col">
             <div className="flex justify-center relative">
@@ -333,31 +333,19 @@ export const BattleArena = ({
             </Card>
           </div>
 
-          {/* Inventory Column */}
-          <div className="space-y-4 w-full flex flex-col">
-            <Inventory
-              inventory={playerState.inventory}
-              onUseItem={handleUseInventoryItem}
-              disabled={isProcessing || currentTurn !== 'player'}
-            />
-          </div>
+          {/* Inventory Column - Only show if inventory has items */}
+          {playerState.inventory.length > 0 && (
+            <div className="space-y-4 w-full flex flex-col">
+              <Inventory
+                inventory={playerState.inventory}
+                onUseItem={handleUseInventoryItem}
+                disabled={isProcessing || currentTurn !== 'player'}
+              />
+            </div>
+          )}
 
-          {/* Center Column - Battle Info & Log */}
+          {/* Center Column - Battle Log */}
           <div className="space-y-4 w-full flex flex-col">
-            {/* Battle Info */}
-            <Card className="p-4">
-              <div className="text-center space-y-2">
-                <h2 className="text-lg font-bold">
-                  {currentTurn === 'player' ? 'Your Turn' : 'Enemy Turn'}
-                </h2>
-                <div className="flex justify-center space-x-4 text-sm text-muted-foreground">
-                  <span>Round: 1</span>
-                  <span>•</span>
-                  <span>{currentTurn === 'player' ? '⚔️ Attack!' : '🛡️ Defend!'}</span>
-                </div>
-              </div>
-            </Card>
-
             {/* Battle Log */}
             <BattleLog messages={battleLog} />
           </div>
