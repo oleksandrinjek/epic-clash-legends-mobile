@@ -34,9 +34,15 @@ export const CharacterCard = ({
   };
 
   const sizeClasses = {
-    small: 'w-24 h-36',
-    medium: 'w-32 h-48',
-    large: 'w-40 h-60'
+    small: 'w-24',
+    medium: 'w-32',
+    large: 'w-44'
+  };
+
+  const imageSizeClasses = {
+    small: 'h-20',
+    medium: 'h-28',
+    large: 'h-36'
   };
 
   return (
@@ -67,15 +73,15 @@ export const CharacterCard = ({
       <div className={cn('absolute top-0 left-0 right-0 h-1', getRarityColor(character.rarity))} />
       
       {/* Character Image */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-background to-muted">
+      <div className={cn("relative overflow-hidden bg-gradient-to-b from-background to-muted", imageSizeClasses[size])}>
         {character.image.startsWith('/') || character.image.startsWith('http') ? (
           <img 
             src={character.image} 
             alt={character.name}
-            className="w-full h-auto object-contain"
+            className="w-full h-full object-cover object-top"
           />
         ) : (
-          <div className="flex items-center justify-center h-28 text-4xl">
+          <div className="flex items-center justify-center h-full text-4xl">
             {character.image}
           </div>
         )}
