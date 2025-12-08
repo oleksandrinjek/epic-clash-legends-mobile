@@ -67,18 +67,15 @@ export const CharacterCard = ({
       <div className={cn('absolute top-0 left-0 right-0 h-1', getRarityColor(character.rarity))} />
       
       {/* Character Image */}
-      <div className="relative h-28 overflow-hidden">
+      <div className="relative overflow-hidden bg-gradient-to-b from-background to-muted">
         {character.image.startsWith('/') || character.image.startsWith('http') ? (
           <img 
             src={character.image} 
             alt={character.name}
-            className={cn(
-              "w-full h-full object-cover",
-              character.name === 'Fire Drake' ? 'object-center' : 'object-top'
-            )}
+            className="w-full h-auto object-contain"
           />
         ) : (
-          <div className="flex items-center justify-center h-full bg-gradient-to-b from-background to-muted text-4xl">
+          <div className="flex items-center justify-center h-28 text-4xl">
             {character.image}
           </div>
         )}
