@@ -77,13 +77,17 @@ const Index = () => {
   // Auto-start battle if coming from village with battle flag
   useEffect(() => {
     const locationState = location.state as any;
-    if (locationState?.startBattle && playerState.selectedHero) {
+    if (locationState?.startBattle) {
       // Clear the location state to prevent repeated battles
       window.history.replaceState({}, document.title);
       
-      // Start battle with selected hero
-      const enemyCharacter = monsters[Math.floor(Math.random() * monsters.length)];
-      handleStartBattle(playerState.selectedHero, enemyCharacter);
+      // Use hero from location state (from Village) or fallback to selectedHero
+      const heroToUse = locationState.player || playerState.selectedHero;
+      const enemyToUse = locationState.enemy || monsters[Math.floor(Math.random() * monsters.length)];
+      
+      if (heroToUse) {
+        handleStartBattle(heroToUse, enemyToUse);
+      }
     }
   }, [location.state]);
 
