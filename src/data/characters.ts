@@ -874,7 +874,7 @@ export const villageHeroes: Character[] = [
     energy: 55,
     maxEnergy: 55,
     rarity: 'uncommon',
-    image: '/lovable-uploads/60aa725a-b504-4b45-99c9-c77374d66bfd.png',
+    image: '/lovable-uploads/wind-master.jpg',
     abilities: [
       {
         id: 'wind-slash',
