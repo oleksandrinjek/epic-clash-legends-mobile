@@ -864,8 +864,8 @@ export const villageHeroes: Character[] = [
     ]
   },
   {
-    id: 'wind-dancer',
-    name: 'Wind Dancer',
+    id: 'wind-master',
+    name: 'Wind Master',
     type: 'hero',
     health: 75,
     maxHealth: 75,
