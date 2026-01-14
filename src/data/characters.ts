@@ -1054,7 +1054,7 @@ export const villageHeroes: Character[] = [
     energy: 50,
     maxEnergy: 50,
     rarity: 'uncommon',
-    image: '/lovable-uploads/e5cf715e-7d36-4b2a-9d8d-46cdd081b4ef.png',
+    image: '/lovable-uploads/nature-guardian.jpg',
     abilities: [
       {
         id: 'vine-whip',
