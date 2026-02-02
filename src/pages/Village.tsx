@@ -354,7 +354,7 @@ const Village = () => {
                   <div className="bg-gradient-to-b from-amber-50 to-amber-100 rounded-lg p-3 border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-200">
                     <div className="text-center mb-2">
                       
-                      <div className="text-xs text-amber-700 font-semibold">{hero.name}'s House</div>
+                      <div className="text-xs text-amber-700 font-semibold">{hero.name}</div>
                     </div>
                     
                     <div className="cursor-pointer transform hover:scale-105 transition-transform" onClick={() => setSelectedHero(hero)}>
