@@ -426,12 +426,6 @@ const Village = () => {
                       />
                     </div>
                     
-                    {/* Rarity badge */}
-                    <div className="absolute top-1 right-1">
-                      <Badge className={`text-white text-xs ${getRarityColor(hero.rarity)} shadow-sm`}>
-                        {hero.rarity}
-                      </Badge>
-                    </div>
                     
                     {/* Price tag */}
                     <div className="absolute bottom-1 right-1 bg-yellow-600 text-white px-2 py-1 rounded-md text-xs font-bold shadow-sm">
