@@ -135,6 +135,9 @@ export const CharacterCard = ({
               </PopoverContent>
             </Popover>
           </div>
+          <Badge variant="outline" className="text-xs mt-1">
+            {character.rarity}
+          </Badge>
         </div>
         
         {/* Health Bar */}
