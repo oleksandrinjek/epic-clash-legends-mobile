@@ -350,12 +350,9 @@ const Village = () => {
             return <div key={hero.id} className="relative">
                   {/* Building background */}
                   <div className="bg-gradient-to-b from-amber-50 to-amber-100 rounded-lg p-3 border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-200">
-                    {/* Name and Rarity row */}
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="text-xs text-amber-700 font-semibold truncate max-w-[60%]" title={hero.name}>{hero.name}</div>
-                      <Badge className={`text-white text-xs ${getRarityColor(hero.rarity)} shadow-sm flex-shrink-0`}>
-                        {hero.rarity}
-                      </Badge>
+                    {/* Name row */}
+                    <div className="mb-2">
+                      <div className="text-xs text-amber-700 font-semibold truncate" title={hero.name}>{hero.name}</div>
                     </div>
                     
                     {/* Centered character card */}
@@ -363,8 +360,11 @@ const Village = () => {
                       <CharacterCard character={hero} size="small" isSelected={selectedHero?.id === hero.id} />
                     </div>
                     
-                    {/* Price tag */}
-                    <div className="mt-2 flex justify-end">
+                    {/* Rarity and Price row */}
+                    <div className="mt-2 flex items-center justify-between">
+                      <Badge className={`text-white text-xs ${getRarityColor(hero.rarity)} shadow-sm`}>
+                        {hero.rarity}
+                      </Badge>
                       <div className="bg-yellow-600 text-white px-2 py-1 rounded-md text-xs font-bold shadow-sm">
                         {getHeroPrice(hero)} 🪙
                       </div>
