@@ -11,9 +11,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ArrowLeft, Coins } from 'lucide-react';
 import { toast } from 'sonner';
 import swordsIcon from '@/assets/swords.jpg';
-
 const Village = () => {
-  const { playerState, updatePlayerState, recruitHero, levelUpHero } = useGame();
+  const {
+    playerState,
+    updatePlayerState,
+    recruitHero,
+    levelUpHero
+  } = useGame();
   const navigate = useNavigate();
   const [selectedHero, setSelectedHero] = useState<Character | null>(null);
   const [showVillageDetails, setShowVillageDetails] = useState(false);
@@ -22,22 +26,42 @@ const Village = () => {
   const [avatarBorderColor, setAvatarBorderColor] = useState('border-amber-400');
   const [showBattleDialog, setShowBattleDialog] = useState(false);
   const [battleHeroId, setBattleHeroId] = useState<string | null>(null);
-  
-  // Derive battleHero from ownedHeroes to keep it in sync
-  const battleHero = battleHeroId 
-    ? playerState.ownedHeroes.find(h => h.id === battleHeroId) || null 
-    : null;
 
-  const colorOptions = [
-    { name: 'Amber', class: 'border-amber-400', color: '#fbbf24' },
-    { name: 'Red', class: 'border-red-400', color: '#f87171' },
-    { name: 'Blue', class: 'border-blue-400', color: '#60a5fa' },
-    { name: 'Green', class: 'border-green-400', color: '#4ade80' },
-    { name: 'Purple', class: 'border-purple-400', color: '#a78bfa' },
-    { name: 'Pink', class: 'border-pink-400', color: '#f472b6' },
-    { name: 'Cyan', class: 'border-cyan-400', color: '#22d3ee' },
-    { name: 'Orange', class: 'border-orange-400', color: '#fb923c' },
-  ];
+  // Derive battleHero from ownedHeroes to keep it in sync
+  const battleHero = battleHeroId ? playerState.ownedHeroes.find(h => h.id === battleHeroId) || null : null;
+  const colorOptions = [{
+    name: 'Amber',
+    class: 'border-amber-400',
+    color: '#fbbf24'
+  }, {
+    name: 'Red',
+    class: 'border-red-400',
+    color: '#f87171'
+  }, {
+    name: 'Blue',
+    class: 'border-blue-400',
+    color: '#60a5fa'
+  }, {
+    name: 'Green',
+    class: 'border-green-400',
+    color: '#4ade80'
+  }, {
+    name: 'Purple',
+    class: 'border-purple-400',
+    color: '#a78bfa'
+  }, {
+    name: 'Pink',
+    class: 'border-pink-400',
+    color: '#f472b6'
+  }, {
+    name: 'Cyan',
+    class: 'border-cyan-400',
+    color: '#22d3ee'
+  }, {
+    name: 'Orange',
+    class: 'border-orange-400',
+    color: '#fb923c'
+  }];
 
   // Helper function to check if hero is owned
   const isHeroOwned = (hero: Character) => {
@@ -46,7 +70,6 @@ const Village = () => {
 
   // Heroes available for purchase in the village (filter out owned heroes)
   const availableHeroes = villageHeroes.filter(hero => !isHeroOwned(hero));
-
   const getHeroPrice = (hero: Character) => {
     // Price based on rarity
     const rarityPrices = {
@@ -58,17 +81,15 @@ const Village = () => {
     };
     return rarityPrices[hero.rarity] || 100;
   };
-
   const handlePurchaseHero = (hero: Character) => {
     const price = getHeroPrice(hero);
-    
+
     // Check if hero is already owned
     const alreadyOwned = playerState.ownedHeroes.find(ownedHero => ownedHero.id === hero.id);
     if (alreadyOwned) {
       toast.error("You already own this hero!");
       return;
     }
-    
     if (recruitHero(hero, price)) {
       toast.success(`Successfully recruited ${hero.name} for ${price} coins!`);
       // Clear selection since hero is no longer available
@@ -77,10 +98,7 @@ const Village = () => {
       toast.error("Not enough coins to recruit this hero!");
     }
   };
-
-
   const canAfford = (price: number) => playerState.coins >= price;
-
   const getRarityColor = (rarity: Character['rarity']) => {
     const colors = {
       common: 'bg-gray-500',
@@ -95,18 +113,16 @@ const Village = () => {
   // Background music effect - only plays on village page
   useEffect(() => {
     let audio: HTMLAudioElement | null = null;
-    
     const initializeMusic = async () => {
       audio = new Audio('/audio/village-theme.mp3');
       audio.loop = true;
       audio.volume = 0.3;
-      
       try {
         await audio.play();
       } catch (error) {
         // Handle autoplay restrictions
         console.log('Autoplay prevented, user interaction required');
-        
+
         // Add click listener to start music on first interaction
         const handleFirstInteraction = async () => {
           if (audio) {
@@ -117,7 +133,6 @@ const Village = () => {
         document.addEventListener('click', handleFirstInteraction);
       }
     };
-
     initializeMusic();
 
     // Cleanup function - stops music when leaving village page
@@ -129,28 +144,17 @@ const Village = () => {
       }
     };
   }, []);
-
   if (!showVillageDetails) {
     // Village Overview - Show the uploaded image with clickable central building
-    return (
-      <div className="relative flex justify-center items-start">
+    return <div className="relative flex justify-center items-start">
         {/* Village Background Image */}
-        <img 
-          src="/lovable-uploads/3fcfc7b7-b1e7-4a6b-9768-25ed5e80443f.png"
-          alt="Village"
-          className="w-full h-auto"
-        />
+        <img src="/lovable-uploads/3fcfc7b7-b1e7-4a6b-9768-25ed5e80443f.png" alt="Village" className="w-full h-auto" />
         
         {/* Avatar Hero positioned in top left corner */}
-        {playerState.avatarHero && (
-          <Dialog open={showHeroSelection} onOpenChange={setShowHeroSelection}>
+        {playerState.avatarHero && <Dialog open={showHeroSelection} onOpenChange={setShowHeroSelection}>
             <DialogTrigger asChild>
               <div className="absolute top-4 left-4 z-10 cursor-pointer hover:scale-105 transition-transform">
-                <img 
-                  src={playerState.avatarHero.image} 
-                  alt={playerState.avatarHero.name}
-                  className={`w-40 h-40 rounded-full object-cover border-[8px] ${avatarBorderColor} shadow-lg`}
-                />
+                <img src={playerState.avatarHero.image} alt={playerState.avatarHero.name} className={`w-40 h-40 rounded-full object-cover border-[8px] ${avatarBorderColor} shadow-lg`} />
               </div>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -167,11 +171,7 @@ const Village = () => {
                       Current Avatar Preview:
                     </div>
                     <div className="flex justify-center">
-                      <img 
-                        src={playerState.avatarHero.image} 
-                        alt={playerState.avatarHero.name}
-                        className={`w-20 h-20 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`}
-                      />
+                      <img src={playerState.avatarHero.image} alt={playerState.avatarHero.name} className={`w-20 h-20 rounded-full object-cover border-[5px] ${avatarBorderColor} shadow-lg`} />
                     </div>
                   </div>
 
@@ -181,43 +181,28 @@ const Village = () => {
                       🎨 Avatar Border Color:
                     </div>
                     <div className="grid grid-cols-8 gap-2">
-                      {colorOptions.map((colorOption) => (
-                        <button
-                          key={colorOption.name}
-                          onClick={() => {
-                            setAvatarBorderColor(colorOption.class);
-                            toast.success(`Border color changed to ${colorOption.name}!`);
-                          }}
-                          className={`w-10 h-10 rounded-full border-2 hover:scale-110 transition-transform ${
-                            avatarBorderColor === colorOption.class ? 'ring-2 ring-gray-500' : ''
-                          }`}
-                          style={{ backgroundColor: colorOption.color }}
-                          title={colorOption.name}
-                        />
-                      ))}
+                      {colorOptions.map(colorOption => <button key={colorOption.name} onClick={() => {
+                    setAvatarBorderColor(colorOption.class);
+                    toast.success(`Border color changed to ${colorOption.name}!`);
+                  }} className={`w-10 h-10 rounded-full border-2 hover:scale-110 transition-transform ${avatarBorderColor === colorOption.class ? 'ring-2 ring-gray-500' : ''}`} style={{
+                    backgroundColor: colorOption.color
+                  }} title={colorOption.name} />)}
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                {playerState.ownedHeroes.map((character) => (
-                  <CharacterCard
-                    key={character.id}
-                    character={character}
-                    size="medium"
-                    onClick={() => {
-                      updatePlayerState({ avatarHero: character });
-                      setShowHeroSelection(false);
-                      toast.success(`${character.name} selected as avatar!`);
-                    }}
-                    isSelected={playerState.avatarHero?.id === character.id}
-                  />
-                ))}
+                {playerState.ownedHeroes.map(character => <CharacterCard key={character.id} character={character} size="medium" onClick={() => {
+              updatePlayerState({
+                avatarHero: character
+              });
+              setShowHeroSelection(false);
+              toast.success(`${character.name} selected as avatar!`);
+            }} isSelected={playerState.avatarHero?.id === character.id} />)}
               </div>
             </DialogContent>
-          </Dialog>
-        )}
+          </Dialog>}
 
         {/* Navigation buttons - Top Right */}
         <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
@@ -229,11 +214,7 @@ const Village = () => {
         </div>
 
         {/* Clickable central building area */}
-        <div 
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 cursor-pointer hover:scale-110 transition-transform duration-200 z-20 flex items-center justify-center"
-          onClick={() => setShowVillageDetails(true)}
-          title="Click to enter the Heroes' Guild"
-        >
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 cursor-pointer hover:scale-110 transition-transform duration-200 z-20 flex items-center justify-center" onClick={() => setShowVillageDetails(true)} title="Click to enter the Heroes' Guild">
           {/* Subtle indicator for clickable area */}
           <div className="bg-white/20 rounded-full p-3 backdrop-blur-sm border border-white/30 opacity-0 hover:opacity-100 transition-opacity">
             <span className="text-white text-sm font-bold">Enter</span>
@@ -243,15 +224,8 @@ const Village = () => {
         {/* Battle Arena (Swords Icon) - Bottom Right */}
         <Dialog open={showBattleDialog} onOpenChange={setShowBattleDialog}>
           <DialogTrigger asChild>
-            <div 
-              className="absolute bottom-8 right-8 cursor-pointer hover:scale-110 transition-transform duration-200 z-20"
-              title="Click to start a battle"
-            >
-              <img 
-                src={swordsIcon} 
-                alt="Battle Arena" 
-                className="w-24 h-24 rounded-xl shadow-lg hover:shadow-xl transition-shadow border-4 border-amber-400"
-              />
+            <div className="absolute bottom-8 right-8 cursor-pointer hover:scale-110 transition-transform duration-200 z-20" title="Click to start a battle">
+              <img src={swordsIcon} alt="Battle Arena" className="w-24 h-24 rounded-xl shadow-lg hover:shadow-xl transition-shadow border-4 border-amber-400" />
             </div>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -264,47 +238,30 @@ const Village = () => {
               <div>
                 <h3 className="text-lg font-semibold mb-3">Your Heroes:</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {playerState.ownedHeroes.map((character) => (
-                    <CharacterCard
-                      key={character.id}
-                      character={character}
-                      size="medium"
-                      onClick={() => setBattleHeroId(character.id)}
-                      isSelected={battleHero?.id === character.id}
-                    />
-                  ))}
+                  {playerState.ownedHeroes.map(character => <CharacterCard key={character.id} character={character} size="medium" onClick={() => setBattleHeroId(character.id)} isSelected={battleHero?.id === character.id} />)}
                 </div>
               </div>
 
               {/* Selected Hero Section */}
-              {battleHero && (
-                <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-300 relative">
+              {battleHero && <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-300 relative">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-lg font-semibold text-amber-900">Selected Hero:</h3>
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        const currentLevel = battleHero.level || 1;
-                        const cost = currentLevel * 100;
-                        if (levelUpHero(battleHero.id)) {
-                          toast.success(`${battleHero.name} leveled up to level ${currentLevel + 1}!`, {
-                            description: `Cost: ${cost} coins`
-                          });
-                        } else {
-                          toast.error(`Need ${cost} coins to level up!`);
-                        }
-                      }}
-                      className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
-                    >
+                    <Button size="sm" onClick={() => {
+                  const currentLevel = battleHero.level || 1;
+                  const cost = currentLevel * 100;
+                  if (levelUpHero(battleHero.id)) {
+                    toast.success(`${battleHero.name} leveled up to level ${currentLevel + 1}!`, {
+                      description: `Cost: ${cost} coins`
+                    });
+                  } else {
+                    toast.error(`Need ${cost} coins to level up!`);
+                  }
+                }} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
                       ⬆️ Level Up ({(battleHero.level || 1) * 100} 🪙)
                     </Button>
                   </div>
                   <div className="flex items-center gap-4">
-                    <img 
-                      src={battleHero.image} 
-                      alt={battleHero.name}
-                      className="w-20 h-20 rounded-lg object-cover border-2 border-amber-400"
-                    />
+                    <img src={battleHero.image} alt={battleHero.name} className="w-20 h-20 rounded-lg object-cover border-2 border-amber-400" />
                     <div>
                       <div className="font-bold text-xl text-amber-900">
                         {battleHero.name}
@@ -317,37 +274,29 @@ const Village = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
 
               {/* Battle Button */}
-              <Button 
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 text-lg"
-                disabled={!battleHero}
-                onClick={() => {
-                  if (battleHero) {
-                    const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
-                    navigate('/', { 
-                      state: { 
-                        startBattle: true, 
-                        player: battleHero,
-                        enemy: randomMonster
-                      } 
-                    });
+              <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 text-lg" disabled={!battleHero} onClick={() => {
+              if (battleHero) {
+                const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
+                navigate('/', {
+                  state: {
+                    startBattle: true,
+                    player: battleHero,
+                    enemy: randomMonster
                   }
-                }}
-              >
+                });
+              }
+            }}>
                 ⚔️ Battle Monsters
               </Button>
             </div>
           </DialogContent>
         </Dialog>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-green-200 via-green-100 to-amber-50 relative overflow-hidden">
+  return <div className="min-h-screen bg-gradient-to-b from-green-200 via-green-100 to-amber-50 relative overflow-hidden">
       {/* Sky and clouds background */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-200 via-blue-100 to-transparent h-1/3"></div>
       
@@ -364,12 +313,7 @@ const Village = () => {
         {/* Village Header */}
         <div className="bg-amber-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200">
           <div className="flex items-center space-x-4">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="bg-white/80 hover:bg-white"
-              onClick={() => setShowVillageDetails(false)}
-            >
+            <Button variant="outline" size="icon" className="bg-white/80 hover:bg-white" onClick={() => setShowVillageDetails(false)}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div className="flex-1">
@@ -403,27 +347,18 @@ const Village = () => {
           {/* Hero Buildings Grid */}
           <div className="grid grid-cols-2 gap-4">
             {availableHeroes.map((hero, index) => {
-              const buildings = ['🏠', '🏡', '🏘️', '🏰'];
-              const building = buildings[index % buildings.length];
-              
-              return (
-                <div key={hero.id} className="relative">
+            const buildings = ['🏠', '🏡', '🏘️', '🏰'];
+            const building = buildings[index % buildings.length];
+            return <div key={hero.id} className="relative">
                   {/* Building background */}
                   <div className="bg-gradient-to-b from-amber-50 to-amber-100 rounded-lg p-3 border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-200">
                     <div className="text-center mb-2">
-                      <span className="text-2xl">{building}</span>
+                      
                       <div className="text-xs text-amber-700 font-semibold">{hero.name}'s House</div>
                     </div>
                     
-                    <div 
-                      className="cursor-pointer transform hover:scale-105 transition-transform"
-                      onClick={() => setSelectedHero(hero)}
-                    >
-                      <CharacterCard
-                        character={hero}
-                        size="small"
-                        isSelected={selectedHero?.id === hero.id}
-                      />
+                    <div className="cursor-pointer transform hover:scale-105 transition-transform" onClick={() => setSelectedHero(hero)}>
+                      <CharacterCard character={hero} size="small" isSelected={selectedHero?.id === hero.id} />
                     </div>
                     
                     {/* Rarity badge */}
@@ -438,15 +373,13 @@ const Village = () => {
                       {getHeroPrice(hero)} 🪙
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                </div>;
+          })}
           </div>
         </div>
 
         {/* Hero Details Inn */}
-        {selectedHero && (
-          <div className="bg-red-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-red-200">
+        {selectedHero && <div className="bg-red-100/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-red-200">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-2xl">🍺</span>
               <h3 className="font-bold text-red-800 text-lg">The Tavern - Hero Details</h3>
@@ -454,15 +387,7 @@ const Village = () => {
             
             <div className="space-y-4">
               <div className="flex items-center space-x-3 bg-white/50 p-3 rounded-lg">
-                {selectedHero.image.startsWith('/') ? (
-                  <img 
-                    src={selectedHero.image} 
-                    alt={selectedHero.name}
-                    className="w-16 h-16 rounded-lg object-cover border-2 border-amber-300"
-                  />
-                ) : (
-                  <span className="text-4xl">{selectedHero.image}</span>
-                )}
+                {selectedHero.image.startsWith('/') ? <img src={selectedHero.image} alt={selectedHero.name} className="w-16 h-16 rounded-lg object-cover border-2 border-amber-300" /> : <span className="text-4xl">{selectedHero.image}</span>}
                 <div>
                   <div className="font-bold text-lg text-red-800">{selectedHero.name}</div>
                   <div className="flex gap-2">
@@ -497,36 +422,22 @@ const Village = () => {
                 <h4 className="font-semibold text-sm text-red-800 flex items-center gap-1">
                   📜 Hero Abilities:
                 </h4>
-                {selectedHero.abilities.map((ability) => (
-                  <div key={ability.id} className="text-xs space-y-1 bg-amber-50/50 p-2 rounded">
+                {selectedHero.abilities.map(ability => <div key={ability.id} className="text-xs space-y-1 bg-amber-50/50 p-2 rounded">
                     <div className="flex justify-between">
                       <span className="font-medium text-red-700">{ability.name}</span>
                       <span className="text-amber-600">{ability.energyCost}⚡</span>
                     </div>
                     <div className="text-red-600">{ability.description}</div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
 
               {/* Recruitment Button */}
-              <Button 
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 shadow-lg" 
-                onClick={() => handlePurchaseHero(selectedHero)}
-                disabled={!canAfford(getHeroPrice(selectedHero)) || isHeroOwned(selectedHero)}
-              >
-                {isHeroOwned(selectedHero) 
-                  ? '✅ Already Recruited'
-                  : canAfford(getHeroPrice(selectedHero)) 
-                    ? `🤝 Recruit for ${getHeroPrice(selectedHero)} coins` 
-                    : '💰 Not enough coins'
-                }
+              <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 shadow-lg" onClick={() => handlePurchaseHero(selectedHero)} disabled={!canAfford(getHeroPrice(selectedHero)) || isHeroOwned(selectedHero)}>
+                {isHeroOwned(selectedHero) ? '✅ Already Recruited' : canAfford(getHeroPrice(selectedHero)) ? `🤝 Recruit for ${getHeroPrice(selectedHero)} coins` : '💰 Not enough coins'}
               </Button>
             </div>
-          </div>
-        )}
+          </div>}
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Village;
