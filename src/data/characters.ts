@@ -919,7 +919,7 @@ export const villageHeroes: Character[] = [
     energy: 40,
     maxEnergy: 40,
     rarity: 'epic',
-    image: '/lovable-uploads/4d283304-067e-41fc-9da9-530663f35cbf.png',
+    image: '/lovable-uploads/steel-warrior.png',
     abilities: [
       {
         id: 'steel-strike',
