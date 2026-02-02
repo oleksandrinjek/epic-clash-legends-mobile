@@ -411,10 +411,7 @@ const Village = () => {
                   <div className="text-sm text-amber-700">❤️ Health</div>
                   <div className="font-bold text-lg text-amber-800">{selectedHero.maxHealth}</div>
                 </div>
-                <div className="text-center bg-white/50 p-2 rounded">
-                  <div className="text-sm text-amber-700">⚡ Energy</div>
-                  <div className="font-bold text-lg text-amber-800">{selectedHero.maxEnergy}</div>
-                </div>
+                
               </div>
 
               {/* Abilities */}
